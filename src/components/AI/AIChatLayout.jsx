@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { FaArrowLeft, FaRobot, FaMagic, FaBars } from 'react-icons/fa';
 import AISidebar from './AISidebar';
 import AIChatWindow from './AIChatWindow';
-import { chatService } from '../../utils/ai/chatService';
+import { chatService } from '../../utils/AI/chatService';
 import toast from 'react-hot-toast';
 
 const AIChatLayout = ({ user }) => {

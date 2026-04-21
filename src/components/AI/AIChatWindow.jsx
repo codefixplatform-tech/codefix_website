@@ -6,8 +6,8 @@ import { FaPaperPlane, FaRobot, FaUser, FaMagic, FaTerminal, FaShieldAlt, FaCode
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { getAIResponse } from '../../utils/ai/geminiEngine';
-import { chatService } from '../../utils/ai/chatService';
+import { getAIResponse } from '../../utils/AI/geminiEngine';
+import { chatService } from '../../utils/AI/chatService';
 import toast from 'react-hot-toast';
 
 const ResponseWrapper = ({ text, isNew }) => {
