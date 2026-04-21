@@ -20,7 +20,7 @@ const AIChatLayout = ({ user }) => {
     if (user) {
       fetchHistory();
     }
-  }, [user]);
+  }, [user, fetchHistory]);
 
   const fetchHistory = async () => {
     try {
@@ -46,6 +46,7 @@ const AIChatLayout = ({ user }) => {
       if (activeChatId === id) setActiveChatId(null);
       toast.success("Chat deleted");
     } catch (err) {
+      console.error(err);
       toast.error("Delete failed");
     }
   };
@@ -57,6 +58,7 @@ const AIChatLayout = ({ user }) => {
       await chatService.renameChat(id, newTitle);
       setChats(prev => prev.map(c => c.id === id ? { ...c, title: newTitle } : c));
     } catch (err) {
+      console.error(err);
       toast.error("Rename failed");
     }
   };

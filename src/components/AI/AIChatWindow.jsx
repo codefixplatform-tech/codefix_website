@@ -19,7 +19,7 @@ const ResponseWrapper = ({ text, isNew }) => {
     >
       <ReactMarkdown
         components={{
-          code({node, inline, className, children, ...props}) {
+          code({inline, className, children, ...props}) {
             const match = /language-(\w+)/.exec(className || '')
             return !inline && match ? (
               <div className="rounded-xl overflow-hidden my-4 border border-white/10 bg-[#1e1e1e]">
@@ -72,7 +72,7 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
       // Optional: Clear state to prevent re-trigger on refresh
       window.history.replaceState({}, document.title);
     }
-  }, [location.state, messages.length]);
+  }, [location.state, messages.length, handleSendMessage, loading]);
   // Jab sidebar se koi purani chat select ho, toh messages load karein
   useEffect(() => {
     if (activeChatId && user) {
@@ -80,7 +80,7 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
     } else {
       setMessages([]); // New chat ke liye khali kar dein
     }
-  }, [activeChatId]);
+  }, [activeChatId, user, loadChatDetails]);
 
   // Auto-scroll logic
   useEffect(() => {
@@ -92,6 +92,7 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
       const data = await chatService.getChatById(activeChatId);
       setMessages(data.messages || []);
     } catch (err) {
+      console.error(err);
       toast.error("Failed to load conversation");
     }
   };
