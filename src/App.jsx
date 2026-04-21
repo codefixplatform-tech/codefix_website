@@ -264,15 +264,36 @@ function App() {
 
   useEffect(() => {
     // Session check on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    const initAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) {
+          if (error.message.includes("refresh_token") || error.status === 400) {
+             console.warn("Auth session recovery failed, signing out to reset state...");
+             await supabase.auth.signOut();
+             setUser(null);
+          } else {
+             console.error("Auth session error:", error);
+          }
+        } else {
+          setUser(session?.user ?? null);
+        }
+      } catch (err) {
+        console.error("Unexpected auth error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initAuth();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth event:", event);
       setUser(session?.user ?? null);
-      // loading state already handled by initial getSession
+      if (event === 'SIGNED_OUT') {
+        // Clear any local state if needed
+      }
     });
 
     return () => subscription.unsubscribe();

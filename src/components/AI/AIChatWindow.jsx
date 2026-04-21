@@ -65,29 +65,7 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef(null);
 
-  // Handle initial prompt from navigation state (e.g. from Question Detail)
-  useEffect(() => {
-    if (location.state?.initialPrompt && !loading && messages.length === 0) {
-      handleSendMessage(null, location.state.initialPrompt);
-      // Optional: Clear state to prevent re-trigger on refresh
-      window.history.replaceState({}, document.title);
-    }
-  }, [location.state, messages.length, handleSendMessage, loading]);
-  // Jab sidebar se koi purani chat select ho, toh messages load karein
-  useEffect(() => {
-    if (activeChatId && user) {
-      loadChatDetails();
-    } else {
-      setMessages([]); // New chat ke liye khali kar dein
-    }
-  }, [activeChatId, user, loadChatDetails]);
-
-  // Auto-scroll logic
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-  }, [messages, loading]);
-
-  const loadChatDetails = async () => {
+  const loadChatDetails = React.useCallback(async () => {
     try {
       const data = await chatService.getChatById(activeChatId);
       setMessages(data.messages || []);
@@ -95,9 +73,9 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
       console.error(err);
       toast.error("Failed to load conversation");
     }
-  };
+  }, [activeChatId]);
 
-  const handleSendMessage = async (e, customText = null) => {
+  const handleSendMessage = React.useCallback(async (e, customText = null) => {
     if (e && e.preventDefault) e.preventDefault();
     const textToSend = customText || input;
     if (!textToSend.trim() || loading) return;
@@ -131,7 +109,30 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [input, loading, messages, user, activeChatId, setActiveChatId, onChatSaved]);
+
+  // Handle initial prompt from navigation state (e.g. from Question Detail)
+  useEffect(() => {
+    if (location.state?.initialPrompt && !loading && messages.length === 0) {
+      handleSendMessage(null, location.state.initialPrompt);
+      // Optional: Clear state to prevent re-trigger on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, messages.length, handleSendMessage, loading]);
+
+  // Jab sidebar se koi purani chat select ho, toh messages load karein
+  useEffect(() => {
+    if (activeChatId && user) {
+      loadChatDetails();
+    } else {
+      setMessages([]); // New chat ke liye khali kar dein
+    }
+  }, [activeChatId, user, loadChatDetails]);
+
+  // Auto-scroll logic
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+  }, [messages, loading]);
 
   return (
     <div className="flex flex-col h-full bg-transparent relative">

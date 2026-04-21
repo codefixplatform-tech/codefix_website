@@ -15,21 +15,21 @@ const AIChatLayout = ({ user }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [newChatTrigger, setNewChatTrigger] = useState(0);
 
-  // 1. Initial Load: Supabase se chats mangwana
-  useEffect(() => {
-    if (user) {
-      fetchHistory();
-    }
-  }, [user, fetchHistory]);
-
-  const fetchHistory = async () => {
+  // 1. Fetch History logic (stable reference)
+  const fetchHistory = React.useCallback(async () => {
+    if (!user) return;
     try {
       const data = await chatService.getUserChats(user.id);
       setChats(data);
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [user]);
+
+  // 2. Initial Load: Supabase se chats mangwana
+  useEffect(() => {
+    fetchHistory();
+  }, [fetchHistory]);
 
   // 2. Nayi Chat shuru karne ka logic
   const handleNewChat = () => {
