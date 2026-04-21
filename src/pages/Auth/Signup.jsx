@@ -1,0 +1,194 @@
+import React, { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // useLocation add kiya
+import { supabase } from '../../lib/supabase'; 
+import toast from 'react-hot-toast';
+
+const Signup = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation(); // Hook initialize kiya
+
+  // Check karo ke user kahan se redirect ho kar aaya hai
+  const from = location.state?.from || '/dashboard';
+
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    
+    if (!email || !password || !fullName) {
+      toast.error("Pehle saari fields bhar lo jani!");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName, 
+          },
+          emailRedirectTo: window.location.origin + '/dashboard'
+        },
+      });
+
+      if (error) throw error;
+
+      if (data) {
+        toast.success("Mubarak ho! Account ban gaya. ✨");
+        // User ko wapis usi page par bhejo jahan se wo aaya tha
+        navigate(from, { replace: true }); 
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    try {
+      setLoading(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/dashboard',
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'select_account',
+          },
+        }
+      });
+      if (error) throw error;
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Decorative Glow */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full"></div>
+
+      <div className="w-full max-w-md relative z-10">
+        <div className="text-center mb-8">
+          <Link to="/">
+            <img src="/logo.png" alt="Codefix" className="h-10 w-auto mx-auto mb-6" />
+          </Link>
+          <h1 className="text-3xl font-black text-white tracking-tight">Create Account</h1>
+          <p className="text-secondary mt-2">
+            {location.state?.from ? "Join to continue your action" : "Join the Codefix developer ecosystem"}
+          </p>
+        </div>
+
+        <div className="bg-surface/40 backdrop-blur-xl border border-white/10 p-8 rounded-[2.5rem] shadow-2xl">
+          <button 
+            type="button"
+            onClick={handleGoogleSignup}
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-3 bg-white text-black py-3.5 rounded-2xl font-bold hover:bg-slate-100 transition-all active:scale-[0.98] mb-6 disabled:opacity-70"
+          >
+            <GoogleIcon />
+            {loading ? "Connecting..." : "Sign up with Google"}
+          </button>
+
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/10"></div></div>
+            <div className="relative flex justify-center text-xs uppercase"><span className="bg-[#0f1115] px-4 text-secondary tracking-widest">Or with email</span></div>
+          </div>
+
+          <form className="space-y-4" onSubmit={handleSignup}>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 ml-1">Full Name</label>
+              <input 
+                type="text" 
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="John Doe"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-primary/50 transition-all focus:ring-1 focus:ring-primary/20"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 ml-1">Email Address</label>
+              <input 
+                type="email" 
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@company.com"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-primary/50 transition-all focus:ring-1 focus:ring-primary/20"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 ml-1">Password</label>
+              <div className="relative">
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Create a strong password"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-primary/50 transition-all focus:ring-1 focus:ring-primary/20 pr-12"
+                />
+                <button 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary hover:text-white transition-colors"
+                >
+                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </button>
+              </div>
+            </div>
+
+            <p className="text-[11px] text-secondary/60 px-1">
+              By signing up, you agree to our <span className="text-primary hover:underline cursor-pointer">Terms</span> and <span className="text-primary hover:underline cursor-pointer">Privacy Policy</span>.
+            </p>
+
+            <button 
+              type="submit"
+              disabled={loading}
+              className="w-full bg-primary hover:bg-blue-600 text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-primary/20 transition-all active:scale-[0.98] mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Creating Account..." : "Create Account"}
+            </button>
+          </form>
+
+          <p className="text-center text-secondary text-sm mt-8">
+            Already have an account?{" "}
+            <Link 
+              to="/login" 
+              state={{ from }} // State transfer kar di
+              className="text-primary font-bold hover:underline"
+            >
+              Log in
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- Icons remain the same ---
+const GoogleIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 48 48">
+    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C43.396,35.509,44,30.518,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
+  </svg>
+);
+const EyeIcon = () => ( <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> );
+const EyeOffIcon = () => ( <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg> );
+
+export default Signup;
