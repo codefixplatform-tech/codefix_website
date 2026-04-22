@@ -52,12 +52,12 @@ const Topbar = ({ onMenuClick, profile, loading }) => {
       {/* Right Actions */}
       <div className="flex items-center gap-2 md:gap-4">
         {/* Back to Home Button */}
-        <button 
-          onClick={() => navigate('/')}
+        <Link 
+          to="/"
           className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-all text-[11px] font-black uppercase tracking-widest border border-white/5"
         >
           <HomeIcon /> <span className="hidden lg:inline">Home</span>
-        </button>
+        </Link>
 
         <button onClick={() => setIsSearchOpen(true)} className="lg:hidden p-2 text-secondary hover:text-white bg-white/5 rounded-xl"><SearchIcon /></button>
         <button className="p-2 text-secondary hover:text-white bg-white/5 rounded-xl relative"><BellIcon /><span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-[#0B0E14]"></span></button>

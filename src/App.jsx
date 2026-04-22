@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AnimatePresence } from "framer-motion";
@@ -38,6 +39,20 @@ import AIChatLayout from "./components/AI/AIChatLayout";
 
 const AnimatedRoutes = ({ user, loading }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Force redirect to dashboard if user is logged in but hits auth pages
+    if (!loading && user) {
+      if (location.pathname === '/login' || location.pathname === '/signup') {
+        navigate('/dashboard', { replace: true });
+      }
+    }
+  }, [user, loading, location.pathname, navigate]);
+
+  if (loading) {
+    return <div className="min-h-screen bg-background flex items-center justify-center text-white font-black uppercase tracking-[5px] text-xs opacity-50">Loading Platform...</div>;
+  }
 
   return (
     <AnimatePresence mode="wait">
@@ -47,13 +62,9 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             index
             element={
-              user ? (
-                <Navigate to="/dashboard" replace />
-              ) : (
-                <PageTransition>
-                  <Home />
-                </PageTransition>
-              )
+              <PageTransition>
+                <Home />
+              </PageTransition>
             }
           />
           <Route
@@ -137,17 +148,25 @@ const AnimatedRoutes = ({ user, loading }) => {
         <Route
           path="/login"
           element={
-            <PageTransition>
-              <Login />
-            </PageTransition>
+            user ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <PageTransition>
+                <Login />
+              </PageTransition>
+            )
           }
         />
         <Route
           path="/signup"
           element={
-            <PageTransition>
-              <Signup />
-            </PageTransition>
+            user ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <PageTransition>
+                <Signup />
+              </PageTransition>
+            )
           }
         />
 
