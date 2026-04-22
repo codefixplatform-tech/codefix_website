@@ -1,147 +1,123 @@
 # 🚀 CodeFix - Ultimate Developer Toolbox & Community Platform
 
-CodeFix is a high-performance, all-in-one platform designed for developers. It combines essential developer utilities, high-fidelity file converters (PDF/Word/Images), and a vibrant Q&A community with an integrated AI assistant.
+CodeFix is a premium, high-performance ecosystem designed for modern developers. It seamlessly integrates a robust suite of developer utilities, high-fidelity file converters, a vibrant Q&A community, and a Gemini-powered AI assistant into a single, sleek dashboard.
 
-![CodeFix Banner](https://via.placeholder.com/1200x400?text=CodeFix+Platform)
+🌐 **Live Demo:** [https://codefix-website-iota.vercel.app/](https://codefix-website-iota.vercel.app/)
 
-## ✨ Key Features
+![CodeFix Banner](https://via.placeholder.com/1200x400?text=CodeFix+Platform+Dashboard)
 
-### 🛠️ Developer Tools (Dev Tools)
-A suite of modular, high-speed utilities for daily development tasks:
-- **JSON Formatter:** Prettify, minify, and validate JSON with live sync.
-- **Base64 Converter:** Secure encode/decode for text and images.
-- **Regex Tester:** Real-time regular expression testing with highlighting.
-- **API Tester:** Send HTTP requests (GET, POST, etc.) and inspect responses directly from the browser.
+## ✨ Core Ecosystem
 
-### 📄 Converter Tools
-Premium file processing and conversion utilities:
-- **PDF to Word:** High-fidelity conversion preserving layouts.
-- **Word to PDF:** Fast and accurate document transformation.
-- **Merge/Split PDF:** Combine multiple PDFs or extract specific pages.
-- **Image to PDF:** Convert various image formats into a single PDF document.
-- **Compress PDF:** Optimized compression to reduce file size without losing quality.
+### 🛠️ 1. Developer Utilities (Dev Tools)
+A collection of essential tools optimized for speed and accuracy:
+- **JSON Formatter & Validator:** Instantly prettify, minify, and validate JSON data with real-time syntax checking.
+- **Base64 Master:** Securely encode and decode text or images to/from Base64 strings.
+- **Regex Lab:** Advanced regular expression testing with live matches and group highlighting.
+- **API Playground:** A lightweight browser-based client to test GET, POST, PUT, and DELETE requests with header inspection.
 
-### 🌐 Global Features
-- **Global Search:** Unified search bar indexed across all tools, community questions, and platform pages.
-- **Q&A Community:** Robust platform for developers to ask questions, share answers, and build a collective knowledge base.
-- **AI Assistant:** Integrated AI chatbot to help debug code and answer technical queries.
-- **Smart Dashboard:** Personalized area to track activity, manage profile settings, and access tools quickly.
+### 📄 2. Premium Converter Suite
+Enterprise-grade document processing utilities:
+- **High-Fidelity PDF ↔ Word:** Convert documents while maintaining complex layouts and formatting.
+- **Smart PDF Compression:** Reduce file sizes significantly without compromising visual clarity.
+- **Excel to PDF:** Professional multi-sheet Excel conversion with automatic page adjustments.
+- **PDF Power Tools:** Merge multiple documents, split specific page ranges, or convert batches of images into a single PDF.
+
+### 🌐 3. Community Q&A Hub
+A knowledge-sharing platform built for growth:
+- **Smart Posting:** Ask questions using a rich Markdown editor with full code snippet support.
+- **Reputation System:** Earn points through verified answers and community upvotes.
+- **Interactive Voting:** Upvote or downvote solutions to highlight the most helpful content.
+- **Global Discovery:** Find solutions instantly using the integrated cross-platform search engine.
+
+### 🤖 4. AI Assistant (Gemini Powered)
+Your personal 24/7 technical co-pilot:
+- **Code Debugging:** Paste your bugs and get instant refactoring suggestions and fixes.
+- **Persistent Memory:** Your chat history is saved securely in Supabase for future reference.
+- **AI Credits:** Integrated credit system to manage high-performance model usage.
+
+### 📊 5. Developer Dashboard
+Personalized command center to manage your developer identity:
+- **Activity Tracking:** Monitor your posted questions, replies, and reputation growth.
+- **Account Security:** Full profile management, including avatar uploads, location settings, and password encryption.
+- **Quick Launch:** One-click access to your most-used utilities.
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend:** React 18, Vite, Tailwind CSS, Framer Motion (Animations).
-- **Backend/Database:** Supabase (PostgreSQL, Auth, Real-time).
-- **Storage:** Supabase Storage (for avatars and temporary files).
-- **Icons:** React Icons (FontAwesome 6, Lucide, Hippo).
-- **Notifications:** React Hot Toast.
+- **Frontend:** React 18, Vite
+- **Styling:** Tailwind CSS 4.0, Framer Motion
+- **Backend:** Supabase (Auth, PostgreSQL, Storage, Real-time)
+- **AI Engine:** Google Gemini API
+- **Document Logic:** pdf-lib, jsPDF, mammoth.js, ExcelJS
+- **State Management:** React Context API, React Router 7
 
 ---
 
-## 🏗️ Supabase Database Schema
+## 🏗️ Supabase Database Setup
 
-The platform relies on the following PostgreSQL table structure in Supabase:
+CodeFix uses a centralized PostgreSQL schema. All table definitions, indexes, and constraints are documented here:
 
-### 1. `profiles`
-Stores extended user information linked to Supabase Auth.
-| Column | Type | Description |
-| :--- | :--- | :--- |
-| `id` | uuid (PK) | Reference to `auth.users` |
-| `full_name` | text | User's display name |
-| `avatar_url` | text | URL to profile picture in storage |
-| `bio` | text | Short user description |
-| `website` | text | Personal website link |
-| `github_username` | text | Github profile reference |
-| `created_at` | timestamp | Registration date |
+👉 **[supabase/schema.sql](./supabase/schema.sql)**
 
-### 2. `questions`
-Stores community Q&A posts.
-| Column | Type | Description |
-| :--- | :--- | :--- |
-| `id` | uuid (PK) | Unique question ID |
-| `user_id` | uuid (FK) | Reference to `profiles.id` |
-| `title` | text | Question heading |
-| `content` | text | Detailed description / Code snippets |
-| `tags` | text[] | Array of related technology tags |
-| `created_at` | timestamp | Time of posting |
-
-### 3. `answers`
-Stores replies to community questions.
-| Column | Type | Description |
-| :--- | :--- | :--- |
-| `id` | uuid (PK) | Unique answer ID |
-| `question_id` | uuid (FK) | Reference to `questions.id` |
-| `user_id` | uuid (FK) | Reference to `profiles.id` |
-| `content` | text | Answer detail |
-| `created_at` | timestamp | Time of posting |
-
-### 4. `chats`
-Stores AI Assistant conversation history.
-| Column | Type | Description |
-| :--- | :--- | :--- |
-| `id` | uuid (PK) | Unique chat ID |
-| `user_id` | uuid (FK) | Reference to `profiles.id` |
-| `title` | text | Chat session name |
-| `history` | jsonb | Full conversation array |
-| `created_at` | timestamp | Session start time |
+### Key Tables:
+1. `profiles`: Extended user data and developer stats.
+2. `questions`: Community posts and metadata.
+3. `answers`: Solutions linked to questions.
+4. `votes`: User interactions and quality control.
+5. `chats`: AI session persistence.
 
 ---
 
-## 🚀 Installation & Setup
+## 🚀 Installation & Local Setup
 
-Follow these steps to run CodeFix locally:
+### 1. Prerequisites
+- Node.js (v18 or higher)
+- A Supabase project
+- A Google AI (Gemini) API Key
 
-### 1. Clone the repository
+### 2. Clone & Install
 ```bash
 git clone https://github.com/yourusername/codefix.git
 cd codefix
-```
-
-### 2. Install dependencies
-```bash
 npm install
 ```
 
-### 3. Configure Environment Variables
-Create a `.env` file in the root directory and add your Supabase credentials:
+### 3. Environment Configuration
+Create a `.env` file in the root and add your credentials:
 ```env
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_GEMINI_API_KEY=your_gemini_api_key
 ```
 
-### 4. Run the development server
+### 4. Run Development Server
 ```bash
 npm run dev
 ```
-The app will be available at `http://localhost:5173`.
+Open `http://localhost:5173` to see the platform in action.
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Architecture
 
 ```text
 codefix/
 ├── src/
-│   ├── components/       # Reusable UI components
-│   │   ├── Dev Tools/    # Modular developer utilities
-│   │   └── LandingPage/  # Global Navbar/Footer/Home
-│   ├── pages/            # Page-level components
-│   │   ├── Dev Tools/    # Tool processing pages
-│   │   ├── Coonverter tools/ # Conversion pages
-│   │   └── Dashboard/    # User management
-│   ├── layouts/          # Dashboard & Landing layouts
-│   ├── lib/              # Supabase configuration
-│   └── utils/            # Core processing logic & AI services
-├── public/               # Static assets (logo, etc.)
-└── README.md
+│   ├── components/       # Atomic UI components (AI, Dashboard, Search)
+│   ├── layouts/          # Dashboard (Sidebar/Topbar) & Public Layouts
+│   ├── pages/            # Feature-rich pages (Dev Tools, Converters, QA)
+│   ├── lib/              # SDK Initializations (Supabase, etc.)
+│   ├── utils/            # Core logic (AI services, File converters)
+│   └── main.jsx          # Entry point
+├── supabase/             # SQL Schema & Migrations
+└── public/               # Global static assets
 ```
 
 ---
 
-## 📜 License
-Distributed under the MIT License. See `LICENSE` for more information.
+## 📜 License & Contribution
 
----
+Distributed under the MIT License. Contributions are welcome to help make CodeFix the best tool for the community.
 
-**Built with ❤️ for the Developer Community.**
+**Built with ❤️ by Developers, for Developers.**

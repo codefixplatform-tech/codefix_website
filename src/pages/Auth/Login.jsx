@@ -12,8 +12,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Check karo ke user kahan se redirect ho kar aaya hai (Default is /dashboard)
-  const from = location.state?.from || "/dashboard";
+  // Hamesha dashboard par bhej do login ke baad (User request)
+  const from = "/dashboard";
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -35,7 +35,7 @@ const Login = () => {
       if (data.user) {
         toast.success("Welcome back, jani! ✨");
         // Seedha usi page par bhejo jahan se wo aaya tha
-        navigate(from, { replace: true }); 
+        navigate("/dashboard", { replace: true }); 
       }
     } catch (error) {
       toast.error(error.message);
@@ -50,9 +50,7 @@ const Login = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          // Note: OAuth ke liye hum static redirect hi rakhte hain 
-          // kyunki refresh par state clear ho jati hai
-          redirectTo: window.location.origin + "/dashboard",
+          redirectTo: "/dashboard",
           queryParams: {
             access_type: 'offline',
             prompt: 'select_account',

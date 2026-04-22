@@ -8,8 +8,8 @@ const Signup = () => {
   const navigate = useNavigate();
   const location = useLocation(); // Hook initialize kiya
 
-  // Check karo ke user kahan se redirect ho kar aaya hai
-  const from = location.state?.from || '/dashboard';
+  // Hamesha dashboard par bhej do signup ke baad (User request)
+  const from = '/dashboard';
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -42,7 +42,7 @@ const Signup = () => {
       if (data) {
         toast.success("Mubarak ho! Account ban gaya. ✨");
         // User ko wapis usi page par bhejo jahan se wo aaya tha
-        navigate(from, { replace: true }); 
+        navigate("/dashboard", { replace: true }); 
       }
     } catch (error) {
       toast.error(error.message);

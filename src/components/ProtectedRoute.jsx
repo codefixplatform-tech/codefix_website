@@ -26,8 +26,8 @@ const ProtectedRoute = () => {
     return <div className="min-h-screen bg-background flex items-center justify-center text-white">Loading...</div>;
   }
 
-  // Agar user login nahi hai toh home page par bhej do
-  return session ? <Outlet context={context} /> : <Navigate to="/" />;
+  // Agar user login nahi hai toh login page par bhej do (Hamesha dashboard par jayega ab)
+  return session ? <Outlet context={context} /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

@@ -47,9 +47,13 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             index
             element={
-              <PageTransition>
-                <Home />
-              </PageTransition>
+              user ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <PageTransition>
+                  <Home />
+                </PageTransition>
+              )
             }
           />
           <Route

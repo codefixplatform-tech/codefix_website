@@ -96,7 +96,7 @@ const QAHome = () => {
 
   const handleAskQuestionClick = () => {
     if (!currentUser) {
-      navigate("/login", { state: { from: location.pathname + "/ask" } });
+      navigate("/login");
     } else {
       navigate(isDashboard ? "/dashboard/qa/ask" : "/questions/ask");
     }

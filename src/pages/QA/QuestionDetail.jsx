@@ -19,6 +19,51 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import AnswerEditor from "../../components/QA/AnswerEditor";
 
+// --- Sub-Components ---
+
+const CommentInput = ({ onPost, user, location }) => {
+  const [val, setVal] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!val.trim()) return;
+    onPost(val);
+    setVal("");
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="relative group">
+      <input 
+        type="text"
+        placeholder={user ? "Add a reply..." : "Login to reply"}
+        disabled={!user}
+        value={val}
+        onChange={(e) => setVal(e.target.value)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+        className="w-full bg-white/[0.03] border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-secondary/30 focus:outline-none focus:border-primary/30 focus:bg-white/[0.05] transition-all"
+      />
+      {!user && (
+        <Link 
+          to="/login" 
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-black text-primary hover:underline uppercase tracking-widest"
+        >
+          Login
+        </Link>
+      )}
+      {isFocused && val.trim() && (
+        <button 
+          type="submit" 
+          className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-white text-[10px] font-black px-3 py-1 rounded-lg hover:bg-blue-600 transition-all animate-in fade-in zoom-in"
+        >
+          POST
+        </button>
+      )}
+    </form>
+  );
+};
+
 const QuestionDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -36,9 +81,17 @@ const QuestionDetail = () => {
     navigate('/ai-assistant', { state: { initialPrompt: aiContext } });
   };
   useEffect(() => {
+    // Initial user fetch
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
     });
+
+    // Listen for auth changes (Login/Logout)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const fetchFullData = async () => {
@@ -69,7 +122,11 @@ const QuestionDetail = () => {
 
         const { data: aData, error: aError } = await supabase
           .from("answers")
-          .select("*, profiles!answers_user_id_fkey(full_name, avatar_url)")
+          .select(`
+            *, 
+            profiles!answers_user_id_fkey(full_name, avatar_url),
+            comments(*, profiles!comments_user_id_fkey(full_name, avatar_url))
+          `)
           .eq("question_id", id)
           .order("created_at", { ascending: true });
 
@@ -87,12 +144,32 @@ const QuestionDetail = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchFullData();
-  }, [id]);
+  }, [id, user]); // user add kiya taake login/logout par data refresh ho
+
+  const handlePostComment = async (answerId, content) => {
+    if (!user) return navigate("/login");
+    if (!content.trim()) return;
+
+    try {
+      const { error } = await supabase.from("comments").insert([
+        {
+          answer_id: answerId,
+          user_id: user.id,
+          content: content.trim(),
+        },
+      ]);
+      if (error) throw error;
+      toast.success("Reply added!");
+      fetchFullData();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const handleVote = async (type) => {
     if (!user) {
       toast.error("Please login to vote!");
-      return navigate("/login", { state: { from: location.pathname } });
+      return navigate("/login");
     }
 
     const isRemovingVote = userVote === type;
@@ -146,7 +223,7 @@ const QuestionDetail = () => {
 
   const handlePostAnswer = async (answerContent, codeSnippet) => {
     try {
-      if (!user) return navigate("/login", { state: { from: location.pathname } });
+      if (!user) return navigate("/login");
       const { error } = await supabase.from("answers").insert([
         {
           question_id: id,
@@ -247,6 +324,26 @@ const QuestionDetail = () => {
                       <p className="text-[10px] text-secondary/50 font-bold">REPLIED {formatDistanceToNow(new Date(ans.created_at)).toUpperCase()} AGO</p>
                     </div>
                   </div>
+
+                  {/* --- Comments/Replies Section --- */}
+                  <div className="mt-8 pt-6 border-t border-white/5 space-y-4">
+                    {ans.comments && ans.comments.map(comment => (
+                      <div key={comment.id} className="flex gap-4 items-start pl-4 border-l-2 border-primary/20 py-1">
+                        <div className="w-6 h-6 rounded-full overflow-hidden bg-white/5 shrink-0">
+                          {comment.profiles?.avatar_url ? <img src={comment.profiles.avatar_url} className="w-full h-full object-cover" alt="" /> : <FaUserCircle className="text-secondary/20 w-full h-full" />}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-[10px] font-black text-primary uppercase tracking-tighter mb-1">{comment.profiles?.full_name}</p>
+                          <p className="text-xs text-secondary/70 leading-relaxed">{comment.content}</p>
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {/* Inline Reply Input */}
+                    <div className="pt-2">
+                       <CommentInput onPost={(val) => handlePostComment(ans.id, val)} user={user} location={location} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -262,5 +359,6 @@ const QuestionDetail = () => {
     </section>
   );
 };
+
 
 export default QuestionDetail;
