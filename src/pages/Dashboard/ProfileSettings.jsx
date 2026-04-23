@@ -11,8 +11,11 @@ import {
   FaMapMarkerAlt, 
   FaPhone, 
   FaEnvelope, 
-  FaCircleNotch 
+  FaCircleNotch,
+  FaShieldAlt,
+  FaCog
 } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
@@ -44,7 +47,6 @@ const ProfileSettings = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-      // Logic: Agar DB mein koi field null ho toh usay empty string '' kar do
       setFormData({ 
         full_name: data?.full_name || '',
         email: user.email || '',
@@ -80,9 +82,9 @@ const ProfileSettings = () => {
       await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id);
       
       setFormData(prev => ({ ...prev, avatar_url: publicUrl }));
-      toast.success("Avatar updated!");
+      toast.success("Identity updated!");
     } catch (error) {
-      toast.error("Upload failed! Check bucket settings.");
+      toast.error("Upload failed! Check storage limits.");
     } finally {
       setUpdating(false);
     }
@@ -96,7 +98,7 @@ const ProfileSettings = () => {
     if (formData.email !== user.email) {
       const { error: emailError } = await supabase.auth.updateUser({ email: formData.email });
       if (emailError) toast.error(emailError.message);
-      else toast.success("Confirmation email sent!");
+      else toast.success("Verify new email!");
     }
 
     const { error } = await supabase.from('profiles').update({
@@ -106,8 +108,10 @@ const ProfileSettings = () => {
     }).eq('id', user.id);
 
     if (!error) {
-      toast.success("Profile updated!");
-      setTimeout(() => navigate('/dashboard'), 1500);
+      toast.success("Profile synchronized!");
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1000);
     }
     setUpdating(false);
   };
@@ -115,7 +119,7 @@ const ProfileSettings = () => {
   const handleChangePassword = async (e) => {
     e.preventDefault();
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      return toast.error("Passwords don't match!");
+      return toast.error("Keys do not match!");
     }
 
     setUpdating(true);
@@ -127,171 +131,248 @@ const ProfileSettings = () => {
 
     if (signInError) {
       setUpdating(false);
-      return toast.error("Old password incorrect!");
+      return toast.error("Current key invalid!");
     }
 
     const { error } = await supabase.auth.updateUser({ password: passwordData.newPassword });
     if (!error) {
-      toast.success("Password changed!");
-      setTimeout(() => navigate('/dashboard'), 1500);
+      toast.success("Access key updated!");
+      setPasswordData({ oldPassword: '', newPassword: '', confirmPassword: '' });
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1000);
     }
     setUpdating(false);
   };
 
   if (loading) return (
-    <div className="flex items-center justify-center min-h-[400px]">
-      <FaCircleNotch className="w-8 h-8 text-primary animate-spin" />
+    <div className="flex flex-col items-center justify-center min-h-[400px]">
+      <FaCircleNotch className="w-10 h-10 text-primary animate-spin mb-4" />
+      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[4px]">Loading Profile Engine...</p>
     </div>
   );
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="mb-10">
-        <h1 className="text-3xl font-black text-white tracking-tight">Account Settings</h1>
-        <p className="text-secondary text-sm mt-1">Update your info and keep your account secure.</p>
+    <div className="space-y-10 pb-10 max-w-5xl mx-auto">
+      {/* --- HEADER SECTION --- */}
+      <div className="space-y-3 px-4 md:px-0">
+         <motion.div 
+           initial={{ opacity: 0, x: -20 }}
+           animate={{ opacity: 1, x: 0 }}
+           className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full"
+         >
+            <FaCog className="text-primary text-[10px]" />
+            <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Account Hub</span>
+         </motion.div>
+         <h1 className="text-4xl md:text-6xl font-semibold text-white tracking-tight leading-none">
+           User <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">Settings</span>
+         </h1>
+         <p className="text-secondary text-base md:text-lg font-medium opacity-60 max-w-xl">
+           Configure your digital identity, update contact parameters, and manage security protocols.
+         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left: Avatar Section */}
-        <div className="lg:col-span-1">
-          <div className="bg-surface/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 text-center group">
-            <div className="relative inline-block cursor-pointer" onClick={handleAvatarClick}>
-              <div className="w-32 h-32 rounded-full bg-gradient-to-tr from-primary to-blue-600 border-4 border-white/5 overflow-hidden flex items-center justify-center text-4xl font-black text-white shadow-2xl transition-transform group-hover:scale-105">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start px-4 md:px-0">
+        {/* --- LEFT: AVATAR CARD --- */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="lg:col-span-4"
+        >
+          <div className="bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-8 md:p-10 text-center relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-1">
+               <div className="w-20 h-20 -mr-10 -mt-10 bg-primary blur-3xl opacity-10 rounded-full"></div>
+            </div>
+
+            <div className="relative inline-block cursor-pointer group/avatar" onClick={handleAvatarClick}>
+              <div className="w-32 md:w-40 h-32 md:h-40 rounded-full bg-white/5 border-4 border-white/5 overflow-hidden flex items-center justify-center shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:border-primary/30">
                 {formData.avatar_url ? (
-                  <img src={formData.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                  <img src={formData.avatar_url} alt="Avatar" className="w-full h-full object-cover transition-transform duration-700 group-hover/avatar:scale-110" />
                 ) : (
-                  <FaUser size={40} className="opacity-20" />
+                  <FaUser className="text-white/10 w-16 h-16" />
                 )}
               </div>
-              <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <FaCamera className="text-white w-6 h-6" />
+              <div className="absolute inset-0 bg-primary/40 rounded-full flex flex-col items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-all duration-300 backdrop-blur-sm">
+                <FaCamera className="text-white text-2xl mb-2" />
+                <span className="text-[10px] font-bold text-white uppercase tracking-widest">Update</span>
               </div>
               <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
             </div>
-            <h3 className={`font-bold mt-4 tracking-tight ${formData.full_name ? 'text-white' : 'text-white/30 italic'}`}>
-              {formData.full_name || "Enter your name"}
-            </h3>
-            <span className="inline-block bg-primary/10 text-primary text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter mt-2 border border-primary/20">
-              Verified User
-            </span>
-          </div>
-        </div>
 
-        {/* Right: Forms */}
-        <div className="lg:col-span-2">
-          <div className="bg-surface/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-6 md:p-8">
-            <div className="flex gap-8 border-b border-white/5 mb-8">
+            <div className="mt-8 space-y-2">
+              <h3 className={`text-xl md:text-2xl font-semibold tracking-tight ${formData.full_name ? 'text-white' : 'text-white/20 italic'}`}>
+                {formData.full_name || "Nexus Developer"}
+              </h3>
+              <p className="text-secondary text-xs font-medium opacity-50 uppercase tracking-[2px]">{formData.email}</p>
+            </div>
+
+            <div className="mt-6 flex flex-wrap justify-center gap-2">
+               <span className="bg-primary/10 text-primary text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-tighter border border-primary/20">
+                 Elite Member
+               </span>
+               <span className="bg-emerald-500/10 text-emerald-400 text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-tighter border border-emerald-500/20">
+                 Verified Fixer
+               </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* --- RIGHT: FORM SECTIONS --- */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="lg:col-span-8 space-y-6"
+        >
+          <div className="bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-xl relative overflow-hidden">
+            <div className="flex items-center justify-start border-b border-white/5 gap-8 mb-10 overflow-x-auto no-scrollbar">
               {[
-                { id: 'profile', label: 'Profile', icon: <FaUser size={12} /> },
-                { id: 'security', label: 'Security', icon: <FaLock size={12} /> }
+                { id: 'profile', label: 'Identity', icon: <FaUser size={12} /> },
+                { id: 'security', label: 'Security', icon: <FaShieldAlt size={12} /> }
               ].map(tab => (
                 <button 
                   key={tab.id} 
                   onClick={() => setActiveTab(tab.id)} 
-                  className={`pb-4 text-xs font-black uppercase tracking-widest flex items-center gap-2 transition-all ${
-                    activeTab === tab.id ? "text-primary border-b-2 border-primary" : "text-secondary hover:text-white"
+                  className={`pb-4 text-[10px] md:text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all relative shrink-0 ${
+                    activeTab === tab.id ? "text-primary" : "text-slate-500 hover:text-white"
                   }`}
                 >
                   {tab.icon} {tab.label}
+                  {activeTab === tab.id && <motion.div layoutId="setting-underline" className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-full" />}
                 </button>
               ))}
             </div>
 
-            {activeTab === 'profile' ? (
-              <form onSubmit={handleUpdateProfile} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Full Name</label>
-                    <div className="relative">
-                      <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 w-3.5 h-3.5" />
-                      <input 
-                        type="text" 
-                        value={formData.full_name} 
-                        placeholder="e.g. Ali Khan" 
-                        onChange={e => setFormData({...formData, full_name: e.target.value})} 
-                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder:text-white/10 focus:border-primary/50 outline-none transition-colors" 
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Location</label>
-                    <div className="relative">
-                      <FaMapMarkerAlt className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 w-3.5 h-3.5" />
-                      <input 
-                        type="text" 
-                        value={formData.location} 
-                        placeholder="City, Country" 
-                        onChange={e => setFormData({...formData, location: e.target.value})} 
-                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder:text-white/10 focus:border-primary/50 outline-none transition-colors" 
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Email Address</label>
-                  <div className="relative">
-                    <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 w-3.5 h-3.5" />
-                    <input 
-                      type="email" 
-                      value={formData.email} 
-                      placeholder="hello@example.com" 
-                      onChange={e => setFormData({...formData, email: e.target.value})} 
-                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder:text-white/10 focus:border-primary/50 outline-none transition-colors" 
+            <AnimatePresence mode="wait">
+              {activeTab === 'profile' ? (
+                <motion.form 
+                  key="profile-form"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  onSubmit={handleUpdateProfile} 
+                  className="space-y-8"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <InputGroup 
+                      label="Full Identity" 
+                      icon={<FaUser />} 
+                      value={formData.full_name} 
+                      placeholder="e.g. Nexus Prime"
+                      onChange={v => setFormData({...formData, full_name: v})} 
+                    />
+                    <InputGroup 
+                      label="Operational Base" 
+                      icon={<FaMapMarkerAlt />} 
+                      value={formData.location} 
+                      placeholder="City, Country"
+                      onChange={v => setFormData({...formData, location: v})} 
                     />
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Phone</label>
-                  <div className="relative">
-                    <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 w-3.5 h-3.5" />
-                    <input 
-                      type="text" 
-                      value={formData.phone} 
-                      placeholder="+92 300 0000000" 
-                      onChange={e => setFormData({...formData, phone: e.target.value})} 
-                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder:text-white/10 focus:border-primary/50 outline-none transition-colors" 
+                  <InputGroup 
+                    label="Primary Communication" 
+                    icon={<FaEnvelope />} 
+                    value={formData.email} 
+                    type="email"
+                    placeholder="nexus@codefix.io"
+                    onChange={v => setFormData({...formData, email: v})} 
+                  />
+                  <InputGroup 
+                    label="Secure Line" 
+                    icon={<FaPhone />} 
+                    value={formData.phone} 
+                    placeholder="+1 000 000 0000"
+                    onChange={v => setFormData({...formData, phone: v})} 
+                  />
+                  
+                  <button type="submit" disabled={updating} className="w-full bg-primary hover:bg-blue-600 py-5 rounded-[1.5rem] font-bold text-white shadow-xl shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 text-xs uppercase tracking-widest">
+                    {updating ? <FaCircleNotch className="animate-spin" /> : "Save Profile Details"}
+                  </button>
+                </motion.form>
+              ) : (
+                <motion.form 
+                  key="security-form"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  onSubmit={handleChangePassword} 
+                  className="space-y-8"
+                >
+                  <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-2xl flex items-start gap-4">
+                     <FaShieldAlt className="text-red-500 mt-1 shrink-0" />
+                     <p className="text-[11px] text-red-500/80 font-medium leading-relaxed">
+                        Updating your security protocols will require a complete re-authentication. Ensure your new access key is stored securely.
+                     </p>
+                  </div>
+
+                  <InputGroup 
+                    label="Current Access Key" 
+                    icon={<FaLock />} 
+                    type={showPasswords ? "text" : "password"}
+                    value={passwordData.oldPassword} 
+                    placeholder="••••••••"
+                    onChange={v => setPasswordData({...passwordData, oldPassword: v})} 
+                    isPassword
+                    showPasswords={showPasswords}
+                    onToggle={() => setShowPasswords(!showPasswords)}
+                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <InputGroup 
+                      label="New Access Key" 
+                      icon={<FaLock />} 
+                      type={showPasswords ? "text" : "password"}
+                      value={passwordData.newPassword} 
+                      placeholder="Min. 8 chars"
+                      onChange={v => setPasswordData({...passwordData, newPassword: v})} 
+                    />
+                    <InputGroup 
+                      label="Confirm Key" 
+                      icon={<FaLock />} 
+                      type={showPasswords ? "text" : "password"}
+                      value={passwordData.confirmPassword} 
+                      placeholder="Repeat new key"
+                      onChange={v => setPasswordData({...passwordData, confirmPassword: v})} 
                     />
                   </div>
-                </div>
-                <button type="submit" disabled={updating} className="w-full bg-primary py-4 rounded-2xl font-black text-white hover:bg-blue-600 shadow-xl shadow-primary/20 transition-all active:scale-[0.98]">
-                  {updating ? <FaCircleNotch className="animate-spin mx-auto w-5 h-5" /> : "Save Profile Details"}
-                </button>
-              </form>
-            ) : (
-              <form onSubmit={handleChangePassword} className="space-y-6">
-                {[
-                  { label: "Current Password", key: "oldPassword", ph: "••••••••" },
-                  { label: "New Password", key: "newPassword", ph: "Min. 8 characters" },
-                  { label: "Confirm Password", key: "confirmPassword", ph: "Repeat new password" }
-                ].map((field) => (
-                  <div key={field.key} className="space-y-2">
-                    <label className="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">{field.label}</label>
-                    <div className="relative">
-                      <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 w-3.5 h-3.5" />
-                      <input 
-                        type={showPasswords ? "text" : "password"} 
-                        required 
-                        value={passwordData[field.key]} 
-                        placeholder={field.ph}
-                        onChange={e => setPasswordData({...passwordData, [field.key]: e.target.value})} 
-                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-12 py-3.5 text-white placeholder:text-white/10 focus:border-primary/50 outline-none transition-colors" 
-                      />
-                      <button type="button" onClick={() => setShowPasswords(!showPasswords)} className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary hover:text-white transition-colors">
-                        {showPasswords ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                <button type="submit" disabled={updating} className="w-full bg-emerald-500 py-4 rounded-2xl font-black text-white hover:bg-emerald-600 shadow-xl shadow-emerald-500/20 transition-all active:scale-[0.98]">
-                  {updating ? <FaCircleNotch className="animate-spin mx-auto w-5 h-5" /> : "Update Access Keys"}
-                </button>
-              </form>
-            )}
+
+                  <button type="submit" disabled={updating} className="w-full bg-emerald-500 hover:bg-emerald-600 py-5 rounded-[1.5rem] font-bold text-white shadow-xl shadow-emerald-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 text-xs uppercase tracking-widest">
+                    {updating ? <FaCircleNotch className="animate-spin" /> : "Update Security Protocols"}
+                  </button>
+                </motion.form>
+              )}
+            </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
 };
+
+const InputGroup = ({ label, icon, value, placeholder, onChange, type = "text", isPassword, showPasswords, onToggle }) => (
+  <div className="space-y-2.5">
+    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+    <div className="relative group/input">
+      <div className="absolute left-5 top-1/2 -translate-y-1/2 text-primary/40 group-focus-within/input:text-primary transition-colors">
+        {icon}
+      </div>
+      <input 
+        type={type} 
+        value={value} 
+        placeholder={placeholder}
+        onChange={e => onChange(e.target.value)}
+        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-14 pr-12 py-4 text-white text-sm font-semibold placeholder:text-white/10 focus:border-primary/40 focus:bg-white/[0.05] outline-none transition-all" 
+      />
+      {isPassword && (
+        <button 
+          type="button" 
+          onClick={onToggle} 
+          className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+        >
+          {showPasswords ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
+        </button>
+      )}
+    </div>
+  </div>
+);
 
 export default ProfileSettings;

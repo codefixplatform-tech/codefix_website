@@ -1,144 +1,200 @@
+import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { FaRocket, FaMicrochip, FaUsers, FaArrowRight } from "react-icons/fa6";
+import { 
+  FaRocket, 
+  FaMicrochip, 
+  FaUsers, 
+  FaArrowRight, 
+  FaShieldAlt, 
+  FaBolt, 
+  FaCode, 
+  FaLayerGroup 
+} from "react-icons/fa";
+import { motion } from 'framer-motion';
 
 const About = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
 
+  const fadeIn = {
+    initial: { opacity: 0, y: 30 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.6 }
+  };
+
   return (
-    <section id="about" className={`relative overflow-hidden bg-background text-white ${isDashboard ? 'pt-10 pb-20' : 'pt-32 pb-20 lg:pt-40'}`}>
-      {/* Background Glows - Syncing with Hero depth */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
-        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[130px] rounded-full opacity-50"></div>
-        <div className="absolute bottom-[10%] left-[-10%] w-[30%] h-[30%] bg-blue-600/10 blur-[100px] rounded-full"></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {/* 1. Header Section */}
-        <div className={`text-center space-y-6 ${isDashboard ? 'mb-12' : 'mb-24'}`}>
-          <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-2 rounded-full backdrop-blur-md">
-            <FaRocket className="text-primary text-xs" />
-            <span className="text-[10px] font-semibold font-black text-slate-300 tracking-[3px] uppercase">
-              Our Vision & Story
-            </span>
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-semibold font-black text-white leading-[1.1] tracking-tight">
-            Bridging the Gap Between <br />
-            <span className="bg-gradient-to-r from-primary via-blue-400 to-emerald-400 bg-clip-text text-transparent">
-              Problems and Solutions
-            </span>
-          </h1>
-          
-          <p className="max-w-3xl mx-auto text-secondary text-lg leading-relaxed">
-            Codefix was engineered to eliminate the friction in modern development. 
-            We've unified Community Intelligence, AI-driven automation, and high-performance 
-            file utilities into a single, cohesive ecosystem.
-          </p>
+    <div className={`bg-background text-white overflow-hidden font-sans ${isDashboard ? 'pt-10' : ''}`}>
+      
+      {/* --- 1. MISSION HEADER --- */}
+      <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
+          <div className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[150px] rounded-full"></div>
+          <div className="absolute bottom-0 left-[-5%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full"></div>
         </div>
 
-        {/* 2. Core Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          <AboutCard 
-            icon={<FaRocket className="w-6 h-6 text-primary" />}
-            title="Our Mission"
-            desc="To accelerate the global programming workflow by providing instant, verified solutions and high-speed developer tools."
-          />
-          <AboutCard 
-            icon={<FaMicrochip className="w-6 h-6 text-emerald-400" />}
-            title="Smart Tech"
-            desc="Leveraging state-of-the-art AI models to analyze complex bugs and generate clean, production-ready code in milliseconds."
-            highlight={true} 
-          />
-          <AboutCard 
-            icon={<FaUsers className="w-6 h-6 text-blue-400" />}
-            title="Community"
-            desc="Fostering a collaborative space where knowledge is shared freely, empowering developers to grow together."
-          />
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 text-center space-y-10">
+           <motion.div {...fadeIn} className="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-2 rounded-full backdrop-blur-md">
+              <FaRocket className="text-primary text-[10px]" />
+              <span className="text-[10px] font-semibold text-slate-300 tracking-[4px] uppercase">The Story of Codefix</span>
+           </motion.div>
+           
+           <motion.h1 {...fadeIn} className="text-4xl sm:text-6xl md:text-8xl font-semibold leading-[1.05] tracking-tight px-4">
+              Reimagining the <br />
+              <span className="bg-gradient-to-r from-primary via-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                Developer Workflow
+              </span>
+           </motion.h1>
+
+           <motion.p {...fadeIn} className="max-w-4xl mx-auto text-secondary text-base md:text-xl font-semibold opacity-80 leading-relaxed px-4">
+              We started with a simple question: Why do developers have to switch between a dozen tabs just to fix a bug, convert a file, or ask a question?
+           </motion.p>
         </div>
+      </section>
 
-        {/* 3. Detailed Philosophy - Refined English */}
-        <div className="mt-24 p-8 md:p-16 rounded-[3rem] bg-surface/30 border border-white/10 backdrop-blur-md relative overflow-hidden">
-          {/* Subtle inner glow for the big card */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -z-10"></div>
-          
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <h3 className="text-4xl font-black text-white tracking-tight">Why Codefix?</h3>
-              <div className="space-y-6 text-secondary text-lg leading-relaxed font-medium">
-                <p>
-                  Our vision is anchored in a single principle: <span className="text-white font-bold underline decoration-primary underline-offset-4">Maximum Efficiency</span>. 
-                  We believe developers shouldn't have to navigate sketchy websites for file conversions or spend hours scouring 
-                  outdated forums for a simple bug fix.
-                </p>
-                <p>
-                  Codefix provides the architecture that keeps you in the flow. By integrating everything 
-                  from AI debugging to secure document processing, we ensure your focus remains where it 
-                  matters most—building great software.
-                </p>
-              </div>
-              
-              <div className="flex flex-wrap gap-12 pt-6">
-                <div className="space-y-1">
-                  <h4 className="text-white font-black text-4xl">99.9%</h4>
-                  <p className="text-primary text-[10px] font-black uppercase tracking-[3px]">System Uptime</p>
-                </div>
-                <div className="border-l border-white/10 pl-12 space-y-1">
-                  <h4 className="text-white font-black text-4xl">24/7</h4>
-                  <p className="text-emerald-400 text-[10px] font-black uppercase tracking-[3px]">AI Availability</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative group">
-              {/* Animated Decorative Element */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary to-blue-500 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-              <div className="relative aspect-square md:aspect-video rounded-[2.5rem] bg-[#0B0E14] border border-white/10 overflow-hidden flex flex-col items-center justify-center p-12 text-center">
-                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6 animate-pulse">
-                    <FaMicrochip className="w-10 h-10 text-primary" />
-                  </div>
-                  <h4 className="text-white font-black text-2xl mb-2">The Ecosystem</h4>
-                  <p className="text-secondary text-sm max-w-[250px]">Unified workspace for the modern developer.</p>
+      {/* --- 2. THE TRIFECTA (THE CORE STORY) --- */}
+      <section className="py-24 relative overflow-hidden">
+         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
+            <div className="grid lg:grid-cols-2 gap-20 items-center">
+               <motion.div {...fadeIn} className="space-y-10">
+                   <h2 className="text-3xl md:text-5xl font-semibold tracking-tight">One Ecosystem. <br />Infinite Possibilities.</h2>
+                   <p className="text-secondary text-base md:text-lg font-semibold opacity-70 leading-relaxed">
+                     Codefix isn't just another utility site. It's a precision-engineered architecture that brings together the three pillars of modern engineering:
+                  </p>
                   
-                  {/* Floating UI Elements Simulation */}
-                  <div className="absolute top-10 right-10 bg-white/5 border border-white/10 p-3 rounded-xl backdrop-blur-xl text-[10px] font-bold text-emerald-400">
-                    Fix Ready ⚡
+                  <div className="space-y-8">
+                     <StoryPoint 
+                        icon={<FaMicrochip />} 
+                        title="Neural Intelligence" 
+                        desc="Advanced AI that doesn't just guess, but understands your codebase to provide verified refactors." 
+                     />
+                     <StoryPoint 
+                        icon={<FaLayerGroup />} 
+                        title="Local-First Processing" 
+                        desc="Privacy-centric file tools that process gigabytes of data directly in your browser, keeping your secrets safe." 
+                     />
+                     <StoryPoint 
+                        icon={<FaUsers />} 
+                        title="Collective Wisdom" 
+                        desc="A high-velocity Q&A community where senior developers and AI agents collaborate to solve the unsolvable." 
+                     />
                   </div>
-                  <div className="absolute bottom-10 left-10 bg-white/5 border border-white/10 p-3 rounded-xl backdrop-blur-xl text-[10px] font-bold text-primary">
-                    AI Online 🤖
+               </motion.div>
+
+               <motion.div 
+                 initial={{ opacity: 0, scale: 0.9 }}
+                 whileInView={{ opacity: 1, scale: 1 }}
+                 className="relative"
+               >
+                  <div className="absolute -inset-4 bg-primary/10 blur-[100px] rounded-full"></div>
+                  <div className="relative bg-surface/30 border border-white/10 rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-12 backdrop-blur-3xl shadow-2xl overflow-hidden group">
+                     <div className="absolute top-0 right-0 p-8">
+                        <FaCode className="text-primary/20 text-8xl rotate-12 group-hover:rotate-0 transition-transform duration-1000" />
+                     </div>
+                     <div className="space-y-8 relative z-10">
+                        <h4 className="text-2xl font-semibold">The Architecture</h4>
+                        <div className="space-y-4">
+                           <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                              <motion.div initial={{ width: 0 }} whileInView={{ width: "90%" }} transition={{ duration: 1.5 }} className="h-full bg-primary" />
+                           </div>
+                           <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">AI Accuracy: 90%+</p>
+                        </div>
+                        <div className="space-y-4">
+                           <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                              <motion.div initial={{ width: 0 }} whileInView={{ width: "100%" }} transition={{ duration: 1.5, delay: 0.2 }} className="h-full bg-emerald-500" />
+                           </div>
+                           <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Privacy Guarantee: 100%</p>
+                        </div>
+                        <div className="pt-8 border-t border-white/5 grid grid-cols-2 gap-8">
+                           <div>
+                              <p className="text-3xl font-semibold">0.2s</p>
+                              <p className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">Avg. Tool Latency</p>
+                           </div>
+                           <div>
+                              <p className="text-3xl font-semibold">15+</p>
+                              <p className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">Integrated Tools</p>
+                           </div>
+                        </div>
+                     </div>
                   </div>
-              </div>
+               </motion.div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
+         </div>
+      </section>
+
+      {/* --- 3. PHILOSOPHY & VALUES --- */}
+      <section className="py-24 bg-white/[0.02]">
+         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
+            <motion.div {...fadeIn} className="text-center mb-24 space-y-6">
+               <h2 className="text-4xl md:text-5xl font-semibold tracking-tight">Our Core Principles</h2>
+               <p className="text-secondary text-lg font-semibold opacity-70 max-w-2xl mx-auto">We build for developers who value their time, privacy, and precision.</p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+               <ValueCard 
+                  icon={<FaShieldAlt />} 
+                  title="Zero-Server Privacy" 
+                  desc="We believe your data is your property. That's why our file converters and dev utilities run entirely on your hardware." 
+               />
+               <ValueCard 
+                  icon={<FaBolt />} 
+                  title="Sub-Second Speed" 
+                  desc="Performance isn't a feature; it's a requirement. Every module is optimized for instantaneous response and feedback." 
+               />
+               <ValueCard 
+                  icon={<FaUsers />} 
+                  title="Community First" 
+                  desc="Codefix is powered by people. Our reputation system rewards those who help others grow and solve complex challenges." 
+               />
+            </div>
+         </div>
+      </section>
+
+      {/* --- 4. FUTURE VISION --- */}
+      <section className="py-40 relative">
+         <div className="max-w-5xl mx-auto px-4 text-center">
+            <motion.div 
+               initial={{ opacity: 0, y: 20 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               className="space-y-12"
+            >
+               <h2 className="text-5xl md:text-7xl font-semibold tracking-tight leading-tight">Shaping the Future <br /> of Engineering.</h2>
+               <p className="text-secondary text-xl font-semibold opacity-80 max-w-3xl mx-auto leading-relaxed">
+                  We are just getting started. From automated refactoring to collaborative cloud workspaces, Codefix is evolving every day to meet the demands of the modern engineer.
+               </p>
+               <div className="pt-10">
+                  <button className="bg-primary hover:bg-blue-600 text-white px-12 py-5 rounded-2xl font-semibold shadow-xl shadow-primary/20 transition-all hover:scale-105 group flex items-center gap-4 mx-auto uppercase tracking-widest text-sm">
+                     Join the Journey <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
+                  </button>
+               </div>
+            </motion.div>
+         </div>
+      </section>
+    </div>
   );
 };
 
-const AboutCard = ({ icon, title, desc, highlight }) => (
-  <div className={`group relative bg-surface/30 border ${highlight ? 'border-primary/40 bg-primary/5 shadow-[0_0_40px_rgba(59,130,246,0.1)]' : 'border-white/10'} p-10 rounded-[2.5rem] backdrop-blur-md hover:-translate-y-2 transition-all duration-500`}>
-    <div className="mb-8">
-      <div className={`mb-6 group-hover:scale-110 transition-transform duration-500 inline-flex items-center justify-center w-14 h-14 ${highlight ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white/5 text-primary'} rounded-2xl`}>
+// --- SUBCOMPONENTS ---
+
+const StoryPoint = ({ icon, title, desc }) => (
+  <div className="flex gap-6 group">
+    <div className="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-primary text-xl shrink-0 group-hover:bg-primary group-hover:text-white transition-all">
+      {icon}
+    </div>
+    <div className="space-y-2">
+      <h4 className="text-xl font-semibold tracking-tight">{title}</h4>
+      <p className="text-secondary text-base font-semibold opacity-70 leading-relaxed">{desc}</p>
+    </div>
+  </div>
+);
+
+const ValueCard = ({ icon, title, desc }) => (
+  <div className="p-12 rounded-[3.5rem] bg-surface/30 border border-white/5 hover:border-primary/40 transition-all group">
+     <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-3xl mb-10 group-hover:scale-110 transition-transform">
         {icon}
-      </div>
-      <h3 className="text-white font-black text-2xl group-hover:text-primary transition-colors tracking-tight">{title}</h3>
-      <p className="text-primary/70 text-[10px] font-black uppercase tracking-widest mt-2 flex items-center gap-2">
-        <span className="w-4 h-[1px] bg-primary/30"></span> 
-        Core Pillar
-      </p>
-    </div>
-    <p className="text-secondary text-sm leading-relaxed group-hover:text-slate-200 transition-colors font-medium">
-      {desc}
-    </p>
-    
-    <div className="mt-8 flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#3b82f6]" />
-        <div className="h-[1px] w-12 bg-white/10" />
-      </div>
-      <FaArrowRight className="text-white/10 group-hover:text-primary group-hover:translate-x-1 transition-all" />
-    </div>
+     </div>
+     <h4 className="text-2xl font-semibold text-white mb-4 tracking-tight">{title}</h4>
+     <p className="text-secondary text-base font-semibold opacity-70 leading-relaxed">{desc}</p>
   </div>
 );
 

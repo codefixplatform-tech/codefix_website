@@ -10,8 +10,12 @@ import {
   FaHistory, 
   FaLayerGroup,
   FaBolt,
-  FaRobot
+  FaRobot,
+  FaMagic,
+  FaPlus,
+  FaChartLine
 } from "react-icons/fa";
+import { motion, AnimatePresence } from 'framer-motion';
 
 const DashboardHome = () => {
   const navigate = useNavigate();
@@ -30,7 +34,6 @@ const DashboardHome = () => {
         const { data: { user } } = await supabase.auth.getUser();
         
         if (user) {
-          // stats aur activity fetch karen (Profile layout se aa raha ha)
           const [questionsCount, answersCount, recentQs] = await Promise.all([
             supabase.from('questions').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
             supabase.from('answers').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
@@ -59,45 +62,59 @@ const DashboardHome = () => {
   const displayName = profile?.full_name ? profile.full_name.split(' ')[0] : 'Developer';
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-10 pb-10">
       
-      {/* 1. Welcome Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/5">
-        <div>
-          <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-none">
-            {loading ? "Welcome Back..." : `Hello, ${displayName}!`}
-          </h1>
-          <p className="text-secondary mt-3 text-sm md:text-base font-medium opacity-80 italic">
-            "The best way to predict the future is to create it."
-          </p>
+      {/* --- 1. WELCOME HEADER --- */}
+      <div className="relative group">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-10 border-b border-white/5">
+          <div className="space-y-4">
+             <motion.div 
+               initial={{ opacity: 0, x: -20 }}
+               animate={{ opacity: 1, x: 0 }}
+               className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full"
+             >
+                <FaMagic className="text-primary text-[10px]" />
+                <span className="text-[10px] font-bold text-primary uppercase tracking-widest uppercase">Workspace Live</span>
+             </motion.div>
+             <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-white tracking-tight leading-none">
+               {loading ? "Initializing..." : `Hello, ${displayName}!`}
+             </h1>
+             <p className="text-secondary text-base md:text-lg font-medium opacity-60 italic max-w-xl">
+               "Your dashboard is synced with the latest community fixes and AI modules. Ready to build?"
+             </p>
+          </div>
+          
+          <button 
+            onClick={() => navigate('/dashboard/qa/ask')}
+            className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-4 bg-primary hover:bg-blue-600 text-white px-10 py-5 rounded-2xl font-bold text-[11px] uppercase tracking-widest transition-all shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 group"
+          >
+            <FaPlus className="text-sm group-hover:rotate-90 transition-transform" />
+            Launch Discussion
+          </button>
         </div>
-        
-        <button 
-          onClick={() => navigate('/dashboard/qa/ask')}
-          className="group flex items-center gap-3 bg-primary hover:bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95"
-        >
-          <span className="text-lg">+</span>
-          Ask Question
-        </button>
       </div>
 
-      {/* 2. Stats & Utilities Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column: Stats */}
-        <div className="lg:col-span-2 space-y-8">
+      {/* --- 2. STATS & UTILITIES GRID --- */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* LEFT: STATS & TOOLS (8 Cols) */}
+        <div className="lg:col-span-8 space-y-10">
+          
+          {/* STATS ROW */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <StatCard title="Questions" value={stats.questions} icon={<FaHistory className="text-blue-400" />} color="blue" />
+            <StatCard title="Total Questions" value={stats.questions} icon={<FaHistory className="text-blue-400" />} color="blue" />
             <StatCard title="Verified Fixes" value={stats.answers} icon={<FaBolt className="text-emerald-400" />} color="emerald" />
-            <StatCard title="Reputation" value={stats.reputation} icon={<FaLayerGroup className="text-primary" />} color="primary" />
+            <StatCard title="Reputation" value={stats.reputation} icon={<FaChartLine className="text-primary" />} color="primary" />
           </div>
 
+          {/* QUICK LAUNCH */}
           <div className="space-y-6">
              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-black text-white flex items-center gap-3">
+                <h2 className="text-2xl font-semibold text-white flex items-center gap-3 tracking-tight">
                   <span className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_10px_#3b82f6]"></span>
-                  Quick Launch Utilities
+                  Neural Utilities
                 </h2>
-                <button onClick={() => navigate('/dashboard/dev-utilities')} className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline">View All</button>
+                <button onClick={() => navigate('/dashboard/dev-utilities')} className="text-[10px] font-bold text-primary uppercase tracking-[3px] hover:underline">Full Library</button>
              </div>
              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <UtilityQuickLink icon={<FaCode />} title="JSON" path="json-formatter" color="blue" />
@@ -108,64 +125,72 @@ const DashboardHome = () => {
           </div>
         </div>
 
-        {/* Right Column: Recent Activity */}
-        <div className="bg-surface/30 border border-white/5 rounded-[2.5rem] p-8 flex flex-col backdrop-blur-xl">
-           <h3 className="text-lg font-black text-white mb-6 flex items-center gap-3">
-              <FaHistory className="text-secondary text-sm" />
-              Recent Activity
+        {/* RIGHT: RECENT ACTIVITY (4 Cols) */}
+        <div className="lg:col-span-4 bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-8 md:p-10 flex flex-col backdrop-blur-xl shadow-2xl relative overflow-hidden group">
+           <div className="absolute top-0 right-0 p-1">
+              <div className="w-24 h-24 -mr-12 -mt-12 bg-primary blur-3xl opacity-10 rounded-full group-hover:opacity-20 transition-opacity"></div>
+           </div>
+
+           <h3 className="text-xl font-semibold text-white mb-8 flex items-center gap-3 tracking-tight">
+              <FaHistory className="text-primary text-sm" />
+              Stream History
            </h3>
-           <div className="flex-1 space-y-6">
+
+           <div className="flex-1 space-y-8 relative z-10">
               {recentQuestions.length > 0 ? recentQuestions.map(q => (
-                <div key={q.id} className="group cursor-pointer" onClick={() => navigate(`/dashboard/questions/${q.id}`)}>
-                   <p className="text-slate-200 font-bold text-sm line-clamp-1 group-hover:text-primary transition-colors">{q.title}</p>
-                   <p className="text-[10px] text-secondary/60 mt-1 uppercase font-black tracking-widest tabular-nums">Posted Recently</p>
-                   <div className="h-[1px] w-full bg-white/5 mt-4 group-last:hidden"></div>
+                <div key={q.id} className="group/item cursor-pointer" onClick={() => navigate(`/dashboard/questions/${q.id}`)}>
+                   <p className="text-slate-200 font-semibold text-base leading-tight line-clamp-2 group-hover/item:text-primary transition-colors">{q.title}</p>
+                   <p className="text-[10px] text-secondary/40 mt-2 uppercase font-bold tracking-[2px] flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary/30"></span> Posted Recently
+                   </p>
+                   <div className="h-[1px] w-full bg-white/5 mt-6 group-last:hidden"></div>
                 </div>
               )) : (
-                <div className="h-full flex flex-col items-center justify-center text-center opacity-40 py-10">
-                   <div className="w-12 h-12 rounded-full border-2 border-dashed border-white/20 flex items-center justify-center mb-4">
-                      <span className="text-xs">?</span>
+                <div className="h-full flex flex-col items-center justify-center text-center opacity-30 py-20">
+                   <div className="w-16 h-16 rounded-full border border-dashed border-white/20 flex items-center justify-center mb-6">
+                      <FaHistory className="text-lg" />
                    </div>
-                   <p className="text-xs font-bold uppercase tracking-widest">No Activity Yet</p>
+                   <p className="text-[10px] font-bold uppercase tracking-widest">No Recent Stream</p>
                 </div>
               )}
            </div>
-           <button onClick={() => navigate('/dashboard/qa')} className="mt-8 flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all text-[11px] font-black uppercase tracking-widest group">
-              Global Feed <FaArrowRight className="text-[10px] group-hover:translate-x-1 transition-transform" />
+
+           <button onClick={() => navigate('/dashboard/questions')} className="mt-10 flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all text-[11px] font-bold uppercase tracking-widest group/btn border border-white/5 py-4 rounded-2xl bg-white/5">
+              Access Full Feed <FaArrowRight className="text-[10px] group-hover/btn:translate-x-1 transition-transform" />
            </button>
         </div>
       </div>
 
-      {/* 3. Core Integrated Modules */}
-      <div className="space-y-6">
-        <h2 className="text-xl font-black text-white flex items-center gap-3">
-          <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
-          Integrated Modules
+      {/* --- 3. MODULES SECTION --- */}
+      <div className="space-y-8 pt-10">
+        <h2 className="text-2xl font-semibold text-white flex items-center gap-3 tracking-tight">
+          <span className="w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_10px_#10b981]"></span>
+          Nexus Modules
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <ModuleCard 
             title="File Power Tools" 
-            desc="Batch convert PDFs, optimize images, and manage assets with military-grade speed."
-            tags={['v2.0', 'Secure']}
+            desc="Batch process documents and assets with local encryption and military-grade speed."
+            tags={['v2.5', 'Secure']}
             icon={<FaLayerGroup />}
             color="blue"
             onClick={() => navigate('/dashboard/tools')}
           />
 
           <ModuleCard 
-            title="Dev Q&A Hub" 
-            desc="Solve bugs together. Access verified solutions and earn reputation points."
-            tags={['Community', 'Fixes']}
+            title="Community Hub" 
+            desc="Solve bugs together. Access verified solutions and earn global reputation points."
+            tags={['Global', 'Live']}
             icon={<FaHistory />}
             color="purple"
             onClick={() => navigate('/dashboard/questions')}
           />
 
           <ModuleCard 
-            title="AI Code Assistant" 
-            desc="Gemini powered models to help you refactor and document your codebase instantly."
-            tags={['Pro', 'GPT']}
+            title="AI Neural Core" 
+            desc="Advanced LLM modules integrated to refactor, document, and fix your codebase."
+            tags={['Pro', 'AI']}
             icon={<FaRobot />}
             color="emerald"
             onClick={() => navigate('/ai-assistant')}
@@ -176,21 +201,21 @@ const DashboardHome = () => {
   );
 };
 
-// --- Sub-Components ---
+// --- SUB-COMPONENTS ---
 
 const StatCard = ({ title, value, icon, color }) => {
   const colors = {
-    blue: "group-hover:border-blue-500/40",
-    emerald: "group-hover:border-emerald-500/40",
-    primary: "group-hover:border-primary/40"
+    blue: "hover:border-blue-500/40 hover:bg-blue-500/[0.02]",
+    emerald: "hover:border-emerald-500/40 hover:bg-emerald-500/[0.02]",
+    primary: "hover:border-primary/40 hover:bg-primary/[0.02]"
   };
   return (
-    <div className={`bg-surface/40 border border-white/5 p-6 rounded-[2rem] transition-all group ${colors[color]}`}>
-      <div className="flex items-center gap-4 mb-4">
-        <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">{icon}</div>
-        <p className="text-secondary text-[10px] font-black uppercase tracking-widest">{title}</p>
+    <div className={`bg-white/[0.02] border border-white/5 p-8 rounded-[2.5rem] transition-all group ${colors[color]} shadow-xl backdrop-blur-sm`}>
+      <div className="flex items-center gap-4 mb-6">
+        <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:bg-white/10 transition-all border border-white/5">{icon}</div>
+        <p className="text-secondary/50 text-[10px] font-bold uppercase tracking-[2px]">{title}</p>
       </div>
-      <h3 className="text-3xl font-black text-white tabular-nums">{value}</h3>
+      <h3 className="text-4xl font-semibold text-white tabular-nums tracking-tight">{value}</h3>
     </div>
   );
 };
@@ -206,30 +231,34 @@ const UtilityQuickLink = ({ icon, title, path, color }) => {
   return (
     <button 
       onClick={() => navigate(`/dashboard/dev-utilities/${path}`)}
-      className={`flex flex-col items-center gap-3 p-4 rounded-2xl border transition-all ${colors[color]}`}
+      className={`flex flex-col items-center gap-4 p-5 rounded-[2rem] border transition-all ${colors[color]} group`}
     >
-      <div className="text-xl">{icon}</div>
-      <span className="text-[10px] font-black uppercase tracking-widest">{title}</span>
+      <div className="text-2xl group-hover:scale-110 transition-transform">{icon}</div>
+      <span className="text-[10px] font-bold uppercase tracking-widest">{title}</span>
     </button>
   );
 };
 
 const ModuleCard = ({ title, desc, tags, icon, color, onClick }) => {
   const colors = {
-    blue: "hover:border-blue-500/30",
-    purple: "hover:border-purple-500/30",
-    emerald: "hover:border-emerald-500/30"
+    blue: "hover:border-blue-500/30 group-hover:text-blue-400",
+    purple: "hover:border-purple-500/30 group-hover:text-purple-400",
+    emerald: "hover:border-emerald-500/30 group-hover:text-emerald-400"
   };
   return (
-    <div onClick={onClick} className={`bg-surface/30 border border-white/5 p-8 rounded-[2.5rem] ${colors[color]} transition-all cursor-pointer group relative overflow-hidden`}>
-      <div className={`mb-6 w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform ${color === 'blue' ? 'text-blue-400' : color === 'purple' ? 'text-purple-400' : 'text-emerald-400'}`}>
+    <div onClick={onClick} className={`bg-white/[0.02] border border-white/5 p-8 md:p-10 rounded-[3rem] ${colors[color]} transition-all cursor-pointer group relative overflow-hidden shadow-2xl hover:bg-white/[0.04]`}>
+      <div className="absolute top-0 right-0 p-1">
+         <div className={`w-32 h-32 -mr-16 -mt-16 blur-[60px] opacity-10 rounded-full ${color === 'blue' ? 'bg-blue-500' : color === 'purple' ? 'bg-purple-500' : 'bg-emerald-500'}`}></div>
+      </div>
+
+      <div className={`mb-8 w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform border border-white/5 ${color === 'blue' ? 'text-blue-400' : color === 'purple' ? 'text-purple-400' : 'text-emerald-400'}`}>
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-      <p className="text-secondary text-sm leading-relaxed mb-6 opacity-60 line-clamp-2">{desc}</p>
+      <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight">{title}</h3>
+      <p className="text-secondary text-sm leading-relaxed mb-10 font-medium opacity-50 line-clamp-2">{desc}</p>
       <div className="flex flex-wrap gap-2">
         {tags.map(tag => (
-          <span key={tag} className="text-[9px] text-white/30 bg-white/5 px-3 py-1 rounded-full uppercase font-black tracking-widest">{tag}</span>
+          <span key={tag} className="text-[9px] text-white/40 bg-white/5 px-4 py-2 rounded-full uppercase font-bold tracking-widest border border-white/5">{tag}</span>
         ))}
       </div>
     </div>

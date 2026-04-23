@@ -27,7 +27,7 @@ const ProtectedRoute = () => {
   }
 
   // Agar user login nahi hai toh login page par bhej do (Hamesha dashboard par jayega ab)
-  return session ? <Outlet context={context} /> : <Navigate to="/login" replace />;
+  return session ? <Outlet context={context} /> : <Navigate to="/" replace />;
 };
 
 export default ProtectedRoute;

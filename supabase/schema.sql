@@ -59,6 +59,24 @@ create table public.votes (
   constraint votes_vote_type_check check ((vote_type = any (array[1, '-1'::integer])))
 ) TABLESPACE pg_default;
 
+-- Function to sync votes count
+CREATE OR REPLACE FUNCTION sync_votes_count()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE questions
+    SET votes_count = (SELECT COALESCE(SUM(vote_type), 0) FROM votes WHERE question_id = COALESCE(NEW.question_id, OLD.question_id))
+    WHERE id = COALESCE(NEW.question_id, OLD.question_id);
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+create trigger trg_sync_votes
+after INSERT
+or DELETE
+or
+update on votes for EACH row
+execute FUNCTION sync_votes_count ();
+
 -- 5. Chats Table
 create table public.chats (
   id uuid not null default gen_random_uuid (),

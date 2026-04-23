@@ -8,13 +8,15 @@ const Sidebar = ({ closeMenu, profile, loading }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Logged out!");
-      navigate('/');
-    }
+    toast.success("Logout Successful!");
+    setTimeout(async () => {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        toast.error(error.message);
+      } else {
+        navigate('/');
+      }
+    }, 2000);
   };
 
   const fullName = profile?.full_name || "Developer";

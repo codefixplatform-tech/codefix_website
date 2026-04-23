@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link} from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
 import { FaPlus, FaRegTrashCan, FaRobot, FaCheck} from 'react-icons/fa6'; 
@@ -27,7 +27,9 @@ const AISidebar = ({ chats, activeChatId, onSelectChat, onNewChat, onDeleteChat,
         
         {/* CodeFix Branding */}
         <div className="flex flex-col mb-5 px-2">
-          <img src="/logo.png" alt="Codefix" className="h-10 w-auto object-contain self-start opacity-90" />
+           <Link to="/"> 
+            <img src="/logo.png" alt="Codefix" className="h-10 w-auto object-contain self-start opacity-90" />
+         </Link>
           <span className="text-[13px] font-black uppercase tracking-[0.2em] text-primary/80 mt-1 ml-3.5">
             AI Assistant
           </span>

@@ -12,7 +12,7 @@ const AIChatLayout = ({ user }) => {
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [newChatTrigger, setNewChatTrigger] = useState(0);
 
   // 1. Fetch History logic (stable reference)

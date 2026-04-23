@@ -131,7 +131,11 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
 
   // Auto-scroll logic
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+    if (messages.length > 0) {
+      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+    } else {
+      scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, [messages, loading]);
 
   return (
@@ -144,9 +148,9 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
       {/* Messages Display */}
       <div className="flex-1 overflow-y-auto pt-8 pb-4 px-4 sm:pt-10 sm:px-8 space-y-6 sm:space-y-8 custom-scrollbar relative z-10" ref={scrollRef}>
         {messages.length === 0 && (
-          <div className="h-full flex flex-col items-center justify-center pt-24 sm:pt-0 space-y-10 animate-in fade-in zoom-in duration-700 w-full max-w-3xl mx-auto px-4 pb-10">
+          <div className="min-h-full flex flex-col items-center justify-start sm:justify-center pt-10 sm:pt-0 space-y-10 animate-in fade-in zoom-in duration-700 w-full max-w-3xl mx-auto px-4 pb-10">
             <div className="text-center">
-              <div className="hidden sm:flex w-16 h-16 bg-primary/10 rounded-[2rem] items-center justify-center border border-primary/20 shadow-2xl shadow-primary/20 mx-auto mb-6">
+              <div className="flex w-16 h-16 bg-primary/10 rounded-[2rem] items-center justify-center border border-primary/20 shadow-2xl shadow-primary/20 mx-auto mb-6">
                 <FaRobot className="text-3xl text-primary" />
               </div>
               <h2 className="text-3xl font-black text-white tracking-wide mb-2">How can I help you today?</h2>

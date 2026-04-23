@@ -33,6 +33,7 @@ import DevUtilities from "./pages/Dev Tools/DevUtilities";
 import FileUpload from "./pages/Coonverter tools/FileUpload";
 import DevToolProcessor from "./pages/Dev Tools/DevToolProcessor";
 import MyActivity from "./pages/Dashboard/MyActivity";
+import AccountPreference from "./pages/Dashboard/AccountPreference";
 
 // AI Components
 import AIChatLayout from "./components/AI/AIChatLayout";
@@ -194,6 +195,14 @@ const AnimatedRoutes = ({ user, loading }) => {
               element={
                 <PageTransition>
                   <MyActivity />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="preferences"
+              element={
+                <PageTransition>
+                  <AccountPreference />
                 </PageTransition>
               }
             />

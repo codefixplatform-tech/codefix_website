@@ -1,123 +1,98 @@
-# 🚀 CodeFix - Ultimate Developer Toolbox & Community Platform
+# 🚀 CodeFix: The Neural Developer Ecosystem
 
-CodeFix is a premium, high-performance ecosystem designed for modern developers. It seamlessly integrates a robust suite of developer utilities, high-fidelity file converters, a vibrant Q&A community, and a Gemini-powered AI assistant into a single, sleek dashboard.
-
-🌐 **Live Demo:** [https://codefix-website-iota.vercel.app/](https://codefix-website-iota.vercel.app/)
-
-![CodeFix Banner](https://via.placeholder.com/1200x400?text=CodeFix+Platform+Dashboard)
-
-## ✨ Core Ecosystem
-
-### 🛠️ 1. Developer Utilities (Dev Tools)
-A collection of essential tools optimized for speed and accuracy:
-- **JSON Formatter & Validator:** Instantly prettify, minify, and validate JSON data with real-time syntax checking.
-- **Base64 Master:** Securely encode and decode text or images to/from Base64 strings.
-- **Regex Lab:** Advanced regular expression testing with live matches and group highlighting.
-- **API Playground:** A lightweight browser-based client to test GET, POST, PUT, and DELETE requests with header inspection.
-
-### 📄 2. Premium Converter Suite
-Enterprise-grade document processing utilities:
-- **High-Fidelity PDF ↔ Word:** Convert documents while maintaining complex layouts and formatting.
-- **Smart PDF Compression:** Reduce file sizes significantly without compromising visual clarity.
-- **Excel to PDF:** Professional multi-sheet Excel conversion with automatic page adjustments.
-- **PDF Power Tools:** Merge multiple documents, split specific page ranges, or convert batches of images into a single PDF.
-
-### 🌐 3. Community Q&A Hub
-A knowledge-sharing platform built for growth:
-- **Smart Posting:** Ask questions using a rich Markdown editor with full code snippet support.
-- **Reputation System:** Earn points through verified answers and community upvotes.
-- **Interactive Voting:** Upvote or downvote solutions to highlight the most helpful content.
-- **Global Discovery:** Find solutions instantly using the integrated cross-platform search engine.
-
-### 🤖 4. AI Assistant (Gemini Powered)
-Your personal 24/7 technical co-pilot:
-- **Code Debugging:** Paste your bugs and get instant refactoring suggestions and fixes.
-- **Persistent Memory:** Your chat history is saved securely in Supabase for future reference.
-- **AI Credits:** Integrated credit system to manage high-performance model usage.
-
-### 📊 5. Developer Dashboard
-Personalized command center to manage your developer identity:
-- **Activity Tracking:** Monitor your posted questions, replies, and reputation growth.
-- **Account Security:** Full profile management, including avatar uploads, location settings, and password encryption.
-- **Quick Launch:** One-click access to your most-used utilities.
+**CodeFix** is a high-fidelity, premium platform engineered for modern developers. It combines elite developer utilities, enterprise-grade file converters, a vibrant community Q&A hub, and a Gemini-powered AI co-pilot into one seamless, glassmorphic experience.
 
 ---
 
-## 🛠️ Technology Stack
-
-- **Frontend:** React 18, Vite
-- **Styling:** Tailwind CSS 4.0, Framer Motion
-- **Backend:** Supabase (Auth, PostgreSQL, Storage, Real-time)
-- **AI Engine:** Google Gemini API
-- **Document Logic:** pdf-lib, jsPDF, mammoth.js, ExcelJS
-- **State Management:** React Context API, React Router 7
+## 💎 Premium Design Language
+CodeFix isn't just a tool; it's a visual experience.
+- **Glassmorphic UI**: Ultra-modern interface using `backdrop-blur-xl` and deep shadows for a high-end feel.
+- **Framer Motion Orchestration**: Silky smooth transitions and layout animations across every interaction.
+- **Neural Workspace**: Responsive workspaces for PDF management (Merge/Split) optimized for touch and desktop.
+- **ChatGPT-style AI Sidebar**: Intelligent responsive behavior—defaults to open on desktop, collapses on mobile.
 
 ---
 
-## 🏗️ Supabase Database Setup
+## 🔥 Core Modules
 
-CodeFix uses a centralized PostgreSQL schema. All table definitions, indexes, and constraints are documented here:
+### 🤖 1. DevIntel AI Engine (Gemini 1.5)
+Your 24/7 technical architect.
+- **Context-Aware Debugging**: Direct integration with Community Q&A to provide instant solutions to posted bugs.
+- **Persistent Memory**: Chat sessions are encrypted and stored in Supabase for cross-device continuity.
+- **Neural Core**: Powered by Google Gemini 1.5 for state-of-the-art code generation and logic analysis.
 
-👉 **[supabase/schema.sql](./supabase/schema.sql)**
+### 📄 2. Enterprise Converter Suite
+100% Client-side processing. Your files never leave your browser.
+- **PDF Powerhouse**: High-fidelity PDF to Word, Excel, PPTX, and Image conversions.
+- **Advanced PDF Logic**: Merge multiple files with draggable reordering and split documents with live thumbnail previews.
+- **Lossless Compression**: Aggressive size reduction using intelligent re-distillation without losing visual quality.
 
-### Key Tables:
-1. `profiles`: Extended user data and developer stats.
-2. `questions`: Community posts and metadata.
-3. `answers`: Solutions linked to questions.
-4. `votes`: User interactions and quality control.
-5. `chats`: AI session persistence.
+### 🛠️ 3. Developer Productivity Hub
+Essential utilities for the modern workflow:
+- **JSON & Base64 Labs**: High-performance formatting and encoding engines.
+- **Regex Neural Tester**: Real-time pattern matching with group isolation.
+- **API Playground**: Lightweight client for RESTful interaction testing.
+
+### 🌐 4. Community Knowledge Engine
+A decentralized knowledge hub with advanced data integrity.
+- **Auto-Sync Voting**: Real-time reputation and vote tracking powered by PostgreSQL triggers and RPCs.
+- **Markdown Mastery**: Rich text editing with integrated syntax highlighting for code sharing.
+- **Global Search**: Platform-wide index for tools, discussions, and documentation.
 
 ---
 
-## 🚀 Installation & Local Setup
+## 🏗️ Technical Architecture
 
-### 1. Prerequisites
-- Node.js (v18 or higher)
-- A Supabase project
-- A Google AI (Gemini) API Key
+### Tech Stack
+- **Frontend**: React 18 (Vite) + Tailwind CSS 4.0
+- **Animation**: Framer Motion
+- **Database/Auth**: Supabase (PostgreSQL + RLS + Storage)
+- **AI Integration**: Gemini SDK
+- **File Processing**: PDF.js, PDF-Lib, ExcelJS, Mammoth.js
 
-### 2. Clone & Install
+### Database Schema Highlights
+CodeFix uses a robust PostgreSQL schema with advanced logic:
+- **`profiles`**: Manages developer identity and reputation stats.
+- **`questions` & `answers`**: Core community data with full RLS protection.
+- **`votes`**: Integrated with a `sync_votes_count` trigger to ensure zero-latency data integrity.
+- **`ai_chats`**: JSONB session persistence for AI interactions.
+
+👉 See the full schema: [supabase/schema.sql](./supabase/schema.sql)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Installation
 ```bash
 git clone https://github.com/yourusername/codefix.git
 cd codefix
 npm install
 ```
 
-### 3. Environment Configuration
-Create a `.env` file in the root and add your credentials:
+### 2. Environment Variables
+Create a `.env` file in the root:
 ```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-VITE_GEMINI_API_KEY=your_gemini_api_key
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_GEMINI_API_KEY=your-api-key
 ```
 
-### 4. Run Development Server
+### 3. Local Execution
 ```bash
 npm run dev
 ```
-Open `http://localhost:5173` to see the platform in action.
 
 ---
 
-## 📁 Project Architecture
-
-```text
-codefix/
-├── src/
-│   ├── components/       # Atomic UI components (AI, Dashboard, Search)
-│   ├── layouts/          # Dashboard (Sidebar/Topbar) & Public Layouts
-│   ├── pages/            # Feature-rich pages (Dev Tools, Converters, QA)
-│   ├── lib/              # SDK Initializations (Supabase, etc.)
-│   ├── utils/            # Core logic (AI services, File converters)
-│   └── main.jsx          # Entry point
-├── supabase/             # SQL Schema & Migrations
-└── public/               # Global static assets
-```
+## 🔐 Security & Privacy
+- **Client-Side Processing**: PDF and file conversions happen entirely in the browser. No server-side file storage for temporary files.
+- **Row Level Security (RLS)**: Every database interaction is validated against the user's authenticated session.
+- **Privacy First**: Sensitive AI conversations are stored securely and accessible only to the session owner.
 
 ---
 
-## 📜 License & Contribution
+## 🤝 Contribution
+CodeFix is built by the community. Feel free to submit PRs for new tools or UI enhancements.
 
-Distributed under the MIT License. Contributions are welcome to help make CodeFix the best tool for the community.
-
-**Built with ❤️ by Developers, for Developers.**
+**Built with ❤️ for the next generation of developers.**

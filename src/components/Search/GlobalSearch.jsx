@@ -16,7 +16,8 @@ import {
   FaRobot,
   FaHome,
   FaUser,
-  FaInfoCircle
+  FaInfoCircle,
+  FaCog
 } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -27,19 +28,26 @@ const SITE_MAP = [
   { title: "Regex Tester", path: "/dev-utilities/regex-tester", category: "Dev Tools", icon: <FaHashtag />, keywords: "pattern match regular expression" },
   { title: "API Tester", path: "/dev-utilities/api-tester", category: "Dev Tools", icon: <FaTerminal />, keywords: "http request post get rest" },
   
-  // File Tools
+  // File Tools (Converters & Editors)
   { title: "PDF to Word", path: "/tools/pdf-to-word", category: "PDF Tools", icon: <FaFilePdf />, keywords: "convert docx office" },
   { title: "Word to PDF", path: "/tools/word-to-pdf", category: "PDF Tools", icon: <FaFileWord />, keywords: "convert docx office" },
-  { title: "Compress PDF", path: "/tools/compress-pdf", category: "PDF Tools", icon: <FaFilePdf />, keywords: "size reduce light" },
-  { title: "Merge PDF", path: "/tools/merge-pdf", category: "PDF Tools", icon: <FaTools />, keywords: "combine join" },
-  { title: "Image to PDF", path: "/tools/image-to-pdf", category: "PDF Tools", icon: <FaFilePdf />, keywords: "jpg png convert" },
+  { title: "Excel to PDF", path: "/tools/excel-to-pdf", category: "PDF Tools", icon: <FaFilePdf />, keywords: "convert spreadsheet xlsx" },
+  { title: "Merge PDF", path: "/tools/merge-pdf", category: "PDF Tools", icon: <FaTools />, keywords: "combine join sequence" },
+  { title: "Split PDF", path: "/tools/split-pdf", category: "PDF Tools", icon: <FaTools />, keywords: "extract separate pages" },
+  { title: "Compress PDF", path: "/tools/compress-pdf", category: "PDF Tools", icon: <FaFilePdf />, keywords: "size reduce light optimization" },
+  { title: "Image to PDF", path: "/tools/image-to-pdf", category: "PDF Tools", icon: <FaFilePdf />, keywords: "jpg png convert scan" },
+  { title: "PDF to PPTX", path: "/tools/pdf-to-pptx", category: "PDF Tools", icon: <FaFilePdf />, keywords: "convert slides powerpoint" },
+  { title: "PPTX to PDF", path: "/tools/pptx-to-pdf", category: "PDF Tools", icon: <FaFilePdf />, keywords: "convert slides powerpoint" },
+  { title: "PDF to Excel", path: "/tools/pdf-to-excel", category: "PDF Tools", icon: <FaFilePdf />, keywords: "convert spreadsheet table data" },
   
-  // Pages
-  { title: "AI Assistant", path: "/ai-assistant", category: "Platform", icon: <FaRobot />, keywords: "chat help bot gpt" },
-  { title: "Home", path: "/", category: "Platform", icon: <FaHome />, keywords: "main landing" },
-  { title: "About Us", path: "/about", category: "Platform", icon: <FaInfoCircle />, keywords: "company team" },
-  { title: "Community Q&A", path: "/questions", category: "Community", icon: <FaQuestionCircle />, keywords: "help forum discussion" },
-  { title: "My Profile", path: "/dashboard/profile", category: "Dashboard", icon: <FaUser />, keywords: "settings account" }
+  // Pages & Navigation
+  { title: "AI Assistant", path: "/ai-assistant", category: "Platform", icon: <FaRobot />, keywords: "chat help bot gpt neural" },
+  { title: "Community Q&A", path: "/questions", category: "Community", icon: <FaQuestionCircle />, keywords: "help forum discussion solver" },
+  { title: "Ask Question", path: "/questions/ask", category: "Community", icon: <FaQuestionCircle />, keywords: "post help discussion" },
+  { title: "My Profile", path: "/dashboard/profile", category: "Dashboard", icon: <FaUser />, keywords: "settings identity avatar" },
+  { title: "Account Preferences", path: "/dashboard/preferences", category: "Dashboard", icon: <FaCog />, keywords: "settings dark mode notifications privacy" },
+  { title: "Home", path: "/", category: "Platform", icon: <FaHome />, keywords: "main landing homepage" },
+  { title: "About Us", path: "/about", category: "Platform", icon: <FaInfoCircle />, keywords: "company team mission" }
 ];
 
 const GlobalSearch = ({ variant = 'landing', placeholder = "Search tools, docs & pages..." }) => {

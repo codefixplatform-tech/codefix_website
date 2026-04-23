@@ -2,6 +2,7 @@ import { supabase } from '../../lib/supabase';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import GlobalSearch from '../Search/GlobalSearch';
+import toast from 'react-hot-toast';
 
 import { useState, useEffect, useRef } from 'react';
 const Topbar = ({ onMenuClick, profile, loading }) => {
@@ -21,8 +22,11 @@ const Topbar = ({ onMenuClick, profile, loading }) => {
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate('/');
+    toast.success("Logout Successful!");
+    setTimeout(async () => {
+      await supabase.auth.signOut();
+      navigate('/');
+    }, 2000);
   };
 
   const displayName = profile?.full_name || "Developer";
@@ -103,9 +107,13 @@ const Topbar = ({ onMenuClick, profile, loading }) => {
                 >
                   <FaUser className="opacity-50 text-[14px]" /> Profile Settings
                 </Link>
-                <button className="w-full flex items-center gap-3 px-3 py-2.5 text-xs text-secondary hover:text-white hover:bg-white/5 rounded-xl transition-all">
+                <Link 
+                  to="/dashboard/preferences"
+                  onClick={() => setIsProfileOpen(false)}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-xs text-secondary hover:text-white hover:bg-white/5 rounded-xl transition-all"
+                >
                   <FaCog className="opacity-50 text-[14px]" /> Account Preferences
-                </button>
+                </Link>
                 <div className="my-1 border-t border-white/5"></div>
                 <button 
                   onClick={handleLogout}

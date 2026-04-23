@@ -99,7 +99,7 @@ const AnswerEditor = ({ onPost }) => {
                   onChange={(e) => setCodeSnippet(e.target.value)}
                   placeholder="// Paste your code or logic here..."
                   rows="8"
-                  className="relative w-full bg-[#0d0e12] border border-white/10 rounded-2xl py-5 px-6 text-primary-light font-mono text-[13px] focus:outline-none focus:border-primary/50 transition-all resize-none shadow-inner"
+                  className="relative w-full bg-[#0d0e12] border border-white/10 rounded-2xl py-5 px-4 md:px-6 text-white font-mono text-[13px] focus:outline-none focus:border-primary/50 transition-all resize-none shadow-inner"
                 />
               </div>
             </div>
