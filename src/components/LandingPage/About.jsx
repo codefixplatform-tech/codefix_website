@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { 
   FaRocket, 
   FaMicrochip, 
@@ -162,11 +162,11 @@ const About = () => {
                <p className="text-secondary text-xl font-semibold opacity-80 max-w-3xl mx-auto leading-relaxed">
                   We are just getting started. From automated refactoring to collaborative cloud workspaces, Codefix is evolving every day to meet the demands of the modern engineer.
                </p>
-               <div className="pt-10">
-                  <button className="bg-primary hover:bg-blue-600 text-white px-12 py-5 rounded-2xl font-semibold shadow-xl shadow-primary/20 transition-all hover:scale-105 group flex items-center gap-4 mx-auto uppercase tracking-widest text-sm">
-                     Join the Journey <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
-                  </button>
-               </div>
+                <div className="pt-10">
+                   <Link to="/signup" className="w-fit bg-primary hover:bg-blue-600 text-white px-12 py-5 rounded-2xl font-semibold shadow-xl shadow-primary/20 transition-all hover:scale-105 group flex items-center gap-4 mx-auto uppercase tracking-widest text-sm">
+                      Join the Journey <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
+                   </Link>
+                </div>
             </motion.div>
          </div>
       </section>

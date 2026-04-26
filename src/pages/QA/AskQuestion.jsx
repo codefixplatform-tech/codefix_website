@@ -32,18 +32,18 @@ const AskQuestion = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title.trim() || !formData.desc.trim()) {
-      toast.error("Title and Description are required!");
+      toast.error("Please provide both a title and a description.");
       return;
     }
     
     setLoading(true);
-    const loadingToast = toast.loading("Syncing with Global Community...");
+    const loadingToast = toast.loading("Publishing your question to the community...");
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast.error("Please login to participate!");
+        toast.error("Please sign in to post a question.");
         navigate('/login', { state: { from: window.location.pathname } });
         return;
       }
@@ -66,12 +66,12 @@ const AskQuestion = () => {
 
       if (error) throw error;
 
-      toast.success("Question Deployed Successfully! 🚀", { id: loadingToast });
-      navigate(isDashboard ? '/dashboard/qa' : '/questions');
+      toast.success("Question published successfully! 🚀", { id: loadingToast });
+      navigate(isDashboard ? '/dashboard/questions' : '/questions');
 
     } catch (error) {
       console.error("Error posting question:", error);
-      toast.error("Network Error: Failed to deploy.", { id: loadingToast });
+      toast.error("Deployment failed. Please check your connection.", { id: loadingToast });
     } finally {
       setLoading(false);
     }

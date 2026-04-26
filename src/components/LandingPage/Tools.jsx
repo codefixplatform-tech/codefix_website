@@ -20,7 +20,6 @@ const Tools = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState("All");
 
   const toolList = [
     {
@@ -39,7 +38,6 @@ const Tools = () => {
       category: "Convert",
       description: "Transform your DOCX files into professional PDF documents instantly with military-grade precision.",
       tags: ["Secure", "DOCX"],
-      highlight: true,
       format: "Word"
     },
     {
@@ -116,14 +114,12 @@ const Tools = () => {
     }
   ];
 
-  const categories = ["All", "PDF", "Word", "Excel", "PPTX", "Image"];
 
-  const filteredTools = toolList.filter(tool => {
-    const matchesSearch = tool.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         tool.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = activeFilter === "All" || tool.format === activeFilter;
-    return matchesSearch && matchesFilter;
-  });
+
+  const filteredTools = toolList.filter(tool => 
+    tool.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    tool.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const isDashboard = location.pathname.startsWith('/dashboard');
 
@@ -163,34 +159,19 @@ const Tools = () => {
         </div>
       </section>
 
-      {/* --- FILTER & SEARCH --- */}
+      {/* --- SEARCH BAR --- */}
       <section className="pb-16">
-         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-10">
-            
-            {/* Category Tabs */}
-            <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/10 overflow-x-auto no-scrollbar max-w-full">
-               {categories.map(cat => (
-                  <button 
-                    key={cat}
-                    onClick={() => setActiveFilter(cat)}
-                    className={`px-8 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${activeFilter === cat ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-500 hover:text-white'}`}
-                  >
-                     {cat}
-                  </button>
-               ))}
-            </div>
-
-            {/* Search Bar */}
-            <div className="relative w-full md:w-96 group">
-               <div className="absolute inset-0 bg-primary/10 blur-2xl opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
-               <div className="relative flex items-center bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus-within:border-primary/50 transition-all">
-                  <FaSearch className="text-slate-600 mr-4" />
+         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
+            <div className="max-w-2xl mx-auto relative group">
+               <div className="absolute inset-0 bg-primary/20 blur-[60px] opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
+               <div className="relative flex items-center bg-white/5 border border-white/10 rounded-[2rem] px-8 py-5 backdrop-blur-2xl focus-within:border-primary/50 transition-all shadow-2xl">
+                  <FaSearch className="text-slate-500 mr-5" />
                   <input 
                      type="text" 
-                     placeholder="Search format or tool..." 
+                     placeholder="Search format or tool (e.g. PDF, Word, Merge)..." 
                      value={searchQuery}
                      onChange={(e) => setSearchQuery(e.target.value)}
-                     className="w-full bg-transparent outline-none text-white font-semibold text-xs placeholder:text-slate-600"
+                     className="w-full bg-transparent outline-none text-white font-semibold text-sm placeholder:text-slate-600"
                   />
                </div>
             </div>
@@ -200,9 +181,10 @@ const Tools = () => {
       {/* --- TOOLS GRID --- */}
       <section className="pb-32">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+           <div className="flex flex-wrap justify-center gap-8">
               <AnimatePresence mode="popLayout">
-                {filteredTools.map((tool, index) => (
+                {filteredTools.length > 0 ? (
+                  filteredTools.map((tool, index) => (
                     <motion.div 
                         key={tool.id}
                         layout
@@ -210,6 +192,7 @@ const Tools = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.4 }}
+                        className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] xl:w-[calc(25%-1.5rem)]"
                     >
                         <ToolPowerCard 
                             tool={tool} 
@@ -219,7 +202,22 @@ const Tools = () => {
                             }} 
                         />
                     </motion.div>
-                ))}
+                  ))
+                ) : (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="w-full py-20 text-center space-y-6"
+                  >
+                    <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <FaSearch className="text-slate-500 text-2xl" />
+                    </div>
+                    <h3 className="text-2xl font-semibold text-white">No tools found</h3>
+                    <p className="text-secondary text-sm max-w-xs mx-auto opacity-60 font-semibold">
+                      We couldn't find any document tools matching your search. Try different keywords.
+                    </p>
+                  </motion.div>
+                )}
               </AnimatePresence>
            </div>
         </div>

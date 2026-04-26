@@ -12,7 +12,8 @@ import {
   FaSyncAlt,
   FaDownload,
   FaRocket,
-  FaLayerGroup 
+  FaLayerGroup,
+  FaFilePowerpoint
 } from "react-icons/fa";
 import { FaFileZipper, FaScissors } from "react-icons/fa6";
 import { v4 as uuidv4 } from 'uuid';
@@ -25,11 +26,10 @@ import SplitWorkspace from './SplitWorkspace';
 // Utils Imports
 import { convertImageToPdf } from '../../utils/converters/imageToPdf';
 import { compressPdf } from '../../utils/converters/compressPdf';
-import { convertPdfToWord } from '../../utils/converters/pdfToWord';
 import { mergePdf } from '../../utils/converters/mergePdf';
 import { splitPdf } from '../../utils/converters/splitPdf';
-import { convertWordToPdf } from '../../utils/converters/wordToPdf'; // Word Utility
-import { convertExcelToPdf } from '../../utils/converters/excelToPdf';
+
+const CONVERSION_API_URL = "https://script.google.com/macros/s/AKfycbwgxy7oxokXZG_5T83cafu2c3gKkVgMs9rJKwVIof9r9ytkbMlyRwZSlNYSRTX-EpQHvw/exec";
 
 const FileUpload = () => {
   const { toolId } = useParams();
@@ -54,6 +54,8 @@ const FileUpload = () => {
       case 'pdf-to-word': return { title: "PDF to Word", icon: <FaFilePdf />, color: "text-red-500", accept: ".pdf", multiple: false };
       case 'word-to-pdf': return { title: "Word to PDF", icon: <FaFileWord />, color: "text-blue-500", accept: ".doc,.docx", multiple: false };
       case 'excel-to-pdf': return { title: "Excel to PDF", icon: <FaFileExcel />, color: "text-emerald-500", accept: ".xls,.xlsx", multiple: false };
+      case 'pdf-to-pptx': return { title: "PDF to PPTX", icon: <FaFilePowerpoint />, color: "text-orange-600", accept: ".pdf", multiple: false };
+      case 'pptx-to-pdf': return { title: "PPTX to PDF", icon: <FaFilePowerpoint />, color: "text-red-600", accept: ".pptx", multiple: false };
       case 'image-to-pdf': return { title: "Image to PDF", icon: <FaFileImage />, color: "text-purple-500", accept: "image/*", multiple: false };
       case 'compress-pdf': return { title: "Compress PDF", icon: <FaFileZipper />, color: "text-orange-500", accept: ".pdf", multiple: false };
       case 'merge-pdf': return { title: "Merge PDF", icon: <FaLayerGroup />, color: "text-indigo-500", accept: ".pdf", multiple: true };
@@ -82,10 +84,10 @@ const FileUpload = () => {
     if (toolId === 'merge-pdf') {
       const wrapped = [{ id: uuidv4(), file: selectedFile, name: selectedFile.name, size: selectedFile.size }];
       setMergeFiles(prev => [...prev, ...wrapped]);
-      toast.success("File added to merge list");
+      toast.success("File added to the merge list.");
     } else if (toolId === 'split-pdf') {
       setSplitFile(selectedFile);
-      toast.success("PDF loaded for splitting");
+      toast.success("PDF loaded for processing.");
     } else {
       setFile(selectedFile);
       startConversion(selectedFile);
@@ -100,7 +102,55 @@ const FileUpload = () => {
       size: f.size
     }));
     setMergeFiles(prev => [...prev, ...selected]);
-    toast.success(`${selected.length} files added`);
+    toast.success(`${selected.length} files successfully added.`);
+  };
+
+  const handleApiConversion = async (selectedFile, targetFormat) => {
+    const reader = new FileReader();
+    const base64Promise = new Promise((resolve) => {
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.readAsDataURL(selectedFile);
+    });
+    
+    const base64 = await base64Promise;
+    console.log("Starting Stable API Conversion for:", selectedFile.name);
+    
+    try {
+        const params = new URLSearchParams();
+        params.append('jsonData', JSON.stringify({
+            fileName: selectedFile.name,
+            base64: base64,
+            targetFormat: targetFormat
+        }));
+
+        const response = await fetch(CONVERSION_API_URL, {
+            method: 'POST',
+            body: params
+        });
+        
+        console.log("API Response Status:", response.status);
+        const result = await response.json();
+        console.log("API Result:", result);
+
+        if (!result.success) throw new Error(result.error || "API Conversion failed");
+
+        // Convert result base64 back to blob
+        const byteCharacters = atob(result.base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/octet-stream' });
+        
+        return {
+            downloadUrl: URL.createObjectURL(blob),
+            fileName: result.fileName
+        };
+    } catch (err) {
+        console.error("Fetch/API Error:", err);
+        throw err;
+    }
   };
 
   const startConversion = async (selectedFile) => {
@@ -108,29 +158,42 @@ const FileUpload = () => {
     const anim = runProgressAnimation(toolId === 'word-to-pdf' ? 4000 : 2000);
     try {
       let result = null;
-      if (toolId === 'image-to-pdf') result = await convertImageToPdf(selectedFile);
+      
+      // Determine if we should use Cloud API or Local Engine
+      const useApi = ['pdf-to-word', 'word-to-pdf', 'excel-to-pdf', 'pdf-to-pptx', 'pptx-to-pdf', 'pdf-to-excel'].includes(toolId);
+
+      if (useApi) {
+        const targetMap = {
+            'pdf-to-word': 'docx',
+            'word-to-pdf': 'pdf',
+            'excel-to-pdf': 'pdf',
+            'pdf-to-pptx': 'pptx',
+            'pptx-to-pdf': 'pdf',
+            'pdf-to-excel': 'xlsx'
+        };
+        result = await handleApiConversion(selectedFile, targetMap[toolId]);
+      } 
+      else if (toolId === 'image-to-pdf') result = await convertImageToPdf(selectedFile);
       else if (toolId === 'compress-pdf') result = await compressPdf(selectedFile);
-      else if (toolId === 'pdf-to-word') result = await convertPdfToWord(selectedFile);
-      else if (toolId === 'word-to-pdf') result = await convertWordToPdf(selectedFile);
-      else if (toolId === 'excel-to-pdf') result = await convertExcelToPdf(selectedFile);
       
       clearInterval(anim);
       setProgress(100);
       setDownloadData(result);
       setTimeout(() => {
         setStatus('completed');
-        toast.success("Done! Your file is ready.");
+        toast.success("Processing complete. Your file is ready.");
       }, 500);
     } catch (error) {
       clearInterval(anim);
       setStatus('idle');
-      toast.error("Process failed! Try again.");
+      console.error("Conversion Error:", error);
+      toast.error(`Conversion failed: ${error.message || "Please try again"}`);
     }
   };
 
   const startMerge = async () => {
     if (mergeFiles.length < 2) {
-      toast.error("Please select at least 2 files");
+      toast.error("Please select at least two files to merge.");
       return;
     }
     setStatus('processing');
@@ -144,7 +207,7 @@ const FileUpload = () => {
     } catch (error) {
       clearInterval(anim);
       setStatus('idle');
-      toast.error("Merge failed!");
+      toast.error("Merge process failed.");
     }
   };
 
@@ -160,7 +223,7 @@ const FileUpload = () => {
     } catch (error) {
       clearInterval(anim);
       setStatus('idle');
-      toast.error("Split failed!");
+      toast.error("Split process failed.");
     }
   };
 
@@ -218,7 +281,11 @@ const FileUpload = () => {
 
   return (
     <div className={`bg-background text-white relative overflow-hidden flex items-center justify-center font-sans ${isDashboard ? 'min-h-[70vh] py-10' : 'min-h-screen py-20 px-4'}`}>
-      <Toaster position="top-center" toastOptions={{ style: { background: '#1e293b', color: '#fff', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' } }} />
+      <Toaster 
+        position="top-center" 
+        containerStyle={{ top: 110 }}
+        toastOptions={{ style: { background: '#1e293b', color: '#fff', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' } }} 
+      />
       
       {!isDashboard && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 pointer-events-none">

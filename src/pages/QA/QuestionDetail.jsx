@@ -130,7 +130,7 @@ const QuestionDetail = () => {
       }
     } catch (err) {
       console.error("Fetch Error:", err);
-      toast.error("Data load nahi ho saka!");
+      toast.error("Failed to load question details.");
     } finally {
       setLoading(false);
     }
@@ -154,7 +154,7 @@ const QuestionDetail = () => {
         },
       ]);
       if (error) throw error;
-      toast.success("Reply added!");
+      toast.success("Reply added successfully.");
       fetchFullData();
     } catch (error) {
       toast.error(error.message);
@@ -163,7 +163,7 @@ const QuestionDetail = () => {
 
   const handleVote = async (type) => {
     if (!user) {
-      toast.error("Please login to vote!");
+      toast.error("Please log in to vote.");
       return navigate("/login");
     }
 
@@ -205,7 +205,7 @@ const QuestionDetail = () => {
       
       if (rpcError) throw rpcError;
       
-      toast.success(isRemovingVote ? "Vote removed" : "Vote recorded!");
+      toast.success(isRemovingVote ? "Vote removed successfully." : "Vote recorded successfully.");
     } catch (error) {
       console.error("Vote Sync Error:", error);
       setUserVote(oldVote);
@@ -226,7 +226,7 @@ const QuestionDetail = () => {
         },
       ]);
       if (error) throw error;
-      toast.success("Solution shared! 🚀");
+      toast.success("Your solution has been shared with the community! 🚀");
       fetchFullData();
     } catch (error) {
       toast.error(error.message);

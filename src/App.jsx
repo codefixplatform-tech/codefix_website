@@ -143,6 +143,14 @@ const AnimatedRoutes = ({ user, loading }) => {
               </PageTransition>
             }
           />
+          <Route
+            path="questions/ask"
+            element={
+              <PageTransition>
+                <AskQuestion />
+              </PageTransition>
+            }
+          />
         </Route>
 
         {/* 🔐 Auth Routes */}

@@ -20,7 +20,7 @@ const Signup = () => {
     e.preventDefault();
     
     if (!email || !password || !fullName) {
-      toast.error("Pehle saari fields bhar lo jani!");
+      toast.error("Please fill in all required fields.");
       return;
     }
 
@@ -40,7 +40,7 @@ const Signup = () => {
       if (error) throw error;
 
       if (data) {
-        toast.success("Mubarak ho! Account ban gaya. ✨");
+        toast.success("Account created successfully! ✨");
         // User ko wapis usi page par bhejo jahan se wo aaya tha
         navigate("/dashboard", { replace: true }); 
       }

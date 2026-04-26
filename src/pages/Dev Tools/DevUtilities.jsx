@@ -9,7 +9,8 @@ import {
   FaSearch,
   FaShieldAlt,
   FaBolt,
-  FaMicrochip
+  FaMicrochip,
+  FaFileCsv
 } from "react-icons/fa";
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -36,7 +37,6 @@ const DevUtilities = () => {
       category: "Security & Encoding",
       description: "Convert text or images to Base64 and vice-versa with military-grade local processing.",
       tags: ["Binary", "Local"],
-      highlight: true,
       preview: "SGVsbG8gV29ybGQ="
     },
     {
@@ -74,6 +74,15 @@ const DevUtilities = () => {
         description: "Generate high-entropy passwords, API keys, and secure UUIDs locally.",
         tags: ["UUID", "Security"],
         preview: "uuid-v4-xxxx-xxxx"
+    },
+    {
+        id: "json-to-csv",
+        icon: <FaFileCsv />,
+        title: "JSON to CSV",
+        category: "Data & Format",
+        description: "Flatten and convert nested JSON objects into clean CSV spreadsheets.",
+        tags: ["Data", "Export"],
+        preview: "id,name\n1,Ali"
     }
   ];
 
@@ -137,9 +146,10 @@ const DevUtilities = () => {
               </div>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+           <div className="flex flex-wrap justify-center gap-8">
               <AnimatePresence mode="popLayout">
-                {filteredUtils.map((util, index) => (
+                {filteredUtils.length > 0 ? (
+                  filteredUtils.map((util, index) => (
                     <motion.div 
                         key={util.id}
                         layout
@@ -147,6 +157,7 @@ const DevUtilities = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
                         transition={{ duration: 0.4, delay: index * 0.05 }}
+                        className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]"
                     >
                         <UtilityPowerCard 
                             util={util} 
@@ -156,7 +167,22 @@ const DevUtilities = () => {
                             }} 
                         />
                     </motion.div>
-                ))}
+                  ))
+                ) : (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="w-full py-20 text-center space-y-6"
+                  >
+                    <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <FaSearch className="text-slate-500 text-2xl" />
+                    </div>
+                    <h3 className="text-2xl font-semibold text-white">No utilities found</h3>
+                    <p className="text-secondary text-sm max-w-xs mx-auto opacity-60 font-semibold">
+                      We couldn't find any tools matching your search. Try adjusting your keywords.
+                    </p>
+                  </motion.div>
+                )}
               </AnimatePresence>
            </div>
         </div>

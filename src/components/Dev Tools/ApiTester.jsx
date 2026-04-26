@@ -72,7 +72,7 @@ const ApiTester = () => {
             <button
               key={method}
               onClick={() => setApiMethod(method)}
-              className={`px-6 py-2 rounded-xl text-[10px] font-black tracking-widest transition-all ${
+              className={`px-6 py-2 rounded-xl text-[10px] font-semibold tracking-widest transition-all ${
                 apiMethod === method 
                   ? 'bg-primary text-white shadow-lg shadow-primary/20' 
                   : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -95,7 +95,7 @@ const ApiTester = () => {
           <button 
             onClick={runApiTest}
             disabled={loading}
-            className="bg-primary hover:bg-blue-600 disabled:opacity-50 text-white px-10 rounded-2xl font-black transition-all flex items-center justify-center gap-3 shadow-lg shadow-primary/20 active:scale-95 group"
+            className="bg-primary hover:bg-blue-600 disabled:opacity-50 text-white px-10 rounded-2xl font-semibold transition-all flex items-center justify-center gap-3 shadow-lg shadow-primary/20 active:scale-95 group"
           >
             {loading ? <FaArrowsRotate className="animate-spin" /> : <FaPlay className="group-hover:translate-x-0.5 transition-transform" />} 
             <span>{loading ? 'Sending...' : 'Send Request'}</span>
@@ -111,7 +111,7 @@ const ApiTester = () => {
               className="overflow-hidden space-y-3"
             >
               <div className="flex items-center justify-between">
-                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Request Body (JSON)</label>
+                 <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Request Body (JSON)</label>
                  <button onClick={() => {
                    try {
                      if (requestBody.trim()) {
@@ -121,7 +121,7 @@ const ApiTester = () => {
                    } catch (e) {
                      toast.error("Invalid JSON in body");
                    }
-                 }} className="text-[9px] font-bold text-primary hover:text-blue-400 transition-colors uppercase tracking-widest bg-white/5 px-3 py-1 rounded-lg border border-white/5">Beautify JSON</button>
+                 }} className="text-[9px] font-semibold text-primary hover:text-blue-400 transition-colors uppercase tracking-widest bg-white/5 px-3 py-1 rounded-lg border border-white/5">Beautify JSON</button>
               </div>
               <textarea 
                 value={requestBody}
@@ -150,7 +150,7 @@ const ApiTester = () => {
                    <div className="w-8 h-8 bg-primary/20 rounded-full animate-pulse"></div>
                 </div>
               </div>
-              <p className="text-primary font-black uppercase tracking-widest text-[10px] animate-pulse">Requesting Server...</p>
+              <p className="text-primary font-semibold uppercase tracking-widest text-[10px] animate-pulse">Requesting Server...</p>
             </motion.div>
           ) : error ? (
             <motion.div 
@@ -162,11 +162,11 @@ const ApiTester = () => {
               <div className="w-20 h-20 bg-red-500/10 rounded-3xl flex items-center justify-center border border-red-500/20 mb-6 rotate-12">
                 <FaTriangleExclamation className="text-red-500 text-3xl -rotate-12" />
               </div>
-              <h3 className="text-red-400 font-black uppercase tracking-widest text-sm mb-3">Request Failed</h3>
+              <h3 className="text-red-400 font-semibold uppercase tracking-widest text-sm mb-3">Request Failed</h3>
               <div className="max-w-md bg-red-500/5 p-4 rounded-xl border border-red-500/10">
                 <p className="text-red-300/70 text-xs font-mono leading-relaxed">{error}</p>
               </div>
-              <button onClick={() => setError('')} className="mt-8 text-[10px] font-black uppercase text-slate-500 hover:text-white transition-colors underline decoration-slate-800 underline-offset-8">Clear Error</button>
+              <button onClick={() => setError('')} className="mt-8 text-[10px] font-semibold uppercase text-slate-500 hover:text-white transition-colors underline decoration-slate-800 underline-offset-8">Clear Error</button>
             </motion.div>
           ) : apiResponse ? (
             <motion.div 
@@ -177,25 +177,25 @@ const ApiTester = () => {
             >
               <div className="flex flex-wrap gap-4">
                 <div className="bg-white/5 border border-white/10 px-6 py-4 rounded-2xl flex flex-col gap-1 min-w-[120px]">
-                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Status Code</p>
+                  <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">Status Code</p>
                   <div className="flex items-center gap-2">
                      <div className={`w-2 h-2 rounded-full ${apiResponse.status < 300 ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></div>
-                     <p className={`text-lg font-black ${apiResponse.status < 300 ? 'text-emerald-500' : 'text-red-500'}`}>{apiResponse.status}</p>
-                     <span className="text-[10px] font-bold text-slate-400 uppercase opacity-40">{apiResponse.statusText}</span>
+                     <p className={`text-lg font-semibold ${apiResponse.status < 300 ? 'text-emerald-500' : 'text-red-500'}`}>{apiResponse.status}</p>
+                     <span className="text-[10px] font-semibold text-slate-400 uppercase opacity-40">{apiResponse.statusText}</span>
                   </div>
                 </div>
                 <div className="bg-white/5 border border-white/10 px-6 py-4 rounded-2xl flex flex-col gap-1 min-w-[120px]">
-                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Response Time</p>
-                  <p className="text-lg font-black text-primary font-mono">{apiResponse.time}</p>
+                  <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">Response Time</p>
+                  <p className="text-lg font-semibold text-primary font-mono">{apiResponse.time}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Response Body</label>
+                  <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Response Body</label>
                   <button 
                     onClick={() => handleCopy(JSON.stringify(apiResponse.data, null, 2))} 
-                    className="bg-primary/10 text-primary border border-primary/20 px-4 py-1.5 rounded-lg text-[9px] font-black uppercase hover:bg-primary hover:text-white transition-all flex items-center gap-2"
+                    className="bg-primary/10 text-primary border border-primary/20 px-4 py-1.5 rounded-lg text-[9px] font-semibold uppercase hover:bg-primary hover:text-white transition-all flex items-center gap-2"
                   >
                     <FaCopy /> Copy JSON
                   </button>

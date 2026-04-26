@@ -62,8 +62,8 @@ const Base64Converter = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Input Data</label>
-            <span className="text-[9px] font-bold px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">Auto Processor</span>
+            <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Input Data</label>
+            <span className="text-[9px] font-semibold px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">Auto Processor</span>
           </div>
           <button onClick={() => setInput('')} className="text-slate-500 hover:text-red-400 transition-colors"><FaEraser /></button>
         </div>
@@ -79,18 +79,18 @@ const Base64Converter = () => {
           <div className="flex bg-white/5 p-1 rounded-lg border border-white/10">
               <button 
                 onClick={() => setBase64Mode('encode')}
-                className={`px-4 py-1.5 rounded-md text-[10px] font-black uppercase transition-all ${base64Mode === 'encode' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:text-emerald-500'}`}
+                className={`px-4 py-1.5 rounded-md text-[10px] font-semibold uppercase transition-all ${base64Mode === 'encode' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:text-emerald-500'}`}
               >
                 Encode
               </button>
               <button 
                 onClick={() => setBase64Mode('decode')}
-                className={`px-4 py-1.5 rounded-md text-[10px] font-black uppercase transition-all ${base64Mode === 'decode' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:text-emerald-500'}`}
+                className={`px-4 py-1.5 rounded-md text-[10px] font-semibold uppercase transition-all ${base64Mode === 'decode' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:text-emerald-500'}`}
               >
                 Decode
               </button>
            </div>
-          <button onClick={() => handleCopy(output)} className="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-2 text-[10px] font-black uppercase tracking-widest">
+          <button onClick={() => handleCopy(output)} className="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest">
             <FaCopy /> Copy
           </button>
         </div>
@@ -108,7 +108,7 @@ const Base64Converter = () => {
                   <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4 border border-red-500/20">
                     <FaTriangleExclamation className="text-red-500 text-2xl" />
                   </div>
-                  <h3 className="text-red-400 font-black uppercase tracking-widest text-xs mb-2">Validation Failed</h3>
+                  <h3 className="text-red-400 font-semibold uppercase tracking-widest text-xs mb-2">Validation Failed</h3>
                   <p className="text-red-300/60 text-[10px] font-mono leading-relaxed">{error}</p>
                 </motion.div>
               ) : output ? (

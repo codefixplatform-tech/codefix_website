@@ -17,7 +17,10 @@ import {
   FaHome,
   FaUser,
   FaInfoCircle,
-  FaCog
+  FaCog,
+  FaBolt,
+  FaShieldAlt,
+  FaFileCsv
 } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -27,6 +30,9 @@ const SITE_MAP = [
   { title: "Base64 Converter", path: "/dev-utilities/base64-converter", category: "Dev Tools", icon: <FaDatabase />, keywords: "encode decode binary" },
   { title: "Regex Tester", path: "/dev-utilities/regex-tester", category: "Dev Tools", icon: <FaHashtag />, keywords: "pattern match regular expression" },
   { title: "API Tester", path: "/dev-utilities/api-tester", category: "Dev Tools", icon: <FaTerminal />, keywords: "http request post get rest" },
+  { title: "Unit Converter", path: "/dev-utilities/unit-converter", category: "Dev Tools", icon: <FaBolt />, keywords: "px rem hex rgb conversion transform" },
+  { title: "Secret Generator", path: "/dev-utilities/secure-gen", category: "Dev Tools", icon: <FaShieldAlt />, keywords: "password key uuid security crypt" },
+  { title: "JSON to CSV", path: "/dev-utilities/json-to-csv", category: "Dev Tools", icon: <FaFileCsv />, keywords: "flatten convert spreadsheet export data excel" },
   
   // File Tools (Converters & Editors)
   { title: "PDF to Word", path: "/tools/pdf-to-word", category: "PDF Tools", icon: <FaFilePdf />, keywords: "convert docx office" },

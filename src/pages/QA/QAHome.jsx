@@ -59,6 +59,11 @@ const QAHome = () => {
         query = query
           .eq("user_id", currentUser.id)
           .order("created_at", { ascending: false });
+      } else if (activeFilter === "My Questions" && !currentUser) {
+        // Special case: don't fetch anything if not logged in for this filter
+        setQuestions([]);
+        setLoading(false);
+        return;
       } else {
         query = query.order("created_at", { ascending: false });
       }
@@ -175,7 +180,7 @@ const QAHome = () => {
               
               {/* Filter Tabs */}
               <div className="flex items-center gap-1 sm:gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/10 overflow-x-auto no-scrollbar w-full xl:w-auto">
-                {["Newest", "Top Voted", "Unanswered", "My Question"].map(filter => (
+                {["Newest", "Top Voted", "Unanswered", "My Questions"].map(filter => (
                     <button
                         key={filter}
                         onClick={() => { setActiveFilter(filter); setVisibleCount(5); }}
@@ -224,8 +229,22 @@ const QAHome = () => {
                     </div>
                   ) : (
                     <div className="text-center py-40 bg-white/[0.01] rounded-[4rem] border border-dashed border-white/10">
-                        <p className="text-secondary font-semibold text-lg opacity-70 mb-6">No discussions found matching your criteria.</p>
-                        <button onClick={handleAskQuestionClick} className="text-primary font-semibold hover:underline flex items-center gap-3 mx-auto uppercase tracking-widest text-[10px]">Start a Discussion <FaArrowRight /></button>
+                        {activeFilter === "My Questions" && !currentUser ? (
+                           <div className="space-y-6">
+                              <p className="text-secondary font-semibold text-lg opacity-70 px-6">Please login to view your questions you ask.</p>
+                              <button onClick={() => navigate("/login")} className="bg-primary text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20 hover:scale-105 transition-all mx-auto block">Sign In Now</button>
+                           </div>
+                        ) : activeFilter === "My Questions" && currentUser ? (
+                           <div className="space-y-6">
+                              <p className="text-secondary font-semibold text-lg opacity-70 px-6">You haven't asked any questions yet.</p>
+                              <button onClick={handleAskQuestionClick} className="text-primary font-semibold hover:underline flex items-center gap-3 mx-auto uppercase tracking-widest text-[10px]">Ask Your First Question <FaArrowRight /></button>
+                           </div>
+                        ) : (
+                           <>
+                              <p className="text-secondary font-semibold text-lg opacity-70 mb-6">No discussions found matching your criteria.</p>
+                              <button onClick={handleAskQuestionClick} className="text-primary font-semibold hover:underline flex items-center gap-3 mx-auto uppercase tracking-widest text-[10px]">Start a Discussion <FaArrowRight /></button>
+                           </>
+                        )}
                     </div>
                   )}
 

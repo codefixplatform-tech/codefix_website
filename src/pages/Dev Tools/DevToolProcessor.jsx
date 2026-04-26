@@ -6,7 +6,9 @@ import {
   FaHashtag, 
   FaDatabase, 
   FaArrowLeft, 
+  FaBolt
 } from "react-icons/fa6";
+import { FaShieldAlt, FaFileCsv } from "react-icons/fa";
 import { Toaster } from 'react-hot-toast';
 
 // Modular Tool Components
@@ -14,6 +16,9 @@ import JsonFormatter from '../../components/Dev Tools/JsonFormatter';
 import Base64Converter from '../../components/Dev Tools/Base64Converter';
 import RegexTester from '../../components/Dev Tools/RegexTester';
 import ApiTester from '../../components/Dev Tools/ApiTester';
+import UnitConverter from '../../components/Dev Tools/UnitConverter';
+import SecretGenerator from '../../components/Dev Tools/SecretGenerator';
+import JsonToCsv from '../../components/Dev Tools/JsonToCsv';
 
 const DevToolProcessor = () => {
   const { toolId } = useParams();
@@ -31,6 +36,9 @@ const DevToolProcessor = () => {
       case 'base64-converter': return { title: "Base64 Encoder/Decoder", icon: <FaDatabase />, color: "text-primary", description: "Convert text to Base64 and vice versa with local processing." };
       case 'regex-tester': return { title: "Regex Tester", icon: <FaHashtag />, color: "text-emerald-400", description: "Test your regular expressions in real-time with pattern highlighting." };
       case 'api-tester': return { title: "API Tester", icon: <FaTerminal />, color: "text-amber-400", description: "Send HTTP requests and inspect responses directly." };
+      case 'unit-converter': return { title: "Unit Converter", icon: <FaBolt />, color: "text-amber-500", description: "Professional unit transformations for modern developers." };
+      case 'secure-gen': return { title: "Secret Generator", icon: <FaShieldAlt />, color: "text-emerald-400", description: "Cryptographically secure passwords and keys generation." };
+      case 'json-to-csv': return { title: "JSON to CSV", icon: <FaFileCsv />, color: "text-emerald-400", description: "Flatten and convert nested JSON data into CSV spreadsheets." };
       default: return { title: "Developer Tool", icon: <FaTerminal />, color: "text-primary", description: "Essential developer utility." };
     }
   };
@@ -48,6 +56,9 @@ const DevToolProcessor = () => {
       case 'base64-converter': return <Base64Converter />;
       case 'regex-tester': return <RegexTester />;
       case 'api-tester': return <ApiTester />;
+      case 'unit-converter': return <UnitConverter />;
+      case 'secure-gen': return <SecretGenerator />;
+      case 'json-to-csv': return <JsonToCsv />;
       default: return (
         <div className="text-center py-20 opacity-50 italic">
           Select a valid tool to continue processing...
@@ -58,7 +69,11 @@ const DevToolProcessor = () => {
 
   return (
     <div className={`bg-background text-white relative overflow-hidden flex flex-col items-center font-sans ${isDashboard ? 'min-h-[85vh] py-6' : 'min-h-screen py-32 px-4'}`}>
-      <Toaster position="top-center" toastOptions={{ style: { background: '#1e293b', color: '#fff', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' } }} />
+      <Toaster 
+        position="top-center" 
+        containerStyle={{ top: 110 }}
+        toastOptions={{ style: { background: '#1e293b', color: '#fff', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' } }} 
+      />
       
       {!isDashboard && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 pointer-events-none">

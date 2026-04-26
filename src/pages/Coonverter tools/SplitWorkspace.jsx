@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { FaTrash, FaDownload, FaThLarge, FaMagic } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Worker configuration for PDF.js
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// Configure PDF.js worker locally to avoid CDN issues
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 const SplitWorkspace = ({ file, onProcess, isProcessing }) => {
   const [pages, setPages] = useState([]);

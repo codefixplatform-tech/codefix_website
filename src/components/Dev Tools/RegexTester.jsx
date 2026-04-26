@@ -40,7 +40,7 @@ const RegexTester = () => {
     <div className="space-y-8">
       <div className="w-full">
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Regular Expression</label>
+          <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Regular Expression</label>
           <div className="flex items-center bg-black/40 border border-white/10 rounded-xl px-4 py-3 focus-within:border-blue-500/50 transition-all">
             <span className="text-slate-500 mr-2">/</span>
             <input 
@@ -63,9 +63,9 @@ const RegexTester = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Test String</label>
+            <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Test String</label>
             <div className="flex gap-2">
-               <span className="text-[9px] font-bold px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20">Live Input</span>
+               <span className="text-[9px] font-semibold px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20">Live Input</span>
             </div>
           </div>
           <textarea 
@@ -77,9 +77,9 @@ const RegexTester = () => {
         </div>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Matches & Results</label>
+            <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Matches & Results</label>
             {output && !error && output !== "No matches found." && (
-              <span className="text-[9px] font-bold px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">
+              <span className="text-[9px] font-semibold px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">
                 {output.split('\n').length} Matches Found
               </span>
             )}
@@ -97,7 +97,7 @@ const RegexTester = () => {
                   >
                     <FaTriangleExclamation className="text-red-500 mt-1 flex-shrink-0" />
                     <div>
-                      <p className="text-red-400 font-bold text-xs uppercase tracking-wider mb-1">Regex Configuration Error</p>
+                      <p className="text-red-400 font-semibold text-xs uppercase tracking-wider mb-1">Regex Configuration Error</p>
                       <p className="text-red-300/80 text-xs leading-relaxed">{error}</p>
                     </div>
                   </motion.div>
@@ -123,7 +123,7 @@ const RegexTester = () => {
                           }}
                           className="group flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/5"
                         >
-                          <span className="w-5 h-5 flex items-center justify-center bg-blue-500/10 text-blue-400 text-[10px] rounded font-bold">{i + 1}</span>
+                          <span className="w-5 h-5 flex items-center justify-center bg-blue-500/10 text-blue-400 text-[10px] rounded font-semibold">{i + 1}</span>
                           <span className="text-blue-100/90 group-hover:text-blue-200 transition-colors">{line.replace(`Match ${i + 1}: `, '')}</span>
                         </motion.div>
                       ))

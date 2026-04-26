@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { 
   FaComments, 
   FaFilePdf, 
@@ -203,7 +203,7 @@ const Features = () => {
                <div className="relative z-10 space-y-10">
                   <h2 className="text-3xl md:text-6xl font-semibold text-white tracking-tight">Ready to optimize?</h2>
                   <p className="text-white/80 text-lg md:text-xl font-semibold">Join the next generation of developer workflows today.</p>
-                  <button className="bg-primary hover:bg-blue-600 text-white px-10 md:px-12 py-4 md:py-5 rounded-2xl font-semibold shadow-xl shadow-primary/20 transition-all hover:scale-105 uppercase tracking-widest text-xs md:text-sm">Create Account Free</button>
+                  <Link to="/signup" className="w-fit bg-primary hover:bg-blue-600 text-white px-10 md:px-12 py-4 md:py-5 rounded-2xl font-semibold shadow-xl shadow-primary/20 transition-all hover:scale-105 uppercase tracking-widest text-xs md:text-sm">Create Account Free</Link>
                </div>
             </motion.div>
          </div>

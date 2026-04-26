@@ -22,7 +22,7 @@ const Topbar = ({ onMenuClick, profile, loading }) => {
   }, []);
 
   const handleLogout = async () => {
-    toast.success("Logout Successful!");
+    toast.success("Signed out successfully.");
     setTimeout(async () => {
       await supabase.auth.signOut();
       navigate('/');

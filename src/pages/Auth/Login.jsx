@@ -19,7 +19,7 @@ const Login = () => {
     e.preventDefault();
     
     if (!email || !password) {
-      toast.error("Pehle email aur password toh likho jani!");
+      toast.error("Please enter both email and password.");
       return;
     }
 
@@ -33,7 +33,7 @@ const Login = () => {
       if (error) throw error;
 
       if (data.user) {
-        toast.success("Welcome back, jani! ✨");
+        toast.success("Welcome back! Login successful. ✨");
         // Seedha usi page par bhejo jahan se wo aaya tha
         navigate("/dashboard", { replace: true }); 
       }
@@ -50,7 +50,7 @@ const Login = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: "/dashboard",
+          redirectTo: window.location.origin + "/dashboard",
           queryParams: {
             access_type: 'offline',
             prompt: 'select_account',
