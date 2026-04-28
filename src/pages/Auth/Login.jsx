@@ -104,35 +104,46 @@ const Login = () => {
 
           <form className="space-y-5" onSubmit={handleLogin}>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2 ml-1">Email Address</label>
+              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2 ml-1">Email Address</label>
               <input
+                id="email"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@company.com"
+                autoComplete="username"
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-primary/50 transition-all focus:ring-1 focus:ring-primary/20"
               />
             </div>
 
             <div>
               <div className="flex justify-between mb-2 ml-1">
-                <label className="block text-sm font-medium text-slate-300">Password</label>
-                <a href="#" className="text-xs text-primary hover:underline font-bold">Forgot?</a>
+                <label htmlFor="password" title="Password Field" className="block text-sm font-medium text-slate-300">Password</label>
+                <button 
+                  type="button"
+                  onClick={() => toast.error("Password reset is currently unavailable. Please contact support.")}
+                  className="text-xs text-primary hover:underline font-bold"
+                >
+                  Forgot?
+                </button>
               </div>
 
               <div className="relative">
                 <input
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
+                  autoComplete="current-password"
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-primary/50 transition-all focus:ring-1 focus:ring-primary/20 pr-12"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary hover:text-white transition-colors"
                 >
                   {showPassword ? <EyeOffIcon /> : <EyeIcon />}

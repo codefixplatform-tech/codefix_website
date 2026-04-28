@@ -35,7 +35,12 @@ const AIFloatingButton = () => {
           {isNavigating ? (
             <FaSpinner className="text-white w-8 h-8 animate-spin" />
           ) : (
-            <FaRobot className="text-white w-8 h-8 group-hover:rotate-[360deg] transition-transform duration-700" />
+            <div className="relative">
+               <FaRobot className="text-white w-8 h-8 group-hover:rotate-[360deg] transition-transform duration-700" />
+               <div className="absolute -top-1 -right-1 bg-white text-primary rounded-full p-0.5 text-[8px] border border-primary">
+                  <FaPlus className="rotate-45" />
+               </div>
+            </div>
           )}
         </div>
 
@@ -43,7 +48,7 @@ const AIFloatingButton = () => {
         {!isNavigating && (
           <div className="absolute right-20 bg-[#0f172a]/90 backdrop-blur-md border border-white/10 text-white text-[10px] font-black uppercase tracking-[2px] px-4 py-3 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap shadow-2xl translate-x-4 group-hover:translate-x-0 flex items-center gap-2">
             <FaHandSparkles className="w-3 h-3 text-yellow-400 animate-pulse" />
-            Talk to DevIntel AI
+            Open Full Assistant
           </div>
         )}
 

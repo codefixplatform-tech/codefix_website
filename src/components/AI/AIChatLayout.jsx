@@ -155,7 +155,7 @@ const AIChatLayout = ({ user }) => {
         {/* 3. Chat Window Component */}
         <div className="flex-1 relative overflow-hidden">
           <AIChatWindow 
-            key={activeChatId || newChatTrigger}
+            key={newChatTrigger}
             user={user}
             activeChatId={activeChatId}
             setActiveChatId={setActiveChatId}

@@ -55,8 +55,6 @@ function doPost(e) {
     var exportMimeType = "";
     if (targetFormat === "pdf") exportMimeType = MimeType.PDF;
     else if (targetFormat === "docx") exportMimeType = MimeType.MICROSOFT_WORD;
-    else if (targetFormat === "xlsx") exportMimeType = MimeType.MICROSOFT_EXCEL;
-    else if (targetFormat === "pptx") exportMimeType = MimeType.MICROSOFT_POWERPOINT;
 
     var exportUrl = "https://www.googleapis.com/drive/v3/files/" + file.id + "/export?mimeType=" + encodeURIComponent(exportMimeType);
     var response = UrlFetchApp.fetch(exportUrl, {

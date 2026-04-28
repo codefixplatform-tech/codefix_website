@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { 
   FaTwitter, 
@@ -10,6 +11,18 @@ import {
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState("");
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault();
+    if (!email) {
+      toast.error("Please enter your email.");
+      return;
+    }
+    // Simulate API call
+    toast.success("Thanks for subscribing! Check your email soon.");
+    setEmail("");
+  };
 
   return (
     <footer className="relative bg-background border-t border-white/5 pt-24 pb-12 overflow-hidden font-sans">
@@ -70,16 +83,25 @@ const Footer = () => {
                <p className="text-secondary text-xs leading-relaxed mb-6 font-semibold opacity-70">
                   Get notified about new developer tools and platform updates.
                </p>
-               <div className="relative">
+               <form onSubmit={handleNewsletterSubmit} className="relative">
+                  <label htmlFor="newsletter-email" className="sr-only">Email Address</label>
                   <input 
+                    id="newsletter-email"
                     type="email" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="dev@example.com"
                     className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-xs text-white focus:border-primary/50 outline-none transition-all pr-14 font-semibold"
+                    required
                   />
-                  <button className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white hover:bg-blue-600 transition-all shadow-lg active:scale-95">
+                  <button 
+                    type="submit"
+                    aria-label="Subscribe to newsletter"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white hover:bg-blue-600 transition-all shadow-lg active:scale-95"
+                  >
                     <FaArrowRight size={12} />
                   </button>
-               </div>
+               </form>
             </div>
           </div>
         </div>
@@ -91,8 +113,8 @@ const Footer = () => {
               © {currentYear} Codefix Ecosystem. Built for the future of engineering.
             </p>
             <div className="flex items-center gap-6">
-               <Link to="#" className="text-[10px] text-slate-600 hover:text-white transition-colors uppercase font-semibold tracking-widest">Privacy</Link>
-               <Link to="#" className="text-[10px] text-slate-600 hover:text-white transition-colors uppercase font-semibold tracking-widest">Terms</Link>
+               <Link to="/privacy" className="text-[10px] text-slate-600 hover:text-white transition-colors uppercase font-semibold tracking-widest">Privacy</Link>
+               <Link to="/terms" className="text-[10px] text-slate-600 hover:text-white transition-colors uppercase font-semibold tracking-widest">Terms</Link>
             </div>
           </div>
           
@@ -102,9 +124,9 @@ const Footer = () => {
                 <span className="text-[10px] font-semibold text-emerald-500 uppercase tracking-widest">Systems Online</span>
              </div>
              <div className="flex items-center gap-4">
-                <SocialLink icon={<FaTwitter />} link="#" />
-                <SocialLink icon={<FaGithub />} link="#" />
-                <SocialLink icon={<FaLinkedin />} link="#" />
+                <SocialLink icon={<FaTwitter />} link="https://x.com/Codefix416850" label="Twitter" />
+                <SocialLink icon={<FaGithub />} link="https://github.com/codefixplatform-tech" label="GitHub" />
+                <SocialLink icon={<FaLinkedin />} link="https://linkedin.com/in/codefix-codefix-863a94406" label="LinkedIn" />
              </div>
           </div>
         </div>
@@ -132,9 +154,12 @@ const FooterLink = ({ to, text }) => (
   </li>
 );
 
-const SocialLink = ({ icon, link }) => (
+const SocialLink = ({ icon, link, label }) => (
   <a 
     href={link} 
+    aria-label={label}
+    target="_blank"
+    rel="noopener noreferrer"
     className="w-11 h-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 shadow-lg"
   >
     {icon}

@@ -13,13 +13,19 @@ import {
   FaCode,
   FaDatabase
 } from "react-icons/fa";
-import { motion } from 'framer-motion';
+import SEO from '../../components/SEO';
+import { motion, useReducedMotion } from 'framer-motion';
 
 const Features = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
 
-  const fadeIn = {
+  const shouldReduceMotion = useReducedMotion();
+  
+  const fadeIn = shouldReduceMotion ? {
+    initial: { opacity: 1, y: 0 },
+    animate: { opacity: 1, y: 0 }
+  } : {
     initial: { opacity: 0, y: 30 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
@@ -28,6 +34,10 @@ const Features = () => {
 
   return (
     <div className={`bg-background text-white overflow-hidden font-sans ${isDashboard ? 'pt-10' : ''}`}>
+      <SEO 
+        title="Platform Features" 
+        description="Explore the advanced features of Codefix, including our AI Neural Engine and high-performance file utilities." 
+      />
       
       {/* --- HERO HEADER --- */}
       <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>
@@ -235,7 +245,7 @@ const MiniToolCard = ({ icon, title, desc }) => (
      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary text-xl mb-6 group-hover:rotate-12 transition-all">
         {icon}
      </div>
-     <h4 className="text-xl font-semibold text-white mb-3 tracking-tight">{title}</h4>
+     <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">{title}</h3>
      <p className="text-secondary text-sm font-semibold opacity-70 leading-relaxed">{desc}</p>
   </div>
 );

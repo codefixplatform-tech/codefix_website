@@ -42,9 +42,7 @@ const SITE_MAP = [
   { title: "Split PDF", path: "/tools/split-pdf", category: "PDF Tools", icon: <FaTools />, keywords: "extract separate pages" },
   { title: "Compress PDF", path: "/tools/compress-pdf", category: "PDF Tools", icon: <FaFilePdf />, keywords: "size reduce light optimization" },
   { title: "Image to PDF", path: "/tools/image-to-pdf", category: "PDF Tools", icon: <FaFilePdf />, keywords: "jpg png convert scan" },
-  { title: "PDF to PPTX", path: "/tools/pdf-to-pptx", category: "PDF Tools", icon: <FaFilePdf />, keywords: "convert slides powerpoint" },
   { title: "PPTX to PDF", path: "/tools/pptx-to-pdf", category: "PDF Tools", icon: <FaFilePdf />, keywords: "convert slides powerpoint" },
-  { title: "PDF to Excel", path: "/tools/pdf-to-excel", category: "PDF Tools", icon: <FaFilePdf />, keywords: "convert spreadsheet table data" },
   
   // Pages & Navigation
   { title: "AI Assistant", path: "/ai-assistant", category: "Platform", icon: <FaRobot />, keywords: "chat help bot gpt neural" },

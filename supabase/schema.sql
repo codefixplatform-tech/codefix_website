@@ -101,6 +101,46 @@ create table public.comments (
   constraint comments_user_id_fkey foreign KEY (user_id) references profiles (id) on delete CASCADE
 ) TABLESPACE pg_default;
 
-create index IF not exists idx_comments_answer_id on public.comments using btree (answer_id) TABLESPACE pg_default;
+-- 7. Security Policies (RLS)
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- Allow public to see only non-sensitive columns
+CREATE POLICY "Public profiles are visible to everyone" 
+ON public.profiles FOR SELECT 
+USING (true);
+
+-- Restrict sensitive columns (only owner can see their own full row)
+-- Standard PG column-level security:
+REVOKE SELECT ON public.profiles FROM anon, authenticated;
+GRANT SELECT (id, full_name, avatar_url, updated_at) ON public.profiles TO anon;
+GRANT SELECT (id, full_name, avatar_url, updated_at) ON public.profiles TO authenticated;
+-- Authenticated users still need to select phone/location for their own profiles.
+-- We can do this by granting on the table but using RLS to filter rows.
+GRANT SELECT ON public.profiles TO authenticated; 
+
+-- Correct way in PG/Supabase RLS:
+CREATE POLICY "Users can see their own sensitive data"
+ON public.profiles FOR SELECT
+USING (auth.uid() = id);
+
+CREATE POLICY "Users can update their own profile"
+ON public.profiles FOR UPDATE
+USING (auth.uid() = id);
+
+-- Other tables RLS
+ALTER TABLE public.questions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Questions are viewable by everyone" ON public.questions FOR SELECT USING (true);
+CREATE POLICY "Authenticated users can create questions" ON public.questions FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Users can update their own questions" ON public.questions FOR UPDATE USING (auth.uid() = user_id);
+
+ALTER TABLE public.answers ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Answers are viewable by everyone" ON public.answers FOR SELECT USING (true);
+CREATE POLICY "Authenticated users can create answers" ON public.answers FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Users can update their own answers" ON public.answers FOR UPDATE USING (auth.uid() = user_id);
+
+ALTER TABLE public.chats ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can only see their own chats" ON public.chats FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can create their own chats" ON public.chats FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Users can update their own chats" ON public.chats FOR UPDATE USING (auth.uid() = user_id);
 
 

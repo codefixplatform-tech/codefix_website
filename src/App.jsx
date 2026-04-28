@@ -34,6 +34,9 @@ import FileUpload from "./pages/Coonverter tools/FileUpload";
 import DevToolProcessor from "./pages/Dev Tools/DevToolProcessor";
 import MyActivity from "./pages/Dashboard/MyActivity";
 import AccountPreference from "./pages/Dashboard/AccountPreference";
+import Privacy from "./pages/Legal/Privacy";
+import Terms from "./pages/Legal/Terms";
+import NotFound from "./pages/NotFound";
 
 // AI Components
 import AIChatLayout from "./components/AI/AIChatLayout";
@@ -148,6 +151,22 @@ const AnimatedRoutes = ({ user, loading }) => {
             element={
               <PageTransition>
                 <AskQuestion />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="privacy"
+            element={
+              <PageTransition>
+                <Privacy />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="terms"
+            element={
+              <PageTransition>
+                <Terms />
               </PageTransition>
             }
           />
@@ -290,8 +309,8 @@ const AnimatedRoutes = ({ user, loading }) => {
           }
         />
 
-        {/* 404 Redirect */}
-        <Route path="*" element={<Navigate to="/" />} />
+        {/* 404 Route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
   );

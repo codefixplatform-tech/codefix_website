@@ -106,43 +106,50 @@ const Signup = () => {
 
           <form className="space-y-4" onSubmit={handleSignup}>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2 ml-1">Full Name</label>
+              <label htmlFor="fullName" className="block text-sm font-medium text-slate-300 mb-2 ml-1">Full Name</label>
               <input 
+                id="fullName"
                 type="text" 
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="John Doe"
+                autoComplete="name"
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-primary/50 transition-all focus:ring-1 focus:ring-primary/20"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2 ml-1">Email Address</label>
+              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2 ml-1">Email Address</label>
               <input 
+                id="email"
                 type="email" 
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@company.com"
+                autoComplete="username"
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-primary/50 transition-all focus:ring-1 focus:ring-primary/20"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2 ml-1">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2 ml-1">Password</label>
               <div className="relative">
                 <input 
+                  id="password"
                   type={showPassword ? "text" : "password"} 
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Create a strong password"
+                  autoComplete="new-password"
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-primary/50 transition-all focus:ring-1 focus:ring-primary/20 pr-12"
                 />
                 <button 
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary hover:text-white transition-colors"
                 >
                   {showPassword ? <EyeOffIcon /> : <EyeIcon />}
@@ -151,7 +158,7 @@ const Signup = () => {
             </div>
 
             <p className="text-[11px] text-secondary/60 px-1">
-              By signing up, you agree to our <span className="text-primary hover:underline cursor-pointer">Terms</span> and <span className="text-primary hover:underline cursor-pointer">Privacy Policy</span>.
+              By signing up, you agree to our <Link to="/terms" className="text-primary hover:underline cursor-pointer">Terms</Link> and <Link to="/privacy" className="text-primary hover:underline cursor-pointer">Privacy Policy</Link>.
             </p>
 
             <button 

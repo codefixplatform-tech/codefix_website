@@ -14,7 +14,8 @@ import {
 } from "react-icons/fa6";
 
 import {FaShieldAlt,FaSearch} from 'react-icons/fa';
-import { motion, AnimatePresence } from 'framer-motion';
+import SEO from '../../components/SEO';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 const Tools = () => {
   const navigate = useNavigate();
@@ -86,15 +87,6 @@ const Tools = () => {
       format: "Image"
     },
     {
-      id: "pdf-to-pptx",
-      icon: <FaFilePowerpoint />,
-      title: "PDF to PPTX",
-      category: "Convert",
-      description: "Convert your PDF presentations into editable PowerPoint slides while preserving visual elements and layouts.",
-      tags: ["Slides", "Office"],
-      format: "PDF"
-    },
-    {
       id: "pptx-to-pdf",
       icon: <FaFilePowerpoint />,
       title: "PPTX to PDF",
@@ -102,15 +94,6 @@ const Tools = () => {
       description: "Transform your PowerPoint presentations into high-quality PDF documents for professional sharing.",
       tags: ["Secure", "Slides"],
       format: "PPTX"
-    },
-    {
-      id: "pdf-to-excel",
-      icon: <FaFileExcel />,
-      title: "PDF to Excel",
-      category: "Convert",
-      description: "Extract data tables from PDF documents and convert them into organized Excel spreadsheets instantly.",
-      tags: ["Data", "Finance"],
-      format: "PDF"
     }
   ];
 
@@ -123,7 +106,12 @@ const Tools = () => {
 
   const isDashboard = location.pathname.startsWith('/dashboard');
 
-  const fadeIn = {
+  const shouldReduceMotion = useReducedMotion();
+  
+  const fadeIn = shouldReduceMotion ? {
+    initial: { opacity: 1, y: 0 },
+    animate: { opacity: 1, y: 0 }
+  } : {
     initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
@@ -132,6 +120,10 @@ const Tools = () => {
 
   return (
     <div className={`relative min-h-screen bg-background text-white overflow-hidden font-sans ${isDashboard ? 'pt-10' : ''}`}>
+      <SEO 
+        title="File Tools" 
+        description="High-performance, client-side document converters and editors. 100% private and secure." 
+      />
       
       {/* --- HERO HEADER --- */}
       <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>

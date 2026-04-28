@@ -10,13 +10,19 @@ import {
   FaCode, 
   FaLayerGroup 
 } from "react-icons/fa";
-import { motion } from 'framer-motion';
+import SEO from '../../components/SEO';
+import { motion, useReducedMotion } from 'framer-motion';
 
 const About = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
 
-  const fadeIn = {
+  const shouldReduceMotion = useReducedMotion();
+  
+  const fadeIn = shouldReduceMotion ? {
+    initial: { opacity: 1, y: 0 },
+    animate: { opacity: 1, y: 0 }
+  } : {
     initial: { opacity: 0, y: 30 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
@@ -25,6 +31,10 @@ const About = () => {
 
   return (
     <div className={`bg-background text-white overflow-hidden font-sans ${isDashboard ? 'pt-10' : ''}`}>
+      <SEO 
+        title="Our Mission" 
+        description="Learn about the story behind Codefix and our mission to reimagine the developer workflow." 
+      />
       
       {/* --- 1. MISSION HEADER --- */}
       <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>
@@ -92,7 +102,7 @@ const About = () => {
                         <FaCode className="text-primary/20 text-8xl rotate-12 group-hover:rotate-0 transition-transform duration-1000" />
                      </div>
                      <div className="space-y-8 relative z-10">
-                        <h4 className="text-2xl font-semibold">The Architecture</h4>
+                        <h3 className="text-2xl font-semibold">The Architecture</h3>
                         <div className="space-y-4">
                            <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
                               <motion.div initial={{ width: 0 }} whileInView={{ width: "90%" }} transition={{ duration: 1.5 }} className="h-full bg-primary" />
@@ -182,7 +192,7 @@ const StoryPoint = ({ icon, title, desc }) => (
       {icon}
     </div>
     <div className="space-y-2">
-      <h4 className="text-xl font-semibold tracking-tight">{title}</h4>
+      <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
       <p className="text-secondary text-base font-semibold opacity-70 leading-relaxed">{desc}</p>
     </div>
   </div>
@@ -193,7 +203,7 @@ const ValueCard = ({ icon, title, desc }) => (
      <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-3xl mb-10 group-hover:scale-110 transition-transform">
         {icon}
      </div>
-     <h4 className="text-2xl font-semibold text-white mb-4 tracking-tight">{title}</h4>
+     <h3 className="text-2xl font-semibold text-white mb-4 tracking-tight">{title}</h3>
      <p className="text-secondary text-base font-semibold opacity-70 leading-relaxed">{desc}</p>
   </div>
 );

@@ -85,10 +85,18 @@ const Navbar = ({ user, loading }) => {
 
           {/* Mobile Search Toggle */}
           <div className={`flex items-center md:hidden gap-3 ${isSearchVisible ? 'hidden' : 'flex'}`}>
-            <button onClick={() => setIsSearchVisible(true)} className="p-3 text-secondary bg-white/5 rounded-xl border border-white/5">
+            <button 
+              onClick={() => setIsSearchVisible(true)} 
+              className="p-3 text-secondary bg-white/5 rounded-xl border border-white/5"
+              aria-label="Open search"
+            >
               <FaSearch size={20} />
             </button>
-            <button onClick={() => setIsOpen(!isOpen)} className="text-secondary p-2 w-12 h-12 flex items-center justify-center bg-white/5 rounded-xl border border-white/5">
+            <button 
+              onClick={() => setIsOpen(!isOpen)} 
+              className="text-secondary p-2 w-12 h-12 flex items-center justify-center bg-white/5 rounded-xl border border-white/5"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+            >
                <AnimatePresence mode="wait">
                   <motion.div
                     key={isOpen ? 'close' : 'open'}
@@ -126,51 +134,60 @@ const Navbar = ({ user, loading }) => {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background border-b border-white/10 overflow-hidden"
-          >
-            <div className="p-8 space-y-5">
-              {navLinks.map((link, i) => (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  key={link.name}
-                >
-                  <Link
-                    to={link.path}
-                    onClick={() => setIsOpen(false)}
-                    className={`block text-xl font-semibold  ${
-                      location.pathname === link.path ? "text-primary" : "text-white"
-                    }`}
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 z-[-1] bg-black/60 backdrop-blur-sm md:hidden"
+            />
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-background border-b border-white/10 overflow-hidden"
+            >
+              <div className="p-8 space-y-5">
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    key={link.name}
                   >
-                    {link.name}
-                  </Link>
-                </motion.div>
-              ))}
-              <div className="grid grid-cols-1 gap-4 pt-8 border-t border-white/10">
-                {!loading && (
-                  user ? (
-                    <Link to="/dashboard" onClick={() => setIsOpen(false)}>
-                      <button className="w-full bg-primary text-white py-5 rounded-2xl font-semibold uppercase tracking-widest text-xs shadow-lg shadow-primary/20">Dashboard</button>
+                    <Link
+                      to={link.path}
+                      onClick={() => setIsOpen(false)}
+                      className={`block text-xl font-semibold  ${
+                        location.pathname === link.path ? "text-primary" : "text-white"
+                      }`}
+                    >
+                      {link.name}
                     </Link>
-                  ) : (
-                    <>
-                      <Link to="/login" onClick={() => setIsOpen(false)}>
-                        <button className="w-full border border-white/10 text-white py-5 rounded-2xl font-semibold uppercase tracking-widest text-xs">Login</button>
+                  </motion.div>
+                ))}
+                <div className="grid grid-cols-1 gap-4 pt-8 border-t border-white/10">
+                  {!loading && (
+                    user ? (
+                      <Link to="/dashboard" onClick={() => setIsOpen(false)}>
+                        <button className="w-full bg-primary text-white py-5 rounded-2xl font-semibold uppercase tracking-widest text-xs shadow-lg shadow-primary/20">Dashboard</button>
                       </Link>
-                      <Link to="/signup" onClick={() => setIsOpen(false)}>
-                        <button className="w-full bg-primary text-white py-5 rounded-2xl font-semibold uppercase tracking-widest text-xs shadow-lg shadow-primary/20">Sign Up</button>
-                      </Link>
-                    </>
-                  )
-                )}
+                    ) : (
+                      <>
+                        <Link to="/login" onClick={() => setIsOpen(false)}>
+                          <button className="w-full border border-white/10 text-white py-5 rounded-2xl font-semibold uppercase tracking-widest text-xs">Login</button>
+                        </Link>
+                        <Link to="/signup" onClick={() => setIsOpen(false)}>
+                          <button className="w-full bg-primary text-white py-5 rounded-2xl font-semibold uppercase tracking-widest text-xs shadow-lg shadow-primary/20">Sign Up</button>
+                        </Link>
+                      </>
+                    )
+                  )}
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>

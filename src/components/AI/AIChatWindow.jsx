@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 // React Icons (Font Awesome Only)
 import { FaPaperPlane, FaRobot, FaUser, FaMagic, FaTerminal, FaShieldAlt, FaCode, FaBug, FaDatabase, FaLightbulb } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { getAIResponse } from '../../utils/AI/geminiEngine';
+import { getAIResponseStream } from '../../utils/AI/geminiEngine';
 import { chatService } from '../../utils/AI/chatService';
 import toast from 'react-hot-toast';
 
@@ -60,12 +60,15 @@ const ResponseWrapper = ({ text, isNew }) => {
 
 const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef(null);
+  const lastSavedChatIdRef = useRef(null);
 
   const loadChatDetails = React.useCallback(async () => {
+    if (!activeChatId || activeChatId === lastSavedChatIdRef.current) return;
     try {
       const data = await chatService.getChatById(activeChatId);
       setMessages(data.messages || []);
@@ -74,6 +77,7 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
       toast.error("Failed to load conversation");
     }
   }, [activeChatId]);
+
 
   const handleSendMessage = React.useCallback(async (e, customText = null) => {
     if (e && e.preventDefault) e.preventDefault();
@@ -88,28 +92,45 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
     setLoading(true);
 
     try {
-      // Direct pass messages array because OpenRouter mapping is handled perfectly in geminiEngine
-      const aiText = await getAIResponse(textToSend, messages);
-      const finalMessages = [...newMessages, { role: 'model', text: aiText, isNew: true }];
+      let fullAIResponse = "";
       
-      setMessages(finalMessages);
+      // Add empty model message for streaming
+      setMessages(prev => [...prev, { role: 'model', text: '', isNew: true }]);
 
-      // Agar user login hai toh Supabase mein save karein
+      await getAIResponseStream(textToSend, messages, (chunk) => {
+        if (loading) setLoading(false);
+        fullAIResponse = chunk;
+        setMessages(prev => {
+          const updated = [...prev];
+          if (updated.length > 0) {
+            updated[updated.length - 1].text = fullAIResponse;
+          }
+          return updated;
+        });
+      });
+
+      // Final cleanup and save
       if (user) {
-        // Strip the `isNew` flag before saving to db
+        const finalMessages = [...newMessages, { role: 'model', text: fullAIResponse }];
         const dbMessages = finalMessages.map(m => ({ role: m.role, text: m.text }));
         const savedChat = await chatService.saveChat(user.id, activeChatId, dbMessages);
         if (!activeChatId) {
-          setActiveChatId(savedChat.id); // Nayi chat ko ID assign karein
-          onChatSaved(); // Sidebar refresh karein
+          lastSavedChatIdRef.current = savedChat.id;
+          setActiveChatId(savedChat.id);
+          onChatSaved();
         }
       }
     } catch (err) {
+      console.error(err);
       toast.error(err.message || "Connection lost");
+      setMessages(prev => prev.slice(0, -1)); // Remove empty message on fail
     } finally {
       setLoading(false);
     }
   }, [input, loading, messages, user, activeChatId, setActiveChatId, onChatSaved]);
+
+
+
 
   // Handle initial prompt from navigation state (e.g. from Question Detail)
   useEffect(() => {
@@ -227,7 +248,32 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
                   {m.role === 'user' ? (
                     m.text
                   ) : (
-                    <ResponseWrapper text={m.text} isNew={m.isNew} />
+                    <>
+                      <ResponseWrapper text={m.text} isNew={m.isNew} />
+                      <div className="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                            <button 
+                              onClick={() => {
+                                navigator.clipboard.writeText(m.text);
+                                toast.success("Response copied!", {
+                                  style: { background: '#1e293b', color: '#fff', fontSize: '12px' }
+                                });
+                              }}
+                              className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 hover:text-primary uppercase tracking-tighter transition-colors cursor-pointer"
+                            >
+                               <FaCode className="text-primary/50" /> Copy Response
+                            </button>
+                            <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
+                               <FaShieldAlt className="text-emerald-500/50" /> Secure
+                            </div>
+                         </div>
+                         <div className="flex items-center gap-2 self-end sm:self-auto">
+                            <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">DevIntel Core v2.0</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+                         </div>
+                      </div>
+
+                    </>
                   )}
                 </div>
               </div>
@@ -255,7 +301,7 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={user ? "Ask anything about development..." : "Sign in to save this session..."}
+              placeholder="Ask anything about development..."
               className="flex-1 bg-transparent px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-sm text-white focus:outline-none placeholder:text-slate-600"
             />
             <button 
@@ -268,11 +314,16 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
           </div>
         </form>
         <div className="mt-3 flex justify-center gap-6">
+           {!user && (
+             <div className="flex items-center gap-2 text-[9px] font-black text-amber-500 uppercase tracking-widest animate-pulse">
+               <FaShieldAlt size={12} /> Guest Mode: History Not Saved
+             </div>
+           )}
            <div className="flex items-center gap-2 text-[9px] font-black text-slate-600 uppercase tracking-widest">
               <FaShieldAlt size={12} /> Privacy Focused
            </div>
            <div className="flex items-center gap-2 text-[9px] font-black text-slate-600 uppercase tracking-widest">
-              <FaMagic size={12} /> Gemini 1.5 Powered
+              <FaMagic size={12} /> Gemini 2.0 Flash
            </div>
         </div>
       </div>

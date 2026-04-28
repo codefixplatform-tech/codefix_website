@@ -11,7 +11,8 @@ import {
   FaShieldAlt
 } from "react-icons/fa";
 import toast from 'react-hot-toast';
-import { motion, AnimatePresence } from 'framer-motion';
+import SEO from '../../components/SEO';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 
 const Contact = () => {
@@ -79,7 +80,12 @@ const Contact = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const fadeIn = {
+  const shouldReduceMotion = useReducedMotion();
+  
+  const fadeIn = shouldReduceMotion ? {
+    initial: { opacity: 1, y: 0 },
+    animate: { opacity: 1, y: 0 }
+  } : {
     initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
@@ -88,6 +94,10 @@ const Contact = () => {
 
   return (
     <div className={`bg-background text-white overflow-hidden font-sans ${isDashboard ? 'pt-10' : ''}`}>
+      <SEO 
+        title="Contact Support" 
+        description="Get in touch with the Codefix engineering team for technical support, feature requests, or bug reports." 
+      />
       
       {/* --- HERO HEADER --- */}
       <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>
@@ -166,26 +176,30 @@ const Contact = () => {
                      <form onSubmit={handleSubmit} className="space-y-10">
                         <div className="grid md:grid-cols-2 gap-10">
                            <div className="space-y-4">
-                              <label className="text-[10px] font-semibold text-primary uppercase tracking-[3px] ml-4">Your Name</label>
+                              <label htmlFor="name" className="text-[10px] font-semibold text-primary uppercase tracking-[3px] ml-4">Your Name</label>
                               <input 
+                                 id="name"
                                  type="text" 
                                  name="name"
                                  required
                                  value={formData.name}
                                  onChange={handleChange}
                                  placeholder="John Doe"
+                                 autoComplete="name"
                                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 px-8 text-white focus:border-primary/50 outline-none transition-all font-semibold text-sm placeholder:text-slate-700"
                               />
                            </div>
                            <div className="space-y-4">
-                              <label className="text-[10px] font-semibold text-primary uppercase tracking-[3px] ml-4">Email Address</label>
+                              <label htmlFor="email" className="text-[10px] font-semibold text-primary uppercase tracking-[3px] ml-4">Email Address</label>
                               <input 
+                                 id="email"
                                  type="email" 
                                  name="email"
                                  required
                                  value={formData.email}
                                  onChange={handleChange}
                                  placeholder="john@example.com"
+                                 autoComplete="email"
                                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 px-8 text-white focus:border-primary/50 outline-none transition-all font-semibold text-sm placeholder:text-slate-700"
                               />
                            </div>
@@ -233,8 +247,9 @@ const Contact = () => {
                         </div>
 
                         <div className="space-y-4">
-                           <label className="text-[10px] font-semibold text-primary uppercase tracking-[3px] ml-4">Your Message</label>
+                           <label htmlFor="message" className="text-[10px] font-semibold text-primary uppercase tracking-[3px] ml-4">Your Message</label>
                            <textarea 
+                              id="message"
                               name="message"
                               required
                               rows="6"
@@ -285,7 +300,7 @@ const SupportCard = ({ icon, title, desc, color }) => {
         {icon}
       </div>
       <div className="space-y-2">
-         <h4 className="text-lg font-semibold tracking-tight">{title}</h4>
+         <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
          <p className="text-secondary text-sm font-semibold opacity-60 leading-relaxed">{desc}</p>
       </div>
     </div>
@@ -293,7 +308,10 @@ const SupportCard = ({ icon, title, desc, color }) => {
 };
 
 const SocialBtn = ({ icon, label }) => (
-  <button className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all font-semibold text-xs text-secondary hover:text-white uppercase tracking-widest">
+  <button 
+    aria-label={`Contact us on ${label}`}
+    className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all font-semibold text-xs text-secondary hover:text-white uppercase tracking-widest"
+  >
      {icon} {label}
   </button>
 );

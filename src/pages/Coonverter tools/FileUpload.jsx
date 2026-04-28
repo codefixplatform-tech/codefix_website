@@ -54,7 +54,6 @@ const FileUpload = () => {
       case 'pdf-to-word': return { title: "PDF to Word", icon: <FaFilePdf />, color: "text-red-500", accept: ".pdf", multiple: false };
       case 'word-to-pdf': return { title: "Word to PDF", icon: <FaFileWord />, color: "text-blue-500", accept: ".doc,.docx", multiple: false };
       case 'excel-to-pdf': return { title: "Excel to PDF", icon: <FaFileExcel />, color: "text-emerald-500", accept: ".xls,.xlsx", multiple: false };
-      case 'pdf-to-pptx': return { title: "PDF to PPTX", icon: <FaFilePowerpoint />, color: "text-orange-600", accept: ".pdf", multiple: false };
       case 'pptx-to-pdf': return { title: "PPTX to PDF", icon: <FaFilePowerpoint />, color: "text-red-600", accept: ".pptx", multiple: false };
       case 'image-to-pdf': return { title: "Image to PDF", icon: <FaFileImage />, color: "text-purple-500", accept: "image/*", multiple: false };
       case 'compress-pdf': return { title: "Compress PDF", icon: <FaFileZipper />, color: "text-orange-500", accept: ".pdf", multiple: false };
@@ -160,16 +159,14 @@ const FileUpload = () => {
       let result = null;
       
       // Determine if we should use Cloud API or Local Engine
-      const useApi = ['pdf-to-word', 'word-to-pdf', 'excel-to-pdf', 'pdf-to-pptx', 'pptx-to-pdf', 'pdf-to-excel'].includes(toolId);
+      const useApi = ['pdf-to-word', 'word-to-pdf', 'excel-to-pdf', 'pptx-to-pdf'].includes(toolId);
 
       if (useApi) {
         const targetMap = {
             'pdf-to-word': 'docx',
             'word-to-pdf': 'pdf',
             'excel-to-pdf': 'pdf',
-            'pdf-to-pptx': 'pptx',
-            'pptx-to-pdf': 'pdf',
-            'pdf-to-excel': 'xlsx'
+            'pptx-to-pdf': 'pdf'
         };
         result = await handleApiConversion(selectedFile, targetMap[toolId]);
       } 

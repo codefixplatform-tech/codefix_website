@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import SEO from '../SEO';
+import { motion, useReducedMotion } from 'framer-motion';
 import { 
   FaTerminal, 
   FaMicrochip, 
@@ -31,7 +32,12 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const fadeIn = {
+  const shouldReduceMotion = useReducedMotion();
+  
+  const fadeIn = shouldReduceMotion ? {
+    initial: { opacity: 1, y: 0 },
+    animate: { opacity: 1, y: 0 }
+  } : {
     initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: "-100px" },
@@ -40,6 +46,10 @@ const Home = () => {
 
   return (
     <div className="bg-background overflow-hidden relative font-sans">
+      <SEO 
+        title="Develop. Fix. Ship." 
+        description="The unified developer ecosystem for modern engineers. High-performance file utilities, community intelligence, and AI-powered coding assistants." 
+      />
       {/* 1. HERO SECTION */}
       <section id="home" className="relative pt-32 pb-20 lg:pt-48 lg:pb-32">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
@@ -232,8 +242,8 @@ const Home = () => {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={shouldReduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+              whileInView={shouldReduceMotion ? {} : { opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
               className="flex-1 w-full relative z-10"
@@ -255,8 +265,8 @@ const Home = () => {
                           Identified a potential memory leak in your current hook. Applying memoization now...
                        </div>
                        <motion.div 
-                         initial={{ opacity: 0, y: 10 }}
-                         whileInView={{ opacity: 1, y: 0 }}
+                         initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                         whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
                          transition={{ delay: 0.5 }}
                          className="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/20 flex justify-center items-center gap-3"
                        >
@@ -293,8 +303,8 @@ const Home = () => {
       <section className="py-40 relative">
          <div className="max-w-5xl mx-auto px-4 text-center">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              initial={shouldReduceMotion ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.95, y: 20 }}
+              whileInView={shouldReduceMotion ? {} : { opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
               className="bg-gradient-to-br from-primary to-blue-700 p-12 md:p-24 rounded-[4rem] shadow-2xl shadow-primary/30 relative overflow-hidden"
@@ -332,10 +342,12 @@ const PreviewLink = ({ icon, label, status, active }) => (
   </div>
 );
 
-const FeatureCard = ({ icon, title, desc, delay }) => (
-  <motion.div 
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
+const FeatureCard = ({ icon, title, desc, delay }) => {
+  const shouldReduceMotion = useReducedMotion();
+  return (
+    <motion.div 
+      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.6 }}
     viewport={{ once: true }}
     className="bg-surface/30 border border-white/5 p-10 rounded-[3rem] hover:border-primary/40 transition-all duration-500 group"
@@ -346,19 +358,23 @@ const FeatureCard = ({ icon, title, desc, delay }) => (
     <h3 className="text-2xl font-semibold text-white mb-4 tracking-tight">{title}</h3>
     <p className="text-secondary text-base leading-relaxed font-semibold opacity-70">{desc}</p>
   </motion.div>
-);
+  );
+};
 
-const StatItem = ({ value, label, delay }) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.8 }}
-    whileInView={{ opacity: 1, scale: 1 }}
-    transition={{ delay, duration: 0.5 }}
-    viewport={{ once: true }}
-  >
+const StatItem = ({ value, label, delay }) => {
+  const shouldReduceMotion = useReducedMotion();
+  return (
+    <motion.div
+      initial={shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+      whileInView={shouldReduceMotion ? {} : { opacity: 1, scale: 1 }}
+      transition={{ delay, duration: 0.5 }}
+      viewport={{ once: true }}
+    >
     <p className="text-4xl md:text-5xl font-semibold text-white mb-3 tracking-tight">{value}</p>
     <p className="text-secondary text-xs font-semibold uppercase tracking-[3px]">{label}</p>
   </motion.div>
-);
+  );
+};
 
 const ToolBadge = ({ label }) => (
   <div className="bg-white/5 border border-white/10 px-4 py-3 rounded-xl text-xs font-semibold text-slate-300 flex items-center gap-2">
@@ -367,12 +383,14 @@ const ToolBadge = ({ label }) => (
   </div>
 );
 
-const TrustItem = ({ icon, title, desc, delay }) => (
-  <motion.div 
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ delay, duration: 0.6 }}
-    viewport={{ once: true }}
+const TrustItem = ({ icon, title, desc, delay }) => {
+  const shouldReduceMotion = useReducedMotion();
+  return (
+    <motion.div 
+      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.6 }}
+      viewport={{ once: true }}
     className="space-y-6"
   >
     <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-[2rem] mx-auto flex items-center justify-center text-primary text-4xl shadow-xl">
@@ -381,6 +399,7 @@ const TrustItem = ({ icon, title, desc, delay }) => (
     <h4 className="text-2xl font-semibold text-white tracking-tight">{title}</h4>
     <p className="text-secondary text-base leading-relaxed font-semibold opacity-70 max-w-sm mx-auto">{desc}</p>
   </motion.div>
-);
+  );
+};
 
 export default Home;

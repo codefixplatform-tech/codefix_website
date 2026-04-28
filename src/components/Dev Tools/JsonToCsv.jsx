@@ -90,6 +90,36 @@ const JsonToCsv = () => {
     setError('');
   };
 
+  const handleFileUpload = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    const loaders = files.map(file => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const json = JSON.parse(event.target.result);
+            resolve(Array.isArray(json) ? json : [json]);
+          } catch (err) {
+            reject(`File ${file.name} is not a valid JSON.`);
+          }
+        };
+        reader.readAsText(file);
+      });
+    });
+
+    toast.promise(Promise.all(loaders), {
+      loading: 'Processing files...',
+      success: (dataArrays) => {
+        const merged = dataArrays.flat();
+        setJsonInput(JSON.stringify(merged, null, 2));
+        return `Batch processed ${files.length} files!`;
+      },
+      error: (err) => err
+    });
+  };
+
   return (
     <div className="flex flex-col gap-6 w-full font-semibold">
       
@@ -104,9 +134,15 @@ const JsonToCsv = () => {
         {/* Input Area */}
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center px-4 py-3 bg-white/5 border border-white/10 rounded-2xl">
-            <span className="text-xs text-white uppercase tracking-widest flex items-center gap-2">
-              <span className="text-primary font-black">{'{ }'}</span> JSON Input
-            </span>
+            <div className="flex items-center gap-4">
+              <span className="text-xs text-white uppercase tracking-widest flex items-center gap-2">
+                <span className="text-primary font-black">{'{ }'}</span> JSON Input
+              </span>
+              <label className="cursor-pointer bg-primary/10 hover:bg-primary/20 text-primary text-[10px] px-3 py-1 rounded-lg border border-primary/20 transition-all">
+                Upload Batch
+                <input type="file" multiple accept=".json" onChange={handleFileUpload} className="hidden" />
+              </label>
+            </div>
             <button 
               onClick={handleClear}
               className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-slate-400 hover:text-red-400 transition-colors"

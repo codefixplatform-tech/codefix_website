@@ -3,7 +3,9 @@ import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { FaSearch, FaPlus, FaCircleNotch, FaUsers, FaArrowRight, FaHashtag, FaCheckCircle, FaRobot } from "react-icons/fa";
 import QuestionCard from "../../components/QA/QuestionCard";
-import { motion, AnimatePresence } from "framer-motion";
+import QuestionSkeleton from "../../components/QA/QuestionSkeleton";
+import SEO from "../../components/SEO";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 const QAHome = () => {
   const navigate = useNavigate();
@@ -103,7 +105,12 @@ const QAHome = () => {
     }
   };
 
-  const fadeIn = {
+  const shouldReduceMotion = useReducedMotion();
+  
+  const fadeIn = shouldReduceMotion ? {
+    initial: { opacity: 1, y: 0 },
+    animate: { opacity: 1, y: 0 }
+  } : {
     initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
@@ -112,6 +119,10 @@ const QAHome = () => {
 
   return (
     <div className={`relative min-h-screen bg-background text-white overflow-hidden font-sans ${isDashboard ? 'pt-10' : ''}`}>
+      <SEO 
+        title="Community Q&A" 
+        description="Solve your development bugs with the help of our global community and AI-powered insights." 
+      />
       
       {/* --- HERO HEADER (CENTERED) --- */}
       <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>
@@ -217,9 +228,8 @@ const QAHome = () => {
                {/* Main Feed */}
                <div className="lg:col-span-8 space-y-6">
                   {loading ? (
-                    <div className="flex flex-col items-center justify-center py-40 bg-white/[0.01] rounded-[4rem] border border-dashed border-white/5">
-                        <FaCircleNotch className="text-primary animate-spin text-4xl mb-6" />
-                        <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-[4px]">Syncing Knowledge Engine...</p>
+                    <div className="space-y-6">
+                        {[1, 2, 3, 4, 5].map(i => <QuestionSkeleton key={i} />)}
                     </div>
                   ) : questions.length > 0 ? (
                     <div className="space-y-6">
