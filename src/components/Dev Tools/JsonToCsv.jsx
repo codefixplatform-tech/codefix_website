@@ -41,7 +41,7 @@ const JsonToCsv = () => {
         return;
       }
 
-      // Escape fields for CSV
+      // Escape fields for CSV wrape , " into ""
       const escapeField = (field) => {
         if (field === null || field === undefined) return '';
         const stringField = String(field);
@@ -74,9 +74,11 @@ const JsonToCsv = () => {
     }
   };
 
+  // Download CSV binary large object (blob)
   const handleDownload = () => {
     if (csvOutput) {
       const blob = new Blob([csvOutput], { type: 'text/csv;charset=utf-8;' });
+      // Create a download link and trigger the download
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = 'data.csv';
@@ -121,76 +123,83 @@ const JsonToCsv = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full font-semibold">
+    <div className="flex flex-col gap-10 w-full">
       
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-2xl text-xs uppercase tracking-widest text-center">
-          {error}
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-6 rounded-[2rem] text-[10px] font-black uppercase tracking-[4px] text-center shadow-xl flex items-center justify-center gap-4"
+        >
+          <div className="w-8 h-8 bg-rose-500/10 rounded-full flex items-center justify-center border border-rose-500/20">
+             <FaTrash className="text-xs" />
+          </div>
+          Parsing Violation: {error}
+        </motion.div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         
         {/* Input Area */}
-        <div className="flex flex-col gap-4">
-          <div className="flex justify-between items-center px-4 py-3 bg-white/5 border border-white/10 rounded-2xl">
-            <div className="flex items-center gap-4">
-              <span className="text-xs text-white uppercase tracking-widest flex items-center gap-2">
-                <span className="text-primary font-black">{'{ }'}</span> JSON Input
-              </span>
-              <label className="cursor-pointer bg-primary/10 hover:bg-primary/20 text-primary text-[10px] px-3 py-1 rounded-lg border border-primary/20 transition-all">
-                Upload Batch
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-2 gap-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+              <label className="text-[10px] font-black uppercase tracking-[4px] text-slate-400">Source (JSON)</label>
+              <label className="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-900 text-[9px] px-3 py-1.5 rounded-lg transition-all font-black uppercase tracking-[2px] shadow-sm">
+                Batch Upload
                 <input type="file" multiple accept=".json" onChange={handleFileUpload} className="hidden" />
               </label>
             </div>
             <button 
               onClick={handleClear}
-              className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-slate-400 hover:text-red-400 transition-colors"
-              title="Clear Input"
+              className="text-slate-400 hover:text-rose-500 transition-colors text-[10px] flex items-center gap-2 font-black uppercase tracking-[3px] bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100"
             >
-              <FaTrash className="text-xs" />
+              <FaTrash className="text-xs" /> Reset
             </button>
           </div>
-          <textarea
-            value={jsonInput}
-            onChange={(e) => setJsonInput(e.target.value)}
-            placeholder='[\n  { "id": 1, "name": "Ali" }\n]'
-            className="w-full h-80 bg-black/40 border border-white/5 rounded-3xl p-6 text-sm text-blue-300 font-mono focus:outline-none focus:border-primary/50 transition-colors resize-none placeholder-blue-300/20 custom-scrollbar"
-            spellCheck="false"
-          />
+          <div className="relative group/input">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/10 to-transparent blur-xl opacity-0 group-focus-within/input:opacity-100 transition-opacity"></div>
+            <textarea
+              value={jsonInput}
+              onChange={(e) => setJsonInput(e.target.value)}
+              placeholder='[\n  { "id": 1, "name": "Matrix" }\n]'
+              className="relative w-full h-[400px] bg-slate-900 border border-slate-800 rounded-[2.5rem] p-8 text-sm text-slate-300 font-mono focus:outline-none focus:border-primary/50 transition-all resize-none placeholder:text-slate-700 custom-scrollbar"
+              spellCheck="false"
+            />
+          </div>
         </div>
 
         {/* Output Area */}
-        <div className="flex flex-col gap-4">
-          <div className="flex justify-between items-center px-4 py-3 bg-white/5 border border-white/10 rounded-2xl">
-            <span className="text-xs text-white uppercase tracking-widest flex items-center gap-2">
-              <FaFileCsv className="text-emerald-400" /> CSV Output
-            </span>
-            <div className="flex gap-2">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-2 gap-4">
+            <label className="text-[10px] font-black uppercase tracking-[4px] text-slate-400">Export (CSV)</label>
+            <div className="flex flex-wrap gap-2">
               <button 
                 onClick={handleCopy}
                 disabled={!csvOutput}
-                className="p-2 bg-white/5 hover:bg-white/10 disabled:opacity-50 disabled:hover:bg-white/5 rounded-lg text-slate-400 transition-colors"
-                title="Copy CSV"
+                className="bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-[9px] font-black uppercase tracking-[2px] border border-emerald-500/20 disabled:opacity-30"
               >
-                <FaCopy className="text-xs" />
+                <FaCopy className="text-xs" /> Copy
               </button>
               <button 
                 onClick={handleDownload}
                 disabled={!csvOutput}
-                className="p-2 bg-primary/20 hover:bg-primary/40 text-primary disabled:opacity-50 disabled:hover:bg-primary/20 rounded-lg transition-colors"
-                title="Download CSV"
+                className="bg-slate-900 text-white hover:bg-primary px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-[9px] font-black uppercase tracking-[2px] shadow-xl disabled:opacity-30"
               >
-                <FaDownload className="text-xs" />
+                <FaDownload className="text-xs" /> Download
               </button>
             </div>
           </div>
-          <textarea
-            value={csvOutput}
-            readOnly
-            placeholder="id,name&#10;1,Ali"
-            className="w-full h-80 bg-black/40 border border-white/5 rounded-3xl p-6 text-sm text-emerald-300 font-mono focus:outline-none transition-colors resize-none placeholder-emerald-300/20 custom-scrollbar"
-          />
+          <div className="relative group/output">
+            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/10 to-transparent blur-xl opacity-0 group-hover/output:opacity-100 transition-opacity"></div>
+            <textarea
+              value={csvOutput}
+              readOnly
+              placeholder="id,name&#10;1,Matrix"
+              className="relative w-full h-[400px] bg-slate-900 border border-slate-800 rounded-[2.5rem] p-8 text-sm text-emerald-400 font-mono focus:outline-none transition-all resize-none placeholder:text-slate-700 custom-scrollbar"
+            />
+          </div>
         </div>
       </div>
 

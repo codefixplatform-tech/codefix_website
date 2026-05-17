@@ -2,15 +2,18 @@ import React from "react";
 import Navbar from "../components/LandingPage/Navbar";
 import Footer from "../components/LandingPage/Footer";
 import AIFloatingButton from "../components/AI/AIFloatingButton";
-import { Outlet } from "react-router-dom"; // Outlet import karo
+import { Outlet, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 const LandingLayout = ({ user, loading }) => {
+  const location = useLocation();
+
   return (
-    <div className="relative min-h-screen bg-background text-white selection:bg-primary/30 selection:text-primary">
+    <div className="relative min-h-screen bg-background text-slate-900 selection:bg-primary/30 selection:text-primary">
       <Navbar user={user} loading={loading} />
 
-      <main className="relative z-10 pt-16"> {/* padding top taake navbar ke peeche na chhupay */}
-        <Outlet /> {/* Yahan Hero, About, ya Contact render honge */}
+      <main className="relative z-10 pt-16">
+        <Outlet />
       </main>
 
       <Footer />

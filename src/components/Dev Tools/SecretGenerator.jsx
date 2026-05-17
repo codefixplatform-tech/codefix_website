@@ -65,24 +65,24 @@ const SecretGenerator = () => {
   };
 
   const strength = calculateStrength();
-  const strengthColor = strength < 40 ? 'bg-red-500' : strength < 75 ? 'bg-amber-500' : 'bg-emerald-500';
+  const strengthColor = strength < 40 ? 'bg-rose-500' : strength < 75 ? 'bg-amber-500' : 'bg-emerald-500';
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-12">
       {/* Type Switcher */}
-      <div className="flex flex-wrap gap-2 bg-white/5 p-2 rounded-2xl border border-white/10 w-fit">
+      <div className="flex flex-wrap gap-3 bg-slate-100 p-2 rounded-[2rem] border border-slate-200 w-fit shadow-inner">
         {[
-          { id: 'password', label: 'Password', icon: <FaKey /> },
-          { id: 'api-key', label: 'API Key', icon: <FaFingerprint /> },
-          { id: 'uuid', label: 'UUID v4', icon: <FaShieldAlt /> }
+          { id: 'password', label: 'Entropy Password', icon: <FaKey /> },
+          { id: 'api-key', label: 'Secret Key', icon: <FaFingerprint /> },
+          { id: 'uuid', label: 'UUID Node', icon: <FaShieldAlt /> }
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-3 px-6 py-2.5 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${
+            className={`flex items-center gap-3 px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[3px] transition-all ${
               activeTab === tab.id 
-              ? 'bg-primary text-white shadow-lg shadow-primary/20' 
-              : 'text-slate-400 hover:text-white hover:bg-white/5'
+              ? 'bg-slate-900 text-white shadow-xl' 
+              : 'text-slate-400 hover:text-slate-900 hover:bg-white'
             }`}
           >
             {tab.icon} {tab.label}
@@ -91,26 +91,30 @@ const SecretGenerator = () => {
       </div>
 
       {/* Main Result Display */}
-      <div className="space-y-4">
+      <div className="space-y-6">
          <div className="flex items-center justify-between px-2">
-            <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Generated Secret</label>
-            <div className="flex items-center gap-4">
-               <button onClick={generateSecret} className="text-primary hover:text-blue-400 transition-colors flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest">
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+              <label className="text-[10px] font-black uppercase tracking-[4px] text-slate-400">Generated Payload</label>
+            </div>
+            <div className="flex items-center gap-6">
+               <button onClick={generateSecret} className="text-slate-400 hover:text-primary transition-colors flex items-center gap-3 text-[10px] font-black uppercase tracking-[3px]">
                   <FaArrowsRotate className="animate-hover-spin" /> Regenerate
                </button>
-               <button onClick={handleCopy} className="text-primary hover:text-blue-400 transition-colors flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest">
-                  <FaCopy /> Copy
+               <button onClick={handleCopy} className="bg-primary/10 text-primary hover:bg-primary hover:text-white px-6 py-2 rounded-xl transition-all flex items-center gap-3 text-[10px] font-black uppercase tracking-[3px] border border-primary/20">
+                  <FaCopy /> Sync to Clip
                </button>
             </div>
          </div>
-         <div className="relative group">
-            <div className="w-full bg-black/40 border border-white/10 rounded-2xl px-8 py-6 text-xl font-mono text-emerald-400 break-all min-h-[80px] flex items-center shadow-inner">
+         <div className="relative group/result">
+            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/10 to-transparent blur-xl opacity-0 group-hover/result:opacity-100 transition-opacity"></div>
+            <div className="relative w-full bg-slate-900 border border-slate-800 rounded-[2.5rem] px-10 py-8 text-2xl font-mono text-emerald-400 break-all min-h-[100px] flex items-center shadow-2xl overflow-hidden">
                <AnimatePresence mode="wait">
                   <motion.span
                     key={result}
-                    initial={{ opacity: 0, filter: 'blur(10px)' }}
-                    animate={{ opacity: 1, filter: 'blur(0px)' }}
-                    className="w-full"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="w-full selection:bg-emerald-500/20"
                   >
                     {result}
                   </motion.span>
@@ -118,17 +122,20 @@ const SecretGenerator = () => {
             </div>
             
             {/* Strength Indicator */}
-            <div className="absolute -bottom-1 left-6 right-6 h-1 bg-white/5 rounded-full overflow-hidden">
+            <div className="absolute -bottom-1 left-10 right-10 h-1.5 bg-slate-800 rounded-full overflow-hidden">
                <motion.div 
                  initial={{ width: 0 }}
                  animate={{ width: `${strength}%` }}
-                 className={`h-full ${strengthColor} transition-colors duration-500`}
+                 className={`h-full ${strengthColor} transition-all duration-1000 shadow-[0_0_20px_rgba(16,185,129,0.3)]`}
                />
             </div>
          </div>
-         <p className="text-[9px] text-slate-600 font-semibold uppercase tracking-[0.2em] px-2">
-            Entropy Strength: <span className={strength < 40 ? 'text-red-500' : 'text-emerald-500'}>{strength}%</span>
-         </p>
+         <div className="flex items-center justify-between px-2">
+            <p className="text-[9px] text-slate-400 font-black uppercase tracking-[4px]">
+               Entropy Analysis: <span className={strength < 40 ? 'text-rose-500' : 'text-emerald-500'}>{strength}% Secured</span>
+            </p>
+            <span className="text-[9px] text-slate-400 font-black uppercase tracking-[4px]">AES-256 Compatible</span>
+         </div>
       </div>
 
       {/* Configuration */}
@@ -138,11 +145,11 @@ const SecretGenerator = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/[0.02] border border-white/5 rounded-3xl p-8"
+            className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-slate-50 border border-slate-100 rounded-[3rem] p-12 shadow-inner"
           >
-             <div className="space-y-6">
+             <div className="space-y-8">
                 <div className="flex items-center justify-between">
-                   <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Length: {config.length}</label>
+                   <label className="text-[10px] font-black uppercase tracking-[4px] text-slate-400">Payload Length: {config.length}</label>
                 </div>
                 <input 
                   type="range" 
@@ -150,15 +157,15 @@ const SecretGenerator = () => {
                   max="64" 
                   value={config.length}
                   onChange={(e) => setConfig({...config, length: parseInt(e.target.value)})}
-                  className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary"
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-900"
                 />
-                <div className="flex justify-between text-[8px] text-slate-600 font-bold uppercase">
-                   <span>8 Characters</span>
-                   <span>64 Characters</span>
+                <div className="flex justify-between text-[8px] text-slate-400 font-black uppercase tracking-[3px]">
+                   <span>Min (8)</span>
+                   <span>Max (64)</span>
                 </div>
              </div>
 
-             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <ConfigToggle 
                   label="Uppercase" 
                   active={config.includeUppercase} 
@@ -180,12 +187,17 @@ const SecretGenerator = () => {
       </AnimatePresence>
 
       {/* Security Disclaimer */}
-      <div className="flex items-start gap-4 p-6 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl">
-         <FaShieldAlt className="text-emerald-500 text-lg shrink-0 mt-1" />
-         <div>
-            <h5 className="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-1">Local Generation Only</h5>
-            <p className="text-[10px] text-emerald-500/60 font-semibold leading-relaxed">
-              Secrets are generated locally in your browser using the Web Crypto API. Your keys never touch our servers, ensuring 100% privacy and security for your sensitive data.
+      <div className="flex items-start gap-6 p-8 bg-slate-900 rounded-[2.5rem] border border-white/5 shadow-2xl relative overflow-hidden group">
+         <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+            <FaShieldAlt className="text-[100px] text-emerald-500" />
+         </div>
+         <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 text-2xl shrink-0">
+            <FaShieldAlt />
+         </div>
+         <div className="relative z-10 space-y-2">
+            <h5 className="text-sm font-black text-white uppercase tracking-[4px]">Zero-Knowledge Local Entropy</h5>
+            <p className="text-[11px] text-slate-400 font-medium leading-relaxed tracking-tight max-w-2xl">
+               Secrets are generated locally via the Web Crypto API. Your keys never leave your machine, ensuring 100% cryptographic isolation. No data is stored or transmitted.
             </p>
          </div>
       </div>
@@ -196,14 +208,14 @@ const SecretGenerator = () => {
 const ConfigToggle = ({ label, active, onClick }) => (
   <button 
     onClick={onClick}
-    className={`flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${
+    className={`flex items-center justify-between px-6 py-4 rounded-2xl border transition-all duration-500 ${
       active 
-      ? 'bg-primary/10 border-primary/30 text-primary' 
-      : 'bg-white/5 border-white/5 text-slate-500 hover:border-white/10'
+      ? 'bg-white border-slate-900 text-slate-900 shadow-xl' 
+      : 'bg-white/50 border-slate-200 text-slate-400 hover:border-slate-400'
     }`}
   >
-    <span className="text-[10px] font-semibold uppercase tracking-widest">{label}</span>
-    <div className={`w-2 h-2 rounded-full ${active ? 'bg-primary animate-pulse' : 'bg-slate-800'}`} />
+    <span className="text-[10px] font-black uppercase tracking-[3px]">{label}</span>
+    <div className={`w-2.5 h-2.5 rounded-full ${active ? 'bg-emerald-500 animate-pulse' : 'bg-slate-200'}`} />
   </button>
 );
 

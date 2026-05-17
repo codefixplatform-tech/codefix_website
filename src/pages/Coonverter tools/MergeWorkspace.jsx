@@ -25,7 +25,7 @@ const MergeWorkspace = ({ files, setFiles, onMerge, isProcessing }) => {
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col lg:flex-row justify-between items-center gap-8 mb-12 bg-white/[0.02] border border-white/10 p-8 md:p-10 rounded-[3rem] backdrop-blur-2xl shadow-2xl relative overflow-hidden"
+        className="flex flex-col lg:flex-row justify-between items-center gap-8 mb-6 bg-white border border-slate-200 p-6 md:p-8 rounded-[3rem] shadow-sm relative overflow-hidden"
       >
         <div className="absolute top-0 right-0 p-1">
            <div className="w-32 h-32 -mr-16 -mt-16 bg-primary blur-[60px] opacity-10 rounded-full"></div>
@@ -36,17 +36,17 @@ const MergeWorkspace = ({ files, setFiles, onMerge, isProcessing }) => {
              <FaMagic className="text-primary text-[10px]" />
              <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Neural Joiner</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-semibold text-white tracking-tight flex items-center justify-center lg:justify-start gap-4">
+          <h2 className="text-2xl md:text-4xl font-semibold text-slate-900 tracking-tight flex items-center justify-center lg:justify-start gap-4">
             Merge <span className="text-primary italic">PDFs</span>
           </h2>
-          <p className="text-secondary/50 text-xs md:text-sm font-semibold uppercase tracking-[3px]">
+          <p className="text-slate-500 text-xs md:text-sm font-semibold uppercase tracking-[3px]">
              Drag cards to define sequence
           </p>
         </div>
         
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto relative z-10">
           <input type="file" multiple accept=".pdf" onChange={handleAddMore} id="more-pdf" className="hidden" />
-          <label htmlFor="more-pdf" className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-5 bg-white/5 text-white rounded-2xl cursor-pointer hover:bg-white/10 transition-all border border-white/5 font-bold text-[11px] uppercase tracking-widest group">
+          <label htmlFor="more-pdf" className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-5 bg-slate-50 text-slate-600 rounded-2xl cursor-pointer hover:bg-slate-100 transition-all border border-slate-200 font-bold text-[11px] uppercase tracking-widest group">
             <FaPlus className="text-primary group-hover:rotate-90 transition-transform" /> 
             Add Files
           </label>
@@ -82,10 +82,21 @@ const MergeWorkspace = ({ files, setFiles, onMerge, isProcessing }) => {
             <Reorder.Item 
               key={file.id} 
               value={file}
+              layout
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5, y: 20 }}
-              className="relative group aspect-[3/4.5] bg-white/[0.03] border border-white/5 rounded-[2.5rem] p-6 flex flex-col items-center justify-between cursor-grab active:cursor-grabbing hover:border-primary/40 transition-all backdrop-blur-sm shadow-2xl overflow-hidden"
+              whileDrag={{ 
+                scale: 1.05, 
+                boxShadow: "0px 25px 50px -12px rgba(0, 0, 0, 0.15)",
+                zIndex: 50
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 30
+              }}
+              className="relative group aspect-[3/4.5] bg-white border border-slate-200 rounded-[2.5rem] p-6 flex flex-col items-center justify-between cursor-grab active:cursor-grabbing hover:border-primary/40 transition-all shadow-sm overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-1 opacity-10 group-hover:opacity-20 transition-opacity">
                  <div className="w-20 h-20 -mr-10 -mt-10 bg-primary blur-2xl rounded-full"></div>
@@ -114,16 +125,16 @@ const MergeWorkspace = ({ files, setFiles, onMerge, isProcessing }) => {
 
               {/* File Info */}
               <div className="w-full text-center mt-6 pointer-events-none relative z-10">
-                <p className="text-white text-xs font-bold truncate px-2 uppercase tracking-tight">
+                <p className="text-slate-900 text-xs font-bold truncate px-2 uppercase tracking-tight">
                   {file.name}
                 </p>
-                <p className="text-secondary/40 text-[10px] font-bold mt-2 uppercase tracking-widest tabular-nums">
+                <p className="text-slate-400 text-[10px] font-bold mt-2 uppercase tracking-widest tabular-nums">
                   {(file.size / 1024).toFixed(0)} KB
                 </p>
               </div>
               
               {/* Drag Indicator */}
-              <div className="mt-4 text-white/10 group-hover:text-primary/40 transition-colors pointer-events-none">
+              <div className="mt-4 text-slate-200 group-hover:text-primary/40 transition-colors pointer-events-none">
                 <FaGripVertical />
               </div>
             </Reorder.Item>
@@ -136,13 +147,13 @@ const MergeWorkspace = ({ files, setFiles, onMerge, isProcessing }) => {
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-40 bg-white/[0.01] border border-dashed border-white/10 rounded-[4rem]"
+          className="text-center py-32 bg-slate-50 border border-dashed border-slate-200 rounded-[3rem]"
         >
-           <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-center mx-auto mb-8">
-              <FaFilePdf className="text-3xl text-secondary/20" />
+           <div className="w-20 h-20 bg-white border border-slate-200 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-sm text-slate-200">
+              <FaFilePdf className="text-3xl" />
            </div>
-           <h3 className="text-xl font-semibold text-white/40 mb-4 tracking-tight">Merge queue is empty</h3>
-           <p className="text-secondary/20 text-sm font-semibold uppercase tracking-widest">Add files to begin reconstruction</p>
+           <h3 className="text-xl font-semibold text-slate-400 mb-4 tracking-tight">Merge queue is empty</h3>
+           <p className="text-slate-300 text-sm font-semibold uppercase tracking-widest">Add files to begin reconstruction</p>
         </motion.div>
       )}
     </div>

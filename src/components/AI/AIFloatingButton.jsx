@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaRobot, FaPlus } from 'react-icons/fa'; 
-import { FaHandSparkles, FaSpinner } from 'react-icons/fa6'; // Modern variations
+import { FaHandSparkles, FaSpinner } from 'react-icons/fa6'; 
 
 const AIFloatingButton = () => {
   const navigate = useNavigate();

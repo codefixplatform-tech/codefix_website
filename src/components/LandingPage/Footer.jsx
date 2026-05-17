@@ -6,7 +6,8 @@ import {
   FaGithub, 
   FaLinkedin, 
   FaArrowRight, 
-  FaEnvelope
+  FaEnvelope,
+  FaBolt
 } from 'react-icons/fa';
 
 const Footer = () => {
@@ -19,115 +20,112 @@ const Footer = () => {
       toast.error("Please enter your email.");
       return;
     }
-    // Simulate API call
-    toast.success("Thanks for subscribing! Check your email soon.");
+    toast.success("Welcome to the elite circle!");
     setEmail("");
   };
 
   return (
-    <footer className="relative bg-background border-t border-white/5 pt-24 pb-12 overflow-hidden font-sans">
-      {/* Dynamic Background Elements */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[200px] bg-primary/5 blur-[100px] rounded-full -z-10"></div>
+    <footer className="relative bg-[#020617] pt-32 pb-16 overflow-hidden font-sans border-t border-slate-900">
+      {/* Background Ambient Glows */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/5 blur-[150px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-[40%] h-[30%] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none"></div>
 
-      {/* Container aligned with Navbar sides */}
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-20">
+      <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
+        
+
+        {/* --- 2. MAIN FOOTER CONTENT --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 mb-32">
           
-          {/* Brand & Mission */}
-          <div className="lg:col-span-4 space-y-8">
-            <img 
-              src="/logo.png" 
-              alt="Codefix Logo" 
-              className="h-10 w-auto brightness-110" 
-            />
-            <p className="text-secondary text-base leading-relaxed max-w-sm font-semibold opacity-70 pl-1">
-              The unified ecosystem for modern developers. Empowering creators with AI-driven insights, sub-second file processing, and community knowledge.
+          {/* Brand Identity */}
+          <div className="lg:col-span-4 space-y-10">
+            <Link to="/" className="inline-block group">
+              <img 
+                src="/logo.png" 
+                alt="Codefix Logo" 
+                className="h-10 w-auto brightness-125 group-hover:scale-105 transition-transform" 
+              />
+            </Link>
+            <p className="text-slate-400 text-base leading-relaxed max-w-sm font-medium">
+              The unified architecture for modern engineering. We bridge the gap between AI intelligence, local processing, and collective wisdom.
             </p>
-            <div className="flex items-center gap-8 pt-2 pl-1">
-               <div className="flex flex-col">
-                  <span className="text-white font-semibold text-2xl tracking-tight">10k+</span>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Active Devs</span>
+            <div className="flex items-center gap-10">
+               <div className="space-y-2">
+                  <p className="text-white text-3xl font-bold tracking-tighter">150k+</p>
+                  <p className="text-[9px] text-slate-500 uppercase tracking-[4px] font-bold">Total Operations</p>
                </div>
-               <div className="w-px h-10 bg-white/10"></div>
-               <div className="flex flex-col">
-                  <span className="text-white font-semibold text-2xl tracking-tight">99.9%</span>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Uptime</span>
+               <div className="w-px h-12 bg-white/5"></div>
+               <div className="space-y-2">
+                  <p className="text-white text-3xl font-bold tracking-tighter">99%</p>
+                  <p className="text-[9px] text-slate-500 uppercase tracking-[4px] font-bold">Trust Score</p>
                </div>
             </div>
           </div>
 
-          {/* Dynamic Navigation Links */}
-          <div className="lg:col-span-4 grid grid-cols-2 gap-8">
-            <FooterGroup title="Ecosystem">
-              <FooterLink to="/dev-utilities" text="Dev Utilities" />
-              <FooterLink to="/tools" text="File Tools" />
-              <FooterLink to="/ai-assistant" text="AI Assistant" />
-              <FooterLink to="/questions" text="Community Q&A" />
-            </FooterGroup>
-
-            <FooterGroup title="Company">
-              <FooterLink to="/about" text="Our Mission" />
+          {/* Navigation Links */}
+          <div className="lg:col-span-4 grid grid-cols-2 gap-12">
+            <FooterGroup title="Platform">
               <FooterLink to="/features" text="Features" />
-              <FooterLink to="/contact" text="Get in Touch" />
-              <FooterLink to="/signup" text="Join Platform" />
+              <FooterLink to="/tools" text="Tool Suite" />
+              <FooterLink to="/dev-utilities" text="Dev Station" />
+              <FooterLink to="/questions" text="Community" />
+            </FooterGroup>
+
+            <FooterGroup title="Resources">
+              <FooterLink to="/about" text="Our Story" />
+              <FooterLink to="/contact" text="Engineering Support" />
+              <FooterLink to="/privacy" text="Privacy Protocols" />
+              <FooterLink to="/terms" text="Legal Terms" />
             </FooterGroup>
           </div>
 
-          {/* Interactive Newsletter Section */}
-          <div className="lg:col-span-4 space-y-8">
-            <div className="p-8 md:p-10 rounded-[3rem] bg-white/[0.02] border border-white/10 backdrop-blur-3xl relative group shadow-xl">
-               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[3rem]"></div>
-               <h4 className="text-white font-semibold text-xs uppercase tracking-widest mb-4 flex items-center gap-3">
-                  <FaEnvelope className="text-primary" /> Stay Updated
-               </h4>
-               <p className="text-secondary text-xs leading-relaxed mb-6 font-semibold opacity-70">
-                  Get notified about new developer tools and platform updates.
-               </p>
-               <form onSubmit={handleNewsletterSubmit} className="relative">
-                  <label htmlFor="newsletter-email" className="sr-only">Email Address</label>
-                  <input 
-                    id="newsletter-email"
-                    type="email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="dev@example.com"
-                    className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 text-xs text-white focus:border-primary/50 outline-none transition-all pr-14 font-semibold"
-                    required
-                  />
-                  <button 
-                    type="submit"
-                    aria-label="Subscribe to newsletter"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white hover:bg-blue-600 transition-all shadow-lg active:scale-95"
-                  >
-                    <FaArrowRight size={12} />
-                  </button>
-               </form>
-            </div>
+          {/* Newsletter / Social */}
+          <div className="lg:col-span-4 space-y-10">
+             <div className="p-10 rounded-[3rem] bg-white/[0.02] border border-white/5 backdrop-blur-3xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-8">
+                   <div className="w-24 h-24 bg-primary/5 blur-3xl rounded-full group-hover:bg-primary/10 transition-all"></div>
+                </div>
+                <h4 className="text-white font-bold text-[10px] uppercase tracking-[4px] mb-6 flex items-center gap-3 relative z-10">
+                   <FaEnvelope className="text-primary" /> Neural Dispatch
+                </h4>
+                <p className="text-slate-400 text-xs leading-relaxed mb-8 font-medium relative z-10">
+                   Get monthly insights on developer productivity and new platform tools.
+                </p>
+                <form onSubmit={handleNewsletterSubmit} className="relative z-10">
+                   <input 
+                     type="email" 
+                     value={email}
+                     onChange={(e) => setEmail(e.target.value)}
+                     placeholder="your@email.com"
+                     className="w-full bg-slate-900/50 border border-white/5 rounded-2xl py-4 px-6 text-sm text-white focus:border-primary/50 outline-none transition-all pr-16 font-medium"
+                     required
+                   />
+                   <button 
+                     type="submit"
+                     className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center hover:bg-blue-600 transition-all"
+                   >
+                     <FaArrowRight size={12} />
+                   </button>
+                </form>
+             </div>
           </div>
         </div>
 
-        {/* Dynamic Bottom Bar */}
-        <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-            <p className="text-slate-500 text-[12px] font-semibold">
-              © {currentYear} Codefix Ecosystem. Built for the future of engineering.
+        {/* --- 3. BOTTOM BAR --- */}
+        <div className="pt-12 border-t border-white/5 flex flex-col xl:flex-row items-center justify-between gap-10">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <p className="text-slate-500 text-[11px] font-bold uppercase tracking-[2px]">
+              © {currentYear} Codefix. All Rights Reserved.
             </p>
-            <div className="flex items-center gap-6">
-               <Link to="/privacy" className="text-[10px] text-slate-600 hover:text-white transition-colors uppercase font-semibold tracking-widest">Privacy</Link>
-               <Link to="/terms" className="text-[10px] text-slate-600 hover:text-white transition-colors uppercase font-semibold tracking-widest">Terms</Link>
+            <div className="flex items-center gap-4 bg-emerald-500/5 border border-emerald-500/10 px-5 py-2 rounded-full">
+               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+               <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-[4px]">System Operational</span>
             </div>
           </div>
           
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-5 w-full md:w-auto">
-             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 md:mr-4">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></div>
-                <span className="text-[10px] font-semibold text-emerald-500 uppercase tracking-widest">Systems Online</span>
-             </div>
-             <div className="flex items-center gap-4">
-                <SocialLink icon={<FaTwitter />} link="https://x.com/Codefix416850" label="Twitter" />
-                <SocialLink icon={<FaGithub />} link="https://github.com/codefixplatform-tech" label="GitHub" />
-                <SocialLink icon={<FaLinkedin />} link="https://linkedin.com/in/codefix-codefix-863a94406" label="LinkedIn" />
-             </div>
+          <div className="flex items-center gap-4">
+             <SocialLink icon={<FaTwitter />} link="https://x.com/Codefix416850" />
+             <SocialLink icon={<FaGithub />} link="https://github.com/codefixplatform-tech" />
+             <SocialLink icon={<FaLinkedin />} link="https://linkedin.com/in/codefix-codefix-863a94406" />
           </div>
         </div>
       </div>
@@ -137,9 +135,9 @@ const Footer = () => {
 
 // --- Helper Components ---
 const FooterGroup = ({ title, children }) => (
-  <div className="space-y-8">
-    <h4 className="text-white font-semibold text-[10px] uppercase tracking-[0.3em] opacity-40 pl-4">{title}</h4>
-    <ul className="space-y-5">
+  <div className="space-y-10">
+    <h4 className="text-white font-bold text-[10px] uppercase tracking-[4px] opacity-40">{title}</h4>
+    <ul className="space-y-6">
       {children}
     </ul>
   </div>
@@ -147,20 +145,18 @@ const FooterGroup = ({ title, children }) => (
 
 const FooterLink = ({ to, text }) => (
   <li>
-    <Link to={to} className="group flex items-center gap-2 text-secondary hover:text-white text-sm transition-all duration-300 font-semibold opacity-70 hover:opacity-100">
-      <span className="w-2 h-[1px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    <Link to={to} className="text-slate-400 hover:text-white text-sm transition-all duration-300 font-medium hover:translate-x-1 inline-block">
       {text}
     </Link>
   </li>
 );
 
-const SocialLink = ({ icon, link, label }) => (
+const SocialLink = ({ icon, link }) => (
   <a 
     href={link} 
-    aria-label={label}
     target="_blank"
     rel="noopener noreferrer"
-    className="w-11 h-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 shadow-lg"
+    className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-primary/20 hover:border-primary transition-all duration-300"
   >
     {icon}
   </a>

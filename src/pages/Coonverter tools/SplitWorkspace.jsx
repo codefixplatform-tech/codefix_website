@@ -50,7 +50,7 @@ const SplitWorkspace = ({ file, onProcess, isProcessing }) => {
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col lg:flex-row justify-between items-center mb-12 gap-8 bg-white/[0.02] border border-white/10 p-6 md:p-10 rounded-[3rem] backdrop-blur-2xl shadow-2xl relative overflow-hidden"
+        className="flex flex-col lg:flex-row justify-between items-center mb-6 gap-8 bg-white border border-slate-200 p-5 md:p-7 rounded-[3rem] shadow-sm relative overflow-hidden"
       >
         <div className="absolute top-0 right-0 p-1">
            <div className="w-32 h-32 -mr-16 -mt-16 bg-primary blur-[60px] opacity-10 rounded-full"></div>
@@ -61,10 +61,10 @@ const SplitWorkspace = ({ file, onProcess, isProcessing }) => {
              <FaMagic className="text-primary text-[10px]" />
              <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Neural Workspace</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-semibold text-white tracking-tight flex items-center justify-center lg:justify-start gap-4">
+          <h2 className="text-2xl md:text-4xl font-semibold text-slate-900 tracking-tight flex items-center justify-center lg:justify-start gap-4">
             Organize <span className="text-primary italic">PDF</span>
           </h2>
-          <p className="text-secondary/50 text-xs md:text-sm font-semibold uppercase tracking-[3px]">
+          <p className="text-slate-500 text-xs md:text-sm font-semibold uppercase tracking-[3px]">
              Remove pages & reconstruct document
           </p>
         </div>
@@ -107,7 +107,7 @@ const SplitWorkspace = ({ file, onProcess, isProcessing }) => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.5, y: 20 }}
-                className="group relative bg-white/[0.03] border border-white/5 p-4 rounded-[2.5rem] hover:border-primary/40 transition-all shadow-xl backdrop-blur-sm"
+                className="group relative bg-white border border-slate-200 p-4 rounded-[2.5rem] hover:border-primary/40 transition-all shadow-sm"
               >
                 {/* Page Badge */}
                 <div className="absolute top-6 left-6 bg-black/80 backdrop-blur-md text-[9px] px-3 py-1.5 rounded-xl font-bold z-10 text-white border border-white/10 shadow-lg group-hover:bg-primary transition-colors">
@@ -138,13 +138,13 @@ const SplitWorkspace = ({ file, onProcess, isProcessing }) => {
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-40 bg-white/[0.01] border border-dashed border-white/10 rounded-[4rem]"
+          className="text-center py-32 bg-slate-50 border border-dashed border-slate-200 rounded-[3rem]"
         >
-           <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-center mx-auto mb-8">
-              <FaThLarge className="text-3xl text-secondary/20" />
+           <div className="w-20 h-20 bg-white border border-slate-200 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-sm text-slate-200">
+              <FaThLarge className="text-3xl" />
            </div>
-           <h3 className="text-xl font-semibold text-white/40 mb-4 tracking-tight">Workspace is empty</h3>
-           <p className="text-secondary/20 text-sm font-semibold uppercase tracking-widest">No pages left in the queue</p>
+           <h3 className="text-xl font-semibold text-slate-400 mb-4 tracking-tight">Workspace is empty</h3>
+           <p className="text-slate-300 text-sm font-semibold uppercase tracking-widest">No pages left in the queue</p>
         </motion.div>
       )}
     </div>

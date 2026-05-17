@@ -1,6 +1,5 @@
 import { supabase } from '../../lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
-console.log("Supabase table points to: chats");
 
 export const chatService = {
   /**

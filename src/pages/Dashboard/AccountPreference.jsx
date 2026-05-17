@@ -42,10 +42,10 @@ const AccountPreference = () => {
             <FaAdjust className="text-emerald-400 text-[10px]" />
             <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Environment</span>
          </motion.div>
-         <h1 className="text-4xl md:text-6xl font-semibold text-white tracking-tight leading-none">
+         <h1 className="text-4xl md:text-6xl font-semibold text-slate-900 tracking-tight leading-none">
            Account <span className="bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">Preferences</span>
          </h1>
-         <p className="text-secondary text-base md:text-lg font-medium opacity-60 max-w-xl">
+         <p className="text-slate-600 text-base md:text-lg font-medium max-w-xl">
            Tailor your workspace experience, manage connectivity protocols, and adjust accessibility parameters.
          </p>
       </div>
@@ -60,7 +60,7 @@ const AccountPreference = () => {
         >
           <h2 className="text-sm font-bold text-slate-500 uppercase tracking-[4px] ml-2">System Config</h2>
           
-          <div className="bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-6 md:p-8 space-y-8 backdrop-blur-xl">
+          <div className="bg-black border border-white/10 rounded-[2.5rem] p-6 md:p-8 space-y-8 backdrop-blur-xl text-white shadow-2xl">
              <PreferenceToggle 
                 icon={<FaGlobe className="text-blue-400" />} 
                 title="System Language" 
@@ -101,7 +101,7 @@ const AccountPreference = () => {
         >
           <h2 className="text-sm font-bold text-slate-500 uppercase tracking-[4px] ml-2">Protocol Settings</h2>
           
-          <div className="bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-6 md:p-8 space-y-8 backdrop-blur-xl">
+          <div className="bg-black border border-white/10 rounded-[2.5rem] p-6 md:p-8 space-y-8 backdrop-blur-xl text-white shadow-2xl">
              <PreferenceToggle 
                 icon={<FaBell className="text-emerald-400" />} 
                 title="Push Notifications" 

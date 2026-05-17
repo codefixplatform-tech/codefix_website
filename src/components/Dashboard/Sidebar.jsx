@@ -2,32 +2,30 @@ import React, { useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const Sidebar = ({ closeMenu, profile, loading }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    toast.success("Logout Successful!");
-    setTimeout(async () => {
+    try {
       const { error } = await supabase.auth.signOut();
-      if (error) {
-        toast.error(error.message);
-      } else {
-        navigate('/');
-      }
-    }, 2000);
+      if (error) throw error;
+      toast.success("User logged out successfully");
+      navigate('/');
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const fullName = profile?.full_name || "Developer";
   const initial = fullName.charAt(0).toUpperCase();
 
-  // Dynamic Credits Logic (Simple mock for now)
   const credits = profile ? 92 : 85;
   const totalCredits = 100;
   const creditPercent = (credits / totalCredits) * 100;
 
-  // Navigation Structure
   const navigation = [
     {
       group: "Main Menu",
@@ -48,40 +46,66 @@ const Sidebar = ({ closeMenu, profile, loading }) => {
       group: "Community",
       links: [
         { name: "Feed", path: "/dashboard/questions", icon: <QAIcon /> },
-        { name: "Ask Question", path: "/dashboard/qa/ask", icon: <PlusIcon /> }, // Direct Post Link
+        { name: "Ask Question", path: "/dashboard/qa/ask", icon: <PlusIcon /> },
       ],
     },
   ];
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-[#0B0E14] border-r border-white/5 flex flex-col z-50">
-      <div className="p-8">
-        <img src="/logo.png" alt="Codefix" className="h-9 w-auto brightness-125 cursor-pointer" onClick={() => navigate('/')} />
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-slate-950 border-r border-white/5 flex flex-col z-50 overflow-hidden relative">
+      
+      {/* 🌌 Vibrant Elite Background Mesh (Same as Login/Signup) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-indigo-950 via-[#0B0E14] to-slate-950 opacity-100 z-0"></div>
+      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[80px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full pointer-events-none"></div>
+      
+      {/* Moving Light Sphere */}
+      <motion.div 
+        animate={{ x: [0, 40, 0], y: [0, 100, 0] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        className="absolute top-1/4 left-0 w-32 h-32 bg-cyan-400/5 blur-[60px] rounded-full pointer-events-none"
+      ></motion.div>
+
+      <div className="p-8 relative z-10">
+        <img 
+          src="/logo.png" 
+          alt="Codefix" 
+          className="h-9 w-auto brightness-150 cursor-pointer hover:scale-105 transition-transform" 
+          onClick={() => navigate('/')} 
+        />
       </div>
 
-      <nav className="flex-1 px-4 overflow-y-auto custom-scrollbar pb-4">
+      <nav className="flex-1 px-4 overflow-y-auto custom-scrollbar pb-4 relative z-10">
         {navigation.map((section, idx) => (
           <div key={idx} className="mb-6">
-            <h3 className="px-4 text-[10px] font-black uppercase tracking-[2px] text-white/30 mb-3">
+            <h3 className="px-4 text-[10px] font-black uppercase tracking-[3px] text-blue-100/30 mb-3">
               {section.group}
             </h3>
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {section.links.map((link) => {
                 const isActive = location.pathname === link.path;
                 return (
                   <Link
                     key={link.name}
                     to={link.path}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 group ${
-                      isActive ? "bg-primary/10 text-primary border border-primary/10" : "text-secondary hover:bg-white/5 hover:text-white"
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl font-medium transition-all duration-300 group relative overflow-hidden ${
+                      isActive 
+                        ? "text-white" 
+                        : "text-blue-100/50 hover:text-white"
                     }`}
                   >
-                    <span className={`${isActive ? "text-primary" : "text-secondary group-hover:text-white"} transition-colors`}>
+                    {isActive && (
+                      <motion.div 
+                        layoutId="activeTab"
+                        className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent border-l-2 border-primary z-0"
+                      />
+                    )}
+                    <span className={`relative z-10 ${isActive ? "text-primary" : "text-blue-100/40 group-hover:text-primary"} transition-colors`}>
                       {link.icon}
                     </span>
-                    <span className="text-sm font-bold">{link.name}</span>
+                    <span className="text-[13px] font-bold tracking-tight relative z-10">{link.name}</span>
                     {link.badge && (
-                      <span className="ml-auto text-[8px] bg-primary/20 text-primary px-1.5 py-0.5 rounded font-black">
+                      <span className="relative z-10 ml-auto text-[8px] bg-primary/20 text-primary px-2 py-0.5 rounded-full font-black tracking-widest">
                         {link.badge}
                       </span>
                     )}
@@ -93,26 +117,27 @@ const Sidebar = ({ closeMenu, profile, loading }) => {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-white/5 space-y-4">
-
-        <div className="bg-white/5 rounded-2xl p-4 border border-white/5 shadow-inner">
-          <div className="flex justify-between text-[10px] mb-2 font-black uppercase tracking-wider">
-            <span className="text-secondary/80 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+      <div className="p-4 border-t border-white/5 space-y-4 relative z-10 bg-black/20 backdrop-blur-md">
+        <div className="bg-white/[0.03] rounded-2xl p-4 border border-white/5 shadow-inner">
+          <div className="flex justify-between text-[10px] mb-2 font-black uppercase tracking-widest">
+            <span className="text-blue-100/40 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#3b82f6]"></span>
               AI Credits
             </span>
             <span className="text-primary">{credits}/{totalCredits}</span>
           </div>
-          <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-            <div 
-              className="bg-primary h-full transition-all duration-1000 ease-out shadow-[0_0_12px_#3b82f6]" 
-              style={{ width: `${creditPercent}%` }}
-            ></div>
+          <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: `${creditPercent}%` }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="bg-gradient-to-r from-primary to-blue-400 h-full shadow-[0_0_12px_rgba(59,130,246,0.5)]" 
+            ></motion.div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 px-2 bg-white/[0.02] py-3 rounded-2xl border border-white/5">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary to-blue-400 border border-white/10 flex items-center justify-center font-bold text-white shrink-0 shadow-lg overflow-hidden">
+        <div className="flex items-center gap-3 px-3 py-3 rounded-2xl bg-white/[0.02] border border-white/5">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-indigo-500 border border-white/10 flex items-center justify-center font-bold text-white shrink-0 shadow-lg overflow-hidden">
             {loading ? (
                <span className="animate-pulse text-[10px]">...</span>
             ) : profile?.avatar_url ? (
@@ -123,11 +148,15 @@ const Sidebar = ({ closeMenu, profile, loading }) => {
           </div>
           
           <div className="overflow-hidden flex-1">
-            <p className="text-white text-xs font-bold truncate">{loading ? "Loading..." : fullName}</p>
-            <p className="text-[9px] text-primary font-black uppercase tracking-tighter">Pro Developer</p>
+            <p className="text-white text-[13px] font-bold truncate leading-none mb-1">{loading ? "Loading..." : fullName}</p>
+            <p className="text-[9px] text-primary font-black uppercase tracking-[1px]">Elite Developer</p>
           </div>
 
-          <button onClick={handleLogout} className="text-secondary hover:text-red-400 transition-colors p-1">
+          <button 
+            onClick={handleLogout} 
+            className="text-blue-100/30 hover:text-red-400 transition-all p-2 hover:bg-red-400/5 rounded-xl"
+            title="Logout"
+          >
             <LogoutIcon />
           </button>
         </div>
@@ -136,7 +165,7 @@ const Sidebar = ({ closeMenu, profile, loading }) => {
   );
 };
 
-// Icons (Same + PlusIcon added)
+// Icons (Same)
 const HomeIcon = () => ( <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg> );
 const HistoryIcon = () => ( <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></svg> );
 const AIIcon = () => ( <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v2" /><path d="M12 20v2" /><circle cx="12" cy="12" r="4" /></svg> );

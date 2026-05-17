@@ -10,7 +10,12 @@ import {
   FaShieldAlt,
   FaBolt,
   FaMicrochip,
-  FaFileCsv
+  FaFileCsv,
+  FaNetworkWired,
+  FaLock,
+  FaExchangeAlt,
+  FaKey,
+  FaFileCode
 } from "react-icons/fa";
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -24,65 +29,65 @@ const DevUtilities = () => {
     {
       id: "json-formatter",
       icon: <FaCode />,
-      title: "JSON Formatter",
-      category: "Data & Format",
-      description: "Prettify, minify and validate your JSON data instantly with syntax highlighting.",
-      tags: ["Syntax", "Structure"],
-      preview: "{\n  \"status\": \"success\"\n}"
+      title: "JSON Neural Core",
+      category: "Data Engineering",
+      description: "High-velocity prettification and validation for complex nested JSON payloads.",
+      tags: ["V8-Engine", "Native"],
+      preview: "{\n  \"neural_sync\": \"stable\"\n}"
     },
     {
       id: "base64-converter",
       icon: <FaDatabase />,
-      title: "Base64 Utility",
-      category: "Security & Encoding",
-      description: "Convert text or images to Base64 and vice-versa with military-grade local processing.",
-      tags: ["Binary", "Local"],
+      title: "Base64 Pipeline",
+      category: "Encoding Protocol",
+      description: "Zero-latency binary-to-text conversion with AES-256 local isolation.",
+      tags: ["Privacy", "E2EE"],
       preview: "SGVsbG8gV29ybGQ="
     },
     {
       id: "regex-tester",
       icon: <FaHashtag />,
-      title: "Regex Engine",
-      category: "Text Processing",
-      description: "Test your regular expressions in real-time with pattern highlighting and groups.",
+      title: "Regex Lab",
+      category: "Pattern Logic",
+      description: "Real-time regular expression testing with visual group matching and V8 speed.",
       tags: ["Patterns", "Matching"],
       preview: "/^[a-z]+$/g"
     },
     {
       id: "api-tester",
       icon: <FaTerminal />,
-      title: "API Terminal",
-      category: "Network & API",
-      description: "Send HTTP requests (GET, POST, etc.) and inspect responses directly in your browser.",
-      tags: ["REST", "Testing"],
-      preview: "GET /api/v1/user"
+      title: "API Terminal v2",
+      category: "Network Infrastructure",
+      description: "Integrated HTTP client for debugging endpoints with full header inspection.",
+      tags: ["REST", "Async"],
+      preview: "GET /api/v1/sync"
     },
     {
         id: "unit-converter",
-        icon: <FaBolt />,
-        title: "Unit Converter",
-        category: "Math & Logic",
-        description: "Pixel to REM, Hex to RGB, and other essential developer conversions.",
-        tags: ["CSS", "Math"],
+        icon: <FaExchangeAlt />,
+        title: "Unit Matrix",
+        category: "Logic Conversion",
+        description: "Professional transformations for PX to REM, HEX to RGB, and HSL manipulation.",
+        tags: ["CSS", "Architect"],
         preview: "16px -> 1rem"
     },
     {
         id: "secure-gen",
-        icon: <FaShieldAlt />,
+        icon: <FaKey />,
         title: "Secret Generator",
-        category: "Security",
-        description: "Generate high-entropy passwords, API keys, and secure UUIDs locally.",
-        tags: ["UUID", "Security"],
-        preview: "uuid-v4-xxxx-xxxx"
+        category: "Cryptographic",
+        description: "Generate high-entropy keys, passwords, and secure UUIDs via local entropy.",
+        tags: ["Secure", "Local"],
+        preview: "xxxx-xxxx-xxxx"
     },
     {
         id: "json-to-csv",
         icon: <FaFileCsv />,
-        title: "JSON to CSV",
-        category: "Data & Format",
-        description: "Flatten and convert nested JSON objects into clean CSV spreadsheets.",
-        tags: ["Data", "Export"],
-        preview: "id,name\n1,Ali"
+        title: "CSV Flux",
+        category: "Data Export",
+        description: "High-fidelity conversion from nested JSON structures to flat CSV spreadsheets.",
+        tags: ["Export", "Flow"],
+        preview: "id,status\n1,active"
     }
   ];
 
@@ -99,67 +104,72 @@ const DevUtilities = () => {
   };
 
   return (
-    <div className={`relative min-h-screen bg-background text-white overflow-hidden font-sans ${isDashboard ? 'pt-10' : ''}`}>
+    <div className={`relative min-h-screen bg-background text-slate-900 overflow-hidden font-sans ${isDashboard ? 'pt-10 pb-20' : ''}`}>
       
-      {/* --- HERO HEADER --- */}
-      <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
-          <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[150px] rounded-full"></div>
-          <div className="absolute bottom-0 left-[-5%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full"></div>
-        </div>
+      {/* BACKGROUND ELEMENTS */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
+        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-primary/5 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-0 left-[-5%] w-[40%] h-[40%] bg-indigo-500/5 blur-[100px] rounded-full"></div>
+        <div className="absolute inset-0 bg-grid opacity-[0.03]"></div>
+      </div>
 
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 text-center space-y-10">
-           <motion.div {...fadeIn} className="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-2 rounded-full backdrop-blur-md">
+      {/* HERO HEADER */}
+      <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>
+        <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 text-center space-y-10">
+           <motion.div {...fadeIn} className="inline-flex items-center gap-3 bg-slate-900 text-white px-6 py-2 rounded-full border border-white/10 shadow-2xl mb-10">
               <FaMicrochip className="text-primary text-[10px]" />
-              <span className="text-[10px] font-semibold text-slate-300 tracking-[4px] uppercase">Engineered Tools v2.0</span>
+              <span className="text-[10px] font-black tracking-[4px] uppercase">Neural Workspace v2.4</span>
            </motion.div>
            
-           <motion.h1 {...fadeIn} className="text-6xl md:text-8xl font-semibold leading-[1.05] tracking-tight">
-              Developer <br />
-              <span className="bg-gradient-to-r from-primary via-blue-400 to-emerald-400 bg-clip-text text-transparent">
-                Power Station
+           <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-5xl sm:text-7xl md:text-8xl font-bold font-heading text-slate-900 leading-[1.1] tracking-[-0.04em] mb-10"
+            > Developer <br />
+              <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Power Station.
               </span>
            </motion.h1>
 
-           <motion.p {...fadeIn} className="max-w-3xl mx-auto text-secondary text-xl font-semibold opacity-80 leading-relaxed">
-              Essential, high-speed utilities for your daily coding flow. 100% Client-side. No data tracking. Pure productivity.
+           <motion.p {...fadeIn} className="max-w-2xl mx-auto text-slate-500 text-lg md:text-xl font-medium leading-relaxed tracking-tight">
+              A comprehensive suite of precision engineering tools. 100% browser-side. Zero data leakage. Pure productivity.
            </motion.p>
         </div>
       </section>
 
-      {/* --- UTILITIES GRID --- */}
-      <section className="pb-32">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
-           
-           {/* Search Bar */}
-           <div className="max-w-2xl mx-auto mb-20 relative group">
-              <div className="absolute inset-0 bg-primary/20 blur-[60px] opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
-              <div className="relative flex items-center bg-white/5 border border-white/10 rounded-[2rem] px-8 py-5 backdrop-blur-2xl focus-within:border-primary/50 transition-all shadow-2xl">
-                 <FaSearch className="text-slate-500 mr-5" />
-                 <input 
-                    type="text" 
-                    placeholder="Search utilities by name or category..." 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-transparent outline-none text-white font-semibold text-sm placeholder:text-slate-600"
-                 />
-              </div>
-           </div>
+      {/* SEARCH INTERFACE */}
+      <section className="pb-32 relative z-10">
+         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
+            
+            <div className="max-w-2xl mx-auto mb-20 relative group">
+               <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-indigo-600/20 blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
+               <div className="relative flex items-center bg-white border border-slate-200 rounded-[2rem] px-10 py-6 focus-within:border-primary/50 transition-all shadow-2xl">
+                  <FaSearch className="text-primary mr-6 text-xl opacity-40" />
+                  <input 
+                     type="text" 
+                     placeholder="Search across 15+ specialized nodes..." 
+                     value={searchQuery}
+                     onChange={(e) => setSearchQuery(e.target.value)}
+                     className="w-full bg-transparent outline-none text-slate-900 font-bold text-sm placeholder:text-slate-400"
+                  />
+               </div>
+            </div>
 
-           <div className="flex flex-wrap justify-center gap-8">
-              <AnimatePresence mode="popLayout">
+            {/* UTILITIES GRID */}
+            <div className="flex flex-wrap justify-center gap-8">
+               <AnimatePresence mode="popLayout">
                 {filteredUtils.length > 0 ? (
                   filteredUtils.map((util, index) => (
                     <motion.div 
                         key={util.id}
                         layout
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.4, delay: index * 0.05 }}
                         className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]"
                     >
-                        <UtilityPowerCard 
+                        <UtilityCard 
                             util={util} 
                             onClick={() => {
                                 const basePath = isDashboard ? '/dashboard/dev-utilities' : '/dev-utilities';
@@ -172,69 +182,73 @@ const DevUtilities = () => {
                   <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="w-full py-20 text-center space-y-6"
+                    className="col-span-full py-32 text-center"
                   >
-                    <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <FaSearch className="text-slate-500 text-2xl" />
+                    <div className="w-24 h-24 bg-slate-50 border border-slate-100 rounded-[2rem] flex items-center justify-center mx-auto mb-10 shadow-inner">
+                      <FaTerminal className="text-primary text-3xl opacity-20" />
                     </div>
-                    <h3 className="text-2xl font-semibold text-white">No utilities found</h3>
-                    <p className="text-secondary text-sm max-w-xs mx-auto opacity-60 font-semibold">
-                      We couldn't find any tools matching your search. Try adjusting your keywords.
-                    </p>
+                    <h3 className="text-3xl font-bold text-slate-900 uppercase tracking-tighter">No Active Nodes Found</h3>
+                    <p className="text-slate-500 text-lg mt-4 font-medium tracking-tight">Try adjusting your search protocol.</p>
                   </motion.div>
                 )}
-              </AnimatePresence>
-           </div>
-        </div>
+               </AnimatePresence>
+            </div>
+         </div>
       </section>
     </div>
   );
 };
 
-// --- SUBCOMPONENTS ---
+// --- ELITE COMPONENTS ---
 
-const UtilityPowerCard = ({ util, onClick }) => (
+const UtilityCard = ({ util, onClick }) => (
   <div 
     onClick={onClick}
-    className={`group relative p-1 leading-none rounded-[3rem] overflow-hidden transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full
-      ${util.highlight ? 'bg-gradient-to-br from-primary/40 to-blue-500/40 shadow-[0_20px_50px_rgba(59,130,246,0.15)]' : 'bg-white/5 border border-white/10 hover:border-white/20'}`}
+    className="group relative bg-white border border-slate-200 p-10 rounded-[3rem] shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full overflow-hidden flex flex-col"
   >
-    <div className="p-10 rounded-[2.9rem] h-full bg-[#0B0E14]/90 backdrop-blur-3xl flex flex-col space-y-8">
-       <div className="flex justify-between items-start">
-          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl transition-all duration-500 group-hover:scale-110 
-             ${util.highlight ? 'bg-primary text-white shadow-xl shadow-primary/30 rotate-3' : 'bg-white/5 text-primary group-hover:bg-primary group-hover:text-white'}`}>
-             {util.icon}
-          </div>
-          <div className="bg-white/5 px-4 py-1.5 rounded-full border border-white/5">
-             <span className="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">{util.category}</span>
-          </div>
-       </div>
+     {/* Ambient Glow */}
+     <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/5 blur-3xl rounded-full group-hover:bg-primary/10 transition-all duration-700"></div>
 
-       <div>
-          <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight group-hover:text-primary transition-colors">
-             {util.title}
-          </h3>
-          <p className="text-secondary text-sm leading-relaxed font-semibold opacity-70 group-hover:opacity-90 transition-opacity line-clamp-2">
-             {util.description}
-          </p>
-       </div>
+     <div className="flex justify-between items-start mb-10 relative z-10">
+        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3
+           ${util.highlight ? 'bg-primary text-white shadow-xl shadow-primary/30' : 'bg-slate-50 text-primary border border-slate-100 group-hover:bg-primary group-hover:text-white'}`}>
+           {util.icon}
+        </div>
+        <div className="bg-slate-50 px-4 py-2 rounded-xl border border-slate-100 group-hover:bg-primary/5 transition-colors">
+           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{util.category}</span>
+        </div>
+     </div>
 
-       {/* Visual Code Preview */}
-       <div className="bg-black/40 rounded-2xl p-6 border border-white/5 font-mono text-[11px] text-emerald-400/60 group-hover:text-emerald-400 transition-colors overflow-hidden h-24 flex items-center">
-          <pre className="whitespace-pre-wrap">{util.preview}</pre>
-       </div>
+     <div className="space-y-6 relative z-10 flex-1">
+        <h3 className="text-2xl font-semibold font-heading text-slate-900 tracking-tighter leading-tight group-hover:text-primary transition-colors">
+           {util.title}
+        </h3>
+        <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium group-hover:text-slate-600 transition-colors line-clamp-3">
+           {util.description}
+        </p>
+     </div>
 
-       <div className="mt-auto flex items-center justify-between pt-4">
-          <div className="flex gap-3">
-             {util.tags.map((tag, idx) => (
-                <span key={idx} className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">#{tag}</span>
-             ))}
-          </div>
-          <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-slate-500 group-hover:border-primary group-hover:text-primary transition-all group-hover:translate-x-2">
-             <FaArrowRight size={14} />
-          </div>
-       </div>
-    </div>
+     {/* Indicator */}
+     <div className="pt-8 mt-8 border-t border-slate-100 flex items-center justify-between relative z-10">
+        <div className="flex items-center gap-3">
+           <div className="w-2 h-2 rounded-full bg-primary/20 group-hover:bg-primary transition-colors"></div>
+           <span className="text-[9px] font-bold text-slate-400 uppercase tracking-[2px]">Engine v2.0</span>
+        </div>
+        <div className="text-primary/30 group-hover:text-primary transition-all group-hover:scale-125">
+           <FaBolt />
+        </div>
+     </div>
+
+     <div className="mt-10 flex items-center justify-between relative z-10">
+        <div className="flex flex-wrap gap-2 sm:gap-4">
+           {util.tags.slice(0, 2).map((tag, idx) => (
+              <span key={idx} className="text-[10px] font-bold uppercase tracking-[2px] text-slate-400 group-hover:text-slate-900 transition-colors">#{tag}</span>
+           ))}
+        </div>
+        <div className="w-12 h-12 flex-shrink-0 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 group-hover:border-primary group-hover:text-primary group-hover:bg-primary/5 transition-all group-hover:translate-x-2 shadow-sm">
+           <FaArrowRight size={14} />
+        </div>
+     </div>
   </div>
 );
 

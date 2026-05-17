@@ -4,6 +4,17 @@
 
 ---
 
+## 🚀 What's New in Version 2.0 (Complete UI/UX & Theme Overhaul)
+
+CodeFix has been completely modernized in **Version 2.0**, delivering a state-of-the-art developer workspace with a total design transformation:
+
+*   **Complete UI/UX Overhaul**: Redesigned every single layout from the landing pages, developer neural tools, file converters, to the Q&A community forum for a high-end, responsive developer experience.
+*   **Curated Theme Engine**: Integrated a highly-polished premium theme system using HSL tailored colors, deep backdrop blur layers, glowing neural accents, and cohesive dark/light mode configurations.
+*   **Clean CSS & Performance Boost**: Fully optimized CSS structure, resolved build-time `@import` ordering warnings, and streamlined Vite asset packaging.
+*   **Fluid Neural Motion**: Added smooth responsive layout animations and interactive micro-animations powered by Framer Motion.
+
+---
+
 ## 🌟 Comprehensive Feature Suite
 
 ### 1. 📄 Hybrid File Conversion Engine

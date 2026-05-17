@@ -9,7 +9,8 @@ import {
   FaArrowRight,
   FaExclamationTriangle,
   FaClock,
-  FaCheckCircle
+  FaCheckCircle,
+  FaRobot
 } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
 import toast from "react-hot-toast";
@@ -23,6 +24,15 @@ const MyActivity = () => {
   const [answers, setAnswers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null, type: null });
+
+  const openDeleteModal = (id, type) => {
+    setDeleteModal({ isOpen: true, id, type });
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModal({ isOpen: false, id: null, type: null });
+  };
 
   const fetchActivity = async () => {
     try {
@@ -50,7 +60,7 @@ const MyActivity = () => {
   }, []);
 
   const handleDeleteQuestion = async (id) => {
-    if (!window.confirm("Are you sure? Is question ke sath saare replies bhi delete ho jayenge.")) return;
+    closeDeleteModal();
     
     try {
       setDeletingId(id);
@@ -68,7 +78,7 @@ const MyActivity = () => {
   };
 
   const handleDeleteAnswer = async (id) => {
-    if (!window.confirm("Kyan aap waqai ye reply delete karna chahte hain?")) return;
+    closeDeleteModal();
 
     try {
       setDeletingId(id);
@@ -86,52 +96,56 @@ const MyActivity = () => {
   };
 
   return (
-    <div className="space-y-10 pb-10">
+    <div className="space-y-12 pb-16 text-slate-900">
       {/* --- HEADER SECTION --- */}
-      <div className="relative group">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-3">
+      <div className="relative pt-6">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-10">
+          <div className="space-y-6">
              <motion.div 
-               initial={{ opacity: 0, x: -20 }}
-               animate={{ opacity: 1, x: 0 }}
-               className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full"
+               initial={{ opacity: 0, y: 10 }}
+               animate={{ opacity: 1, y: 0 }}
+               className="inline-flex items-center gap-2.5 bg-slate-100 border border-slate-200 px-5 py-2 rounded-full shadow-sm"
              >
                 <FaClock className="text-primary text-[10px]" />
-                <span className="text-[10px] font-bold text-primary uppercase tracking-widest">User Timeline</span>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-[3px]">Timeline Analytics</span>
              </motion.div>
-             <h1 className="text-4xl md:text-6xl font-semibold text-white tracking-tight leading-none">
-               My <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">Activity</span>
-             </h1>
-             <p className="text-secondary text-base md:text-lg font-medium opacity-60 max-w-xl">
-               Monitor your contributions, manage your questions, and track community interactions in one dashboard.
-             </p>
+             
+             <div className="space-y-2">
+               <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold text-slate-900 tracking-tighter leading-[1] font-syne">
+                 My <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-600 to-purple-600">Activity</span>
+               </h1>
+               <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
+                 Access your full platform history. Manage questions, track community fixes, and monitor your global reputation.
+               </p>
+             </div>
           </div>
 
-          <div className="flex items-center gap-4 bg-white/5 border border-white/10 p-4 rounded-3xl backdrop-blur-xl">
-             <div className="px-6 border-r border-white/5">
-                <p className="text-2xl font-semibold text-white leading-none">{questions.length}</p>
-                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mt-1">Questions</p>
+          <div className="flex items-center gap-6 bg-white border border-slate-200 p-6 rounded-[2.5rem] shadow-sm">
+             <div className="px-6 border-r border-slate-100">
+                <p className="text-3xl font-bold text-slate-900 leading-none">{questions.length}</p>
+                <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mt-2">Questions</p>
              </div>
              <div className="px-6">
-                <p className="text-2xl font-semibold text-primary leading-none">{answers.length}</p>
-                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mt-1">Solutions</p>
+                <p className="text-3xl font-bold text-primary leading-none">{answers.length}</p>
+                <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mt-2">Solutions</p>
              </div>
           </div>
         </div>
       </div>
 
       {/* --- TAB NAVIGATION --- */}
-      <div className="flex items-center justify-start border-b border-white/5 gap-8">
+      <div className="flex items-center justify-start border-b border-slate-100 gap-12">
         <button 
           onClick={() => setActiveTab("questions")}
-          className={`pb-4 text-xs md:text-sm font-bold uppercase tracking-widest transition-all relative ${activeTab === 'questions' ? 'text-primary' : 'text-slate-500 hover:text-white'}`}
+          className={`pb-5 text-[11px] font-black uppercase tracking-[3px] transition-all relative ${activeTab === 'questions' ? 'text-primary' : 'text-slate-400 hover:text-slate-900'}`}
         >
           My Questions
           {activeTab === 'questions' && <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-full" />}
         </button>
         <button 
           onClick={() => setActiveTab("answers")}
-          className={`pb-4 text-xs md:text-sm font-bold uppercase tracking-widest transition-all relative ${activeTab === 'answers' ? 'text-primary' : 'text-slate-500 hover:text-white'}`}
+          className={`pb-5 text-[11px] font-black uppercase tracking-[3px] transition-all relative ${activeTab === 'answers' ? 'text-primary' : 'text-slate-400 hover:text-slate-900'}`}
         >
           My Solutions
           {activeTab === 'answers' && <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-full" />}
@@ -147,10 +161,10 @@ const MyActivity = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col items-center justify-center py-32 bg-white/[0.01] rounded-[3rem] border border-dashed border-white/5"
+              className="flex flex-col items-center justify-center py-32 bg-slate-50/50 rounded-[3rem] border border-dashed border-slate-200"
             >
                <FaCircleNotch className="text-primary animate-spin text-4xl mb-6" />
-               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[4px]">Accessing History Engine...</p>
+               <p className="text-[10px] font-black text-slate-400 uppercase tracking-[4px]">Accessing History Engine...</p>
             </motion.div>
           ) : (
             <motion.div 
@@ -158,7 +172,7 @@ const MyActivity = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="space-y-4"
+              className="space-y-6"
             >
               {activeTab === "questions" ? (
                 questions.length > 0 ? questions.map(q => (
@@ -167,7 +181,8 @@ const MyActivity = () => {
                     title={q.title}
                     date={q.created_at}
                     id={q.id}
-                    onDelete={() => handleDeleteQuestion(q.id)}
+                    onDelete={() => openDeleteModal(q.id, 'question')}
+                    onAIFix={() => navigate('/ai-assistant', { state: { initialPrompt: `I need help with this question: ${q.title}` } })}
                     isDeleting={deletingId === q.id}
                     onClick={() => navigate(`/dashboard/questions/${q.id}`)}
                     type="question"
@@ -181,7 +196,7 @@ const MyActivity = () => {
                     content={a.content}
                     date={a.created_at}
                     id={a.id}
-                    onDelete={() => handleDeleteAnswer(a.id)}
+                    onDelete={() => openDeleteModal(a.id, 'solution')}
                     isDeleting={deletingId === a.id}
                     onClick={() => navigate(`/dashboard/questions/${a.question_id}`)}
                     type="solution"
@@ -192,63 +207,123 @@ const MyActivity = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* --- DELETE CONFIRMATION MODAL --- */}
+      <AnimatePresence>
+        {deleteModal.isOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeDeleteModal}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="bg-white border border-slate-200 rounded-[3.5rem] p-10 md:p-14 max-w-lg w-full relative z-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] text-center"
+            >
+              <div className="w-24 h-24 bg-red-50 rounded-[2rem] flex items-center justify-center mb-10 border border-red-100 mx-auto relative">
+                 <div className="absolute inset-0 bg-red-200 blur-2xl opacity-20 rounded-full animate-pulse"></div>
+                 <FaTrashAlt className="text-red-500 text-3xl relative z-10" />
+              </div>
+              
+              <h2 className="text-4xl font-bold text-slate-900 tracking-tighter font-syne mb-4">Confirm Deletion</h2>
+              <p className="text-slate-500 text-lg font-medium leading-relaxed mb-12 max-w-sm mx-auto">
+                {deleteModal.type === 'question' 
+                  ? "Are you sure you want to delete this question? This action will permanently remove all associated replies and data."
+                  : "Are you sure you want to delete this reply? This action is permanent and cannot be undone."}
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button 
+                  onClick={closeDeleteModal}
+                  className="flex-1 py-5 rounded-2xl bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all text-[11px] font-black uppercase tracking-[3px] border border-slate-200"
+                >
+                  Go Back
+                </button>
+                <button 
+                  onClick={() => deleteModal.type === 'question' ? handleDeleteQuestion(deleteModal.id) : handleDeleteAnswer(deleteModal.id)}
+                  className="flex-1 py-5 rounded-2xl bg-slate-900 text-white hover:bg-red-600 transition-all text-[11px] font-black uppercase tracking-[3px] shadow-2xl shadow-slate-900/20 active:scale-95"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-const ActivityCard = ({ title, content, date, onDelete, isDeleting, onClick, type }) => (
+const ActivityCard = ({ title, content, date, onDelete, onAIFix, isDeleting, onClick, type }) => (
   <motion.div 
-    whileHover={{ scale: 1.01 }}
-    className="bg-white/[0.02] border border-white/5 rounded-3xl md:rounded-[2.5rem] p-6 md:p-10 hover:bg-white/[0.04] hover:border-primary/20 transition-all group relative overflow-hidden"
+    whileHover={{ y: -5 }}
+    className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-12 hover:border-primary/30 transition-all group relative overflow-hidden shadow-sm hover:shadow-xl"
   >
-    <div className="absolute top-0 right-0 p-1">
-       <div className={`w-20 h-20 -mr-10 -mt-10 blur-3xl opacity-20 rounded-full ${type === 'question' ? 'bg-primary' : 'bg-emerald-500'}`}></div>
+    <div className="absolute top-0 right-0 p-2">
+       <div className={`w-32 h-32 -mr-16 -mt-16 blur-[80px] opacity-10 rounded-full ${type === 'question' ? 'bg-primary' : 'bg-emerald-500'}`}></div>
     </div>
 
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-      <div className="flex-1 space-y-4 cursor-pointer w-full" onClick={onClick}>
-        <div className="flex flex-wrap items-center gap-3 md:gap-4">
-           <span className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border ${type === 'question' ? 'bg-primary/10 text-primary border-primary/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'}`}>
+    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10 relative z-10">
+      <div className="flex-1 space-y-6 cursor-pointer w-full" onClick={onClick}>
+        <div className="flex flex-wrap items-center gap-4">
+           <span className={`text-[9px] font-black uppercase tracking-[3px] px-4 py-1.5 rounded-full border shadow-sm ${type === 'question' ? 'bg-primary/5 text-primary border-primary/20' : 'bg-emerald-500/5 text-emerald-600 border-emerald-500/20'}`}>
              {type}
            </span>
-           <span className="text-secondary/40 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
-             <FaCalendarAlt size={10} className="text-primary/50" /> {formatDistanceToNow(new Date(date), { addSuffix: true })}
+           <span className="text-slate-400 text-[10px] font-black uppercase tracking-[2px] flex items-center gap-2">
+             <FaCalendarAlt size={10} className="text-primary/40" /> {formatDistanceToNow(new Date(date), { addSuffix: true })}
            </span>
            {type === 'solution' && (
-             <span className="flex items-center gap-2 text-emerald-400 text-[10px] font-bold uppercase tracking-widest">
-               <FaCheckCircle size={10} /> Sync Complete
+             <span className="flex items-center gap-2 text-emerald-500 text-[10px] font-black uppercase tracking-[2px]">
+               <FaCheckCircle size={10} /> Verified Sync
              </span>
            )}
         </div>
 
-        <h3 className="text-xl md:text-2xl font-semibold text-white group-hover:text-primary transition-colors leading-tight tracking-tight line-clamp-2">
+        <h3 className="text-2xl md:text-3xl font-bold text-slate-900 group-hover:text-primary transition-colors leading-tight tracking-tight font-syne line-clamp-2">
           {title}
         </h3>
         {content && (
-          <div className="relative pl-6 border-l-2 border-white/5">
-             <p className="text-secondary text-sm md:text-base font-medium opacity-60 italic line-clamp-2 leading-relaxed">
+          <div className="relative pl-8 border-l-2 border-slate-100">
+             <p className="text-slate-500 text-base md:text-lg font-medium italic line-clamp-2 leading-relaxed italic">
                "{content}"
              </p>
           </div>
         )}
       </div>
       
-      <div className="flex items-center gap-3 w-full md:w-auto pt-4 md:pt-0 border-t md:border-0 border-white/5">
+      <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto pt-6 lg:pt-0 border-t lg:border-0 border-slate-100">
+         {type === 'question' && (
+           <button 
+             onClick={(e) => {
+               e.stopPropagation();
+               onAIFix();
+             }}
+             className="flex-1 lg:flex-none flex items-center justify-center gap-3 px-8 py-5 rounded-2xl bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all shadow-sm border border-primary/20 group/ai"
+           >
+              <FaRobot size={14} className="group-hover/ai:scale-125 transition-transform" />
+              <span className="text-[11px] font-black uppercase tracking-[3px]">AI Fix</span>
+           </button>
+         )}
          <button 
            onClick={(e) => {
              e.stopPropagation();
              onDelete();
            }}
            disabled={isDeleting}
-           className="flex-1 md:flex-none flex items-center justify-center p-4 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all disabled:opacity-50 border border-red-500/10"
+           className="p-5 rounded-2xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all disabled:opacity-50 border border-red-100 shadow-sm"
          >
            {isDeleting ? <FaCircleNotch className="animate-spin" /> : <FaTrashAlt />}
          </button>
          <button 
            onClick={onClick}
-           className="flex-[2] md:flex-none flex items-center justify-center gap-3 px-8 md:px-10 py-4 rounded-2xl bg-white/5 text-secondary hover:text-white hover:bg-primary transition-all group/btn border border-white/5"
+           className="flex-1 lg:flex-none flex items-center justify-center gap-4 px-10 py-5 rounded-2xl bg-slate-900 text-white hover:bg-black transition-all group/btn shadow-lg"
          >
-            <span className="text-[10px] font-bold uppercase tracking-widest md:hidden lg:block">View Details</span>
+            <span className="text-[11px] font-black uppercase tracking-[3px]">{type === 'question' ? 'View Details' : 'Inspect Fix'}</span>
             <FaArrowRight className="group-hover/btn:translate-x-1 transition-transform" />
          </button>
       </div>
@@ -257,16 +332,16 @@ const ActivityCard = ({ title, content, date, onDelete, isDeleting, onClick, typ
 );
 
 const EmptyState = ({ type }) => (
-  <div className="bg-white/[0.01] border border-dashed border-white/10 rounded-[3rem] py-24 text-center flex flex-col items-center group">
-    <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-8 border border-white/5 group-hover:scale-110 transition-transform">
-       <FaExclamationTriangle className="text-slate-700 text-3xl" />
+  <div className="bg-slate-50/50 border border-dashed border-slate-200 rounded-[3rem] py-32 text-center flex flex-col items-center group">
+    <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mb-10 border border-slate-100 shadow-sm group-hover:scale-110 transition-transform">
+       <FaExclamationTriangle className="text-slate-300 text-4xl" />
     </div>
-    <h3 className="text-2xl font-bold text-white tracking-tight">NO CONTRIBUTIONS YET</h3>
-    <p className="text-secondary text-base mt-3 font-medium opacity-60 max-w-sm mx-auto">
-      You haven't posted any {type} in the Codefix community. Start by exploring open discussions.
+    <h3 className="text-3xl font-bold text-slate-900 tracking-tight font-syne">HISTORY SILENT</h3>
+    <p className="text-slate-500 text-lg mt-4 font-medium max-w-sm mx-auto">
+      You haven't posted any {type} yet. Join the community to begin your contribution streak.
     </p>
-    <button className="mt-8 px-10 py-4 bg-primary/10 hover:bg-primary text-primary hover:text-white border border-primary/20 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all">
-       Explore Discussions
+    <button className="mt-10 px-12 py-5 bg-primary text-white hover:bg-blue-600 rounded-2xl text-[11px] font-black uppercase tracking-[3px] transition-all shadow-xl shadow-primary/20">
+       Launch Feed
     </button>
   </div>
 );
@@ -279,4 +354,3 @@ const FaCircleNotch = ({ className }) => (
 );
 
 export default MyActivity;
-

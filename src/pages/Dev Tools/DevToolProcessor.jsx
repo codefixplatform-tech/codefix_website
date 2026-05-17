@@ -6,9 +6,10 @@ import {
   FaHashtag, 
   FaDatabase, 
   FaArrowLeft, 
-  FaBolt
+  FaBolt,
+  FaMicrochip
 } from "react-icons/fa6";
-import { FaShieldAlt, FaFileCsv } from "react-icons/fa";
+import { FaShieldAlt, FaFileCsv, FaKey, FaExchangeAlt } from "react-icons/fa";
 import { Toaster } from 'react-hot-toast';
 
 // Modular Tool Components
@@ -32,14 +33,14 @@ const DevToolProcessor = () => {
 
   const getToolDetails = (id) => {
     switch(id) {
-      case 'json-formatter': return { title: "JSON Formatter", icon: <FaCode />, color: "text-blue-400", description: "Prettify, minify and validate your JSON data instantly." };
-      case 'base64-converter': return { title: "Base64 Encoder/Decoder", icon: <FaDatabase />, color: "text-primary", description: "Convert text to Base64 and vice versa with local processing." };
-      case 'regex-tester': return { title: "Regex Tester", icon: <FaHashtag />, color: "text-emerald-400", description: "Test your regular expressions in real-time with pattern highlighting." };
-      case 'api-tester': return { title: "API Tester", icon: <FaTerminal />, color: "text-amber-400", description: "Send HTTP requests and inspect responses directly." };
-      case 'unit-converter': return { title: "Unit Converter", icon: <FaBolt />, color: "text-amber-500", description: "Professional unit transformations for modern developers." };
-      case 'secure-gen': return { title: "Secret Generator", icon: <FaShieldAlt />, color: "text-emerald-400", description: "Cryptographically secure passwords and keys generation." };
-      case 'json-to-csv': return { title: "JSON to CSV", icon: <FaFileCsv />, color: "text-emerald-400", description: "Flatten and convert nested JSON data into CSV spreadsheets." };
-      default: return { title: "Developer Tool", icon: <FaTerminal />, color: "text-primary", description: "Essential developer utility." };
+      case 'json-formatter': return { title: "JSON Neural Core", icon: <FaCode />, color: "text-blue-500", description: "Precision data structuring engine." };
+      case 'base64-converter': return { title: "Base64 Pipeline", icon: <FaDatabase />, color: "text-primary", description: "Binary encoding protocol." };
+      case 'regex-tester': return { title: "Regex Lab", icon: <FaHashtag />, color: "text-emerald-500", description: "Pattern matching intelligence." };
+      case 'api-tester': return { title: "API Terminal v2", icon: <FaTerminal />, color: "text-amber-500", description: "Network infrastructure debugger." };
+      case 'unit-converter': return { title: "Unit Matrix", icon: <FaExchangeAlt />, color: "text-indigo-500", description: "Logical unit transformations." };
+      case 'secure-gen': return { title: "Secret Generator", icon: <FaKey />, color: "text-emerald-400", description: "Cryptographic entropy engine." };
+      case 'json-to-csv': return { title: "CSV Flux", icon: <FaFileCsv />, color: "text-emerald-500", description: "Structured data export node." };
+      default: return { title: "Neural Node", icon: <FaTerminal />, color: "text-primary", description: "Active developer utility." };
     }
   };
 
@@ -60,50 +61,72 @@ const DevToolProcessor = () => {
       case 'secure-gen': return <SecretGenerator />;
       case 'json-to-csv': return <JsonToCsv />;
       default: return (
-        <div className="text-center py-20 opacity-50 italic">
-          Select a valid tool to continue processing...
+        <div className="text-center py-32 opacity-50 italic font-mono uppercase tracking-[5px] text-xs">
+          Initialising Neural Link...
         </div>
       );
     }
   };
 
   return (
-    <div className={`bg-background text-white relative overflow-hidden flex flex-col items-center font-sans ${isDashboard ? 'min-h-[85vh] py-6' : 'min-h-screen py-32 px-4'}`}>
+    <div className={`relative min-h-screen bg-background text-slate-900 overflow-hidden font-sans ${isDashboard ? 'pt-6 pb-20' : 'py-32'}`}>
       <Toaster 
         position="top-center" 
         containerStyle={{ top: 110 }}
-        toastOptions={{ style: { background: '#1e293b', color: '#fff', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' } }} 
+        toastOptions={{ style: { background: '#0F172A', color: '#fff', borderRadius: '1.5rem', border: '1px solid rgba(255,255,255,0.1)', fontWeight: '800', fontSize: '12px', letterSpacing: '1px' } }} 
       />
       
-      {!isDashboard && (
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/10 blur-[130px] rounded-full"></div>
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/5 blur-[100px] rounded-full"></div>
-        </div>
-      )}
+      {/* Background Glows */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
+        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-primary/10 blur-[150px] rounded-full"></div>
+        <div className="absolute bottom-0 left-[-5%] w-[40%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full"></div>
+        <div className="absolute inset-0 bg-grid opacity-[0.03]"></div>
+      </div>
 
-      <div className={`w-full ${isDashboard ? 'max-w-6xl' : 'max-w-5xl'}`}>
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6 px-4">
-          <button onClick={handleBack} className="flex items-center gap-3 text-slate-400 hover:text-primary transition-all group">
-            <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5 transition-all">
-              <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
+      <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 relative z-10">
+        
+        {/* TOP COMMAND BAR */}
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-16 gap-10">
+          <button onClick={handleBack} className="flex items-center gap-4 text-slate-400 hover:text-slate-900 transition-all group w-fit">
+            <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5 transition-all bg-white shadow-sm">
+              <FaArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
             </div>
-            <span className="font-black uppercase tracking-[2px] text-[11px]">Back to Tools</span>
+            <span className="font-black uppercase tracking-[5px] text-[10px]">Back to Station</span>
           </button>
 
-          <div className="flex items-center gap-4 bg-white/5 border border-white/10 px-6 py-3 rounded-2xl backdrop-blur-xl">
-             <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 ${tool.color}`}>
-               {React.cloneElement(tool.icon, { className: "w-4 h-4" })}
+          <div className="flex items-center gap-8 bg-white border border-slate-200 px-10 py-6 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-700">
+             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 ${tool.color} shadow-inner text-3xl`}>
+               {tool.icon}
              </div>
              <div>
-               <h1 className="text-xl font-black text-white leading-none">{tool.title}</h1>
-               <p className="text-[10px] text-secondary font-bold uppercase tracking-widest mt-1 opacity-60">System Utility</p>
+               <div className="flex items-center gap-3 mb-1">
+                  <h1 className="text-3xl font-bold font-heading text-slate-900 tracking-tighter leading-none">{tool.title}</h1>
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+               </div>
+               <p className="text-[10px] text-slate-400 font-black uppercase tracking-[5px] mt-2">Active Neural Node v2.4</p>
              </div>
           </div>
         </div>
 
-        <div className="bg-surface/30 border border-white/10 backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden transition-all duration-700 animate-in zoom-in-95 duration-500">
-          {renderTool()}
+        {/* WORKSPACE CONTAINER */}
+        <div className="bg-white border border-slate-200 rounded-[4rem] p-10 md:p-20 shadow-sm hover:shadow-3xl transition-all duration-1000 relative overflow-hidden group">
+          {/* Ambient Glow */}
+          <div className="absolute top-0 right-0 p-12">
+            <div className="w-80 h-80 bg-primary/5 blur-[120px] rounded-full group-hover:bg-primary/10 transition-all duration-1000"></div>
+          </div>
+          
+          <div className="relative z-10">
+            {renderTool()}
+          </div>
+
+          {/* Footer Branding */}
+          <div className="mt-16 pt-10 border-t border-slate-100 flex items-center justify-between opacity-30">
+             <div className="flex items-center gap-3">
+                <FaMicrochip className="text-primary text-xs" />
+                <span className="text-[9px] font-black uppercase tracking-[4px]">Neural Processing Active</span>
+             </div>
+             <span className="text-[9px] font-black uppercase tracking-[4px]">End-to-End Local Isolation</span>
+          </div>
         </div>
       </div>
     </div>

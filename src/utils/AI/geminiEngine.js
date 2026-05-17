@@ -1,8 +1,13 @@
 import axios from 'axios';
 
-// 1. Original Non-Streaming Response (Legacy/Backup)
+// 1. LEGACY: Non-Streaming Response (Currently not in use, kept as backup)
 export const getAIResponse = async (userPrompt, chatHistory = []) => {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("AI API Key is missing. Please check your environment variables.");
+  }
+
 
   const systemPrompt = {
     role: "system",
@@ -38,9 +43,14 @@ export const getAIResponse = async (userPrompt, chatHistory = []) => {
   }
 };
 
-// 2. NEW: Streaming Response (Real-time Typing)
+// 2. ACTIVE: Streaming Response (This is the primary function used in AIChatWindow)
 export const getAIResponseStream = async (userPrompt, chatHistory = [], onChunk) => {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("AI API Key is missing. Please check your environment variables.");
+  }
+
 
   const systemPrompt = {
     role: "system",

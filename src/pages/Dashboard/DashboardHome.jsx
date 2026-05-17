@@ -8,25 +8,47 @@ import {
   FaTerminal, 
   FaArrowRight, 
   FaHistory, 
-  FaLayerGroup,
   FaBolt,
   FaRobot,
-  FaMagic,
   FaPlus,
-  FaChartLine
+  FaChevronRight,
+  FaStar,
+  FaBrain,
+  FaClock,
+  FaRocket,
+  FaShieldAlt,
+  FaFire,
+  FaGlobe,
+  FaGithub,
+  FaCheckCircle,
+  FaLock,
+  FaUsers,
+  FaFilePdf,
+  FaExchangeAlt,
+  FaCompressAlt
 } from "react-icons/fa";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const DashboardHome = () => {
   const navigate = useNavigate();
   const { profile, loading: profileLoading } = useOutletContext();
   
-  // --- States ---
   const [stats, setStats] = useState({ questions: 0, answers: 0, reputation: 0 });
   const [recentQuestions, setRecentQuestions] = useState([]);
+  const [trendingInquiries, setTrendingInquiries] = useState([
+    { id: 1, title: "Optimizing WebAssembly for PDF compression", views: "1.2k" },
+    { id: 2, title: "Securing Supabase Edge Functions with OAuth", views: "850" },
+    { id: 3, title: "Framer Motion vs React Spring in 2026", views: "2.4k" }
+  ]);
   const [loading, setLoading] = useState(true);
 
-  // --- Data Fetching Logic (Stats Only) ---
+  const checklistItems = [
+    { id: 1, text: "Establish Profile Identity", done: !!profile?.full_name },
+    { id: 2, text: "Launch First Neural Inquiry", done: stats.questions > 0 },
+    { id: 3, text: "Verify 1 Community Solution", done: stats.answers > 0 },
+    { id: 4, text: "Reach Reputation Level 5", done: stats.reputation >= 1000 }
+  ];
+
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -37,7 +59,7 @@ const DashboardHome = () => {
           const [questionsCount, answersCount, recentQs] = await Promise.all([
             supabase.from('questions').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
             supabase.from('answers').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
-            supabase.from('questions').select('id, title, created_at').eq('user_id', user.id).order('created_at', { ascending: false }).limit(3)
+            supabase.from('questions').select('id, title, created_at').eq('user_id', user.id).order('created_at', { ascending: false }).limit(4)
           ]);
 
           const calculatedRep = (questionsCount.count * 10) + (answersCount.count * 25);
@@ -57,212 +79,326 @@ const DashboardHome = () => {
     };
 
     fetchStats();
-  }, []);
+  }, [profile]);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
 
   const displayName = profile?.full_name ? profile.full_name.split(' ')[0] : 'Developer';
 
   return (
-    <div className="space-y-10 pb-10">
+    <div className="min-h-screen space-y-12 pb-20 selection:bg-primary/10">
       
-      {/* --- 1. WELCOME HEADER --- */}
-      <div className="relative group">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-10 border-b border-white/5">
-          <div className="space-y-4">
-             <motion.div 
-               initial={{ opacity: 0, x: -20 }}
-               animate={{ opacity: 1, x: 0 }}
-               className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full"
-             >
-                <FaMagic className="text-primary text-[10px]" />
-                <span className="text-[10px] font-bold text-primary uppercase tracking-widest uppercase">Workspace Live</span>
-             </motion.div>
-             <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-white tracking-tight leading-none">
-               {loading ? "Initializing..." : `Hello, ${displayName}!`}
-             </h1>
-             <p className="text-secondary text-base md:text-lg font-medium opacity-60 italic max-w-xl">
-               "Your dashboard is synced with the latest community fixes and AI modules. Ready to build?"
-             </p>
+      {/* 🚀 1. SYSTEM MONITOR BAR */}
+      <div className="flex flex-wrap items-center justify-between gap-6 px-1">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2.5 bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-100 shadow-sm">
+             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></div>
+             <span className="text-[9px] font-black text-emerald-600 uppercase tracking-[3px]">Systems Operational</span>
           </div>
-          
-          <button 
-            onClick={() => navigate('/dashboard/qa/ask')}
-            className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-4 bg-primary hover:bg-blue-600 text-white px-10 py-5 rounded-2xl font-bold text-[11px] uppercase tracking-widest transition-all shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 group"
-          >
-            <FaPlus className="text-sm group-hover:rotate-90 transition-transform" />
-            Launch Discussion
-          </button>
+          <div className="hidden sm:flex items-center gap-2.5 text-slate-400">
+             <FaGlobe size={10} />
+             <span className="text-[9px] font-black uppercase tracking-[2px]">Node: ASIA-SOUTH-01</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-6">
+           <div className="flex items-center gap-2">
+              <FaShieldAlt className="text-emerald-500 text-[10px]" />
+              <span className="text-[9px] font-black text-slate-400 uppercase tracking-[4px]">E2E Encryption: Active</span>
+           </div>
+           <div className="w-24 h-1 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+              <motion.div initial={{ width: 0 }} animate={{ width: '100%' }} className="h-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></motion.div>
+           </div>
         </div>
       </div>
 
-      {/* --- 2. STATS & UTILITIES GRID --- */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* 👑 2. SIGNATURE HERO & WELCOME */}
+      <section className="relative">
+        <div className="absolute -top-32 -left-32 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
         
-        {/* LEFT: STATS & TOOLS (8 Cols) */}
-        <div className="lg:col-span-8 space-y-10">
-          
-          {/* STATS ROW */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <StatCard title="Total Questions" value={stats.questions} icon={<FaHistory className="text-blue-400" />} color="blue" />
-            <StatCard title="Verified Fixes" value={stats.answers} icon={<FaBolt className="text-emerald-400" />} color="emerald" />
-            <StatCard title="Reputation" value={stats.reputation} icon={<FaChartLine className="text-primary" />} color="primary" />
-          </div>
-
-          {/* QUICK LAUNCH */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 relative z-10">
           <div className="space-y-6">
-             <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-semibold text-white flex items-center gap-3 tracking-tight">
-                  <span className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_10px_#3b82f6]"></span>
-                  Neural Utilities
-                </h2>
-                <button onClick={() => navigate('/dashboard/dev-utilities')} className="text-[10px] font-bold text-primary uppercase tracking-[3px] hover:underline">Full Library</button>
+            <h2 className="text-[11px] font-black text-primary uppercase tracking-[8px] ml-1">{getGreeting()}</h2>
+            <h1 className="text-6xl sm:text-7xl md:text-[95px] font-bold text-slate-900 tracking-tighter leading-[0.85] font-syne">
+              {loading ? "Establishing..." : (
+                <>
+                  Welcome Back,  <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-600 to-purple-600">
+                    {displayName}.
+                  </span>
+                </>
+              )}
+            </h1>
+            <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
+              Experience the powerhouse of AI, Q&A, and **Local-First PDF utilities** all in one synchronized workspace.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+            <motion.button 
+              whileHover={{ scale: 1.02, translateY: -2 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => navigate('/dashboard/qa/ask')}
+              className="h-16 px-10 bg-slate-900 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[4px] shadow-2xl hover:bg-black transition-all flex items-center justify-center gap-4 group"
+            >
+              <FaPlus size={12} className="group-hover:rotate-90 transition-transform" />
+              <span>Broadcast Inquiry</span>
+            </motion.button>
+          </div>
+        </div>
+      </section>
+
+      {/* 📊 3. ANALYTICS & ONBOARDING STRIP */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <MetricCard label="Reputation" value={stats.reputation} icon={<FaStar />} subValue="Rank: Elite" color="primary" delay={0.1} sparkData={[20, 30, 25, 40, 35, 50, 45]} />
+          <MetricCard label="Verified Fixes" value={stats.answers} icon={<FaBolt />} subValue="Top 2% Globally" color="emerald" delay={0.2} sparkData={[10, 15, 12, 18, 20, 25, 22]} />
+          <MetricCard label="Active Requests" value={stats.questions} icon={<FaHistory />} subValue="Live Tracking" color="indigo" delay={0.3} sparkData={[5, 8, 7, 10, 9, 12, 11]} />
+        </div>
+
+        <div className="lg:col-span-4 bg-slate-900 text-white rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden group">
+           <div className="absolute top-0 right-0 p-4 opacity-10">
+              <FaRocket size={80} className="group-hover:translate-x-4 transition-transform duration-1000" />
+           </div>
+           <h3 className="text-xl font-bold font-syne mb-6 relative z-10">Workspace Onboarding</h3>
+           <div className="space-y-4 relative z-10">
+              {checklistItems.map(item => (
+                <div key={item.id} className="flex items-center gap-4">
+                   <div className={`w-6 h-6 rounded-lg flex items-center justify-center border transition-all ${item.done ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-white/20 bg-white/5'}`}>
+                      {item.done ? <FaCheckCircle size={12} /> : <div className="w-1.5 h-1.5 bg-white/20 rounded-full"></div>}
+                   </div>
+                   <span className={`text-[11px] font-bold uppercase tracking-widest ${item.done ? 'text-white/40 line-through' : 'text-white/80'}`}>{item.text}</span>
+                </div>
+              ))}
+           </div>
+        </div>
+      </div>
+
+      {/* 🧩 4. PDF POWER MODULE (NEW: Highlighting PDF Tools) */}
+      <section className="space-y-8">
+         <div className="flex items-center gap-4">
+            <h3 className="text-3xl font-bold text-slate-900 tracking-tight font-syne">PDF Infrastructure</h3>
+            <div className="flex-1 h-[1px] bg-slate-100"></div>
+         </div>
+         
+         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <motion.div 
+               whileHover={{ translateY: -5 }}
+               onClick={() => navigate('/dashboard/tools')}
+               className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm group cursor-pointer relative overflow-hidden"
+            >
+               <div className="absolute -right-10 -bottom-10 opacity-5 group-hover:scale-110 transition-transform">
+                  <FaCompressAlt size={120} />
+               </div>
+               <div className="w-14 h-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mb-6 border border-red-100 shadow-sm">
+                  <FaCompressAlt size={24} />
+               </div>
+               <h4 className="text-xl font-bold text-slate-900 mb-3 font-syne tracking-tight">PDF Compressor</h4>
+               <p className="text-slate-500 text-sm font-medium leading-relaxed">Extreme local compression without loss of clarity. 100% browser-side processing.</p>
+            </motion.div>
+
+            <motion.div 
+               whileHover={{ translateY: -5 }}
+               onClick={() => navigate('/dashboard/tools')}
+               className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm group cursor-pointer relative overflow-hidden"
+            >
+               <div className="absolute -right-10 -bottom-10 opacity-5 group-hover:scale-110 transition-transform">
+                  <FaExchangeAlt size={120} />
+               </div>
+               <div className="w-14 h-14 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm">
+                  <FaExchangeAlt size={24} />
+               </div>
+               <h4 className="text-xl font-bold text-slate-900 mb-3 font-syne tracking-tight">Word to PDF</h4>
+               <p className="text-slate-500 text-sm font-medium leading-relaxed">High-fidelity conversion from Word documents to PDF with zero formatting loss.</p>
+            </motion.div>
+
+            <motion.div 
+               whileHover={{ translateY: -5 }}
+               onClick={() => navigate('/dashboard/tools')}
+               className="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl group cursor-pointer relative overflow-hidden border border-white/5"
+            >
+               <div className="absolute -right-5 -bottom-5 opacity-10 group-hover:scale-110 transition-transform">
+                  <FaFilePdf size={120} />
+               </div>
+               <h4 className="text-xl font-bold text-white mb-3 font-syne tracking-tight">Security-First Protocol</h4>
+               <p className="text-slate-400 text-sm font-medium leading-relaxed">Your documents never reach our servers. We use WebAssembly to process files locally.</p>
+               <div className="mt-6 flex items-center gap-2 text-primary font-bold text-xs">
+                  <span>Explore PDF Stack</span>
+                  <FaArrowRight size={10} />
+               </div>
+            </motion.div>
+         </div>
+      </section>
+
+      {/* 🧭 5. THE ECOSYSTEM OVERVIEW */}
+      <section className="space-y-10">
+         <div className="flex items-center gap-4">
+            <h3 className="text-3xl font-bold text-slate-900 tracking-tight font-syne">Ecosystem Pillars</h3>
+            <div className="flex-1 h-[1px] bg-slate-100"></div>
+         </div>
+         
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <TourCard icon={<FaBrain className="text-primary" />} title="AI Assistant" desc="Refactor code and find bugs with Neural Intelligence." link="/ai-assistant" />
+            <TourCard icon={<FaUsers className="text-indigo-500" />} title="Community Hub" desc="Broadcast struggles to senior engineers globally." link="/dashboard/questions" />
+            <TourCard icon={<FaLock className="text-emerald-500" />} title="Local-First" desc="Process data securely without touching the cloud." link="/dashboard/tools" />
+            <TourCard icon={<FaStar className="text-amber-500" />} title="XP System" desc="Earn reputation by fixing community issues." link="/dashboard/activity" />
+         </div>
+      </section>
+
+      {/* 🛠️ 6. INFRASTRUCTURE & TOOLS */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div className="lg:col-span-8 space-y-10">
+          <motion.div whileHover={{ translateY: -5 }} onClick={() => navigate('/ai-assistant')} className="relative bg-slate-900 rounded-[3.5rem] p-10 md:p-14 overflow-hidden group cursor-pointer shadow-2xl border border-white/5">
+             <div className="absolute top-0 right-0 p-8 opacity-20">
+                <FaRobot size={150} className="text-white group-hover:scale-110 transition-transform duration-1000" />
              </div>
-             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <UtilityQuickLink icon={<FaCode />} title="JSON" path="json-formatter" color="blue" />
-                <UtilityQuickLink icon={<FaDatabase />} title="Base64" path="base64-converter" color="primary" />
-                <UtilityQuickLink icon={<FaHashtag />} title="Regex" path="regex-tester" color="emerald" />
-                <UtilityQuickLink icon={<FaTerminal />} title="API" path="api-tester" color="amber" />
+             <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent"></div>
+             <div className="relative z-10 space-y-4">
+                <div className="inline-flex items-center gap-3 bg-white/5 border border-white/5 px-4 py-1.5 rounded-full">
+                  <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
+                  <span className="text-[9px] font-black text-primary uppercase tracking-[4px]">Neural Cluster: Online</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tighter font-syne leading-tight">Sync With <br /> Neural Intelligence.</h2>
+                <p className="text-slate-400 text-lg font-medium max-w-lg leading-relaxed">Collaborative refactoring at the speed of thought.</p>
              </div>
+          </motion.div>
+
+          <div className="bg-white border border-slate-100 rounded-[3.5rem] p-10 md:p-14 shadow-sm">
+            <div className="flex items-center justify-between mb-12">
+              <div className="space-y-1">
+                <h3 className="text-3xl font-bold text-slate-900 tracking-tight font-syne">Power Toolbox</h3>
+                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[4px]">Atomic Processing Core</p>
+              </div>
+              <button onClick={() => navigate('/dashboard/tools')} className="text-[10px] font-black text-primary uppercase tracking-[3px] hover:underline">Full Catalog</button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <QuickTool icon={<FaCode />} label="JSON Lab" path="json-formatter" desc="Code Styling" />
+              <QuickTool icon={<FaDatabase />} label="Base64" path="base64-converter" desc="Data Streams" />
+              <QuickTool icon={<FaHashtag />} label="Regex" path="regex-tester" desc="Pattern Engine" />
+              <QuickTool icon={<FaTerminal />} label="Probes" path="api-tester" desc="Network Lab" />
+            </div>
           </div>
         </div>
 
-        {/* RIGHT: RECENT ACTIVITY (4 Cols) */}
-        <div className="lg:col-span-4 bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-8 md:p-10 flex flex-col backdrop-blur-xl shadow-2xl relative overflow-hidden group">
-           <div className="absolute top-0 right-0 p-1">
-              <div className="w-24 h-24 -mr-12 -mt-12 bg-primary blur-3xl opacity-10 rounded-full group-hover:opacity-20 transition-opacity"></div>
-           </div>
-
-           <h3 className="text-xl font-semibold text-white mb-8 flex items-center gap-3 tracking-tight">
-              <FaHistory className="text-primary text-sm" />
-              Stream History
-           </h3>
-
-           <div className="flex-1 space-y-8 relative z-10">
-              {recentQuestions.length > 0 ? recentQuestions.map(q => (
-                <div key={q.id} className="group/item cursor-pointer" onClick={() => navigate(`/dashboard/questions/${q.id}`)}>
-                   <p className="text-slate-200 font-semibold text-base leading-tight line-clamp-2 group-hover/item:text-primary transition-colors">{q.title}</p>
-                   <p className="text-[10px] text-secondary/40 mt-2 uppercase font-bold tracking-[2px] flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary/30"></span> Posted Recently
-                   </p>
-                   <div className="h-[1px] w-full bg-white/5 mt-6 group-last:hidden"></div>
-                </div>
-              )) : (
-                <div className="h-full flex flex-col items-center justify-center text-center opacity-30 py-20">
-                   <div className="w-16 h-16 rounded-full border border-dashed border-white/20 flex items-center justify-center mb-6">
-                      <FaHistory className="text-lg" />
+        <div className="lg:col-span-4 space-y-8">
+           <div className="bg-white border border-slate-100 rounded-[3rem] p-10 flex flex-col shadow-sm">
+              <div className="flex items-center justify-between mb-10">
+                 <h3 className="text-2xl font-bold text-slate-900 tracking-tight font-syne">Trending</h3>
+                 <FaFire className="text-orange-500 animate-pulse" />
+              </div>
+              <div className="space-y-8">
+                 {trendingInquiries.map(item => (
+                   <div key={item.id} className="group cursor-pointer">
+                      <p className="text-slate-800 font-bold text-sm leading-snug group-hover:text-primary transition-colors">{item.title}</p>
+                      <div className="flex items-center gap-3 mt-3">
+                         <span className="text-[9px] text-slate-400 font-black uppercase tracking-[2px]">{item.views} fixes synced</span>
+                         <div className="flex-1 h-[0.5px] bg-slate-100"></div>
+                      </div>
                    </div>
-                   <p className="text-[10px] font-bold uppercase tracking-widest">No Recent Stream</p>
-                </div>
-              )}
+                 ))}
+              </div>
            </div>
 
-           <button onClick={() => navigate('/dashboard/questions')} className="mt-10 flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all text-[11px] font-bold uppercase tracking-widest group/btn border border-white/5 py-4 rounded-2xl bg-white/5">
-              Access Full Feed <FaArrowRight className="text-[10px] group-hover/btn:translate-x-1 transition-transform" />
-           </button>
+           <div className="bg-slate-50 border border-slate-100 rounded-[3rem] p-10 space-y-10">
+              <div className="flex items-center justify-between">
+                 <h3 className="text-2xl font-bold text-slate-900 tracking-tight font-syne">Intelligence Stack</h3>
+                 <FaGithub size={20} className="text-slate-300" />
+              </div>
+              <div className="space-y-6">
+                 <LanguageProgress label="React / TS" percent="85%" color="bg-primary" />
+                 <LanguageProgress label="Node / SQL" percent="42%" color="bg-indigo-500" />
+                 <LanguageProgress label="Python" percent="15%" color="bg-emerald-500" />
+              </div>
+           </div>
         </div>
-      </div>
+      </section>
 
-      {/* --- 3. MODULES SECTION --- */}
-      <div className="space-y-8 pt-10">
-        <h2 className="text-2xl font-semibold text-white flex items-center gap-3 tracking-tight">
-          <span className="w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_10px_#10b981]"></span>
-          Nexus Modules
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <ModuleCard 
-            title="File Power Tools" 
-            desc="Batch process documents and assets with local encryption and military-grade speed."
-            tags={['v2.5', 'Secure']}
-            icon={<FaLayerGroup />}
-            color="blue"
-            onClick={() => navigate('/dashboard/tools')}
-          />
-
-          <ModuleCard 
-            title="Community Hub" 
-            desc="Solve bugs together. Access verified solutions and earn global reputation points."
-            tags={['Global', 'Live']}
-            icon={<FaHistory />}
-            color="purple"
-            onClick={() => navigate('/dashboard/questions')}
-          />
-
-          <ModuleCard 
-            title="AI Neural Core" 
-            desc="Advanced LLM modules integrated to refactor, document, and fix your codebase."
-            tags={['Pro', 'AI']}
-            icon={<FaRobot />}
-            color="emerald"
-            onClick={() => navigate('/ai-assistant')}
-          />
-        </div>
+      <div className="text-center pt-20 text-[10px] font-black uppercase tracking-[15px] text-slate-400 pointer-events-none mb-10">
+        Codefix Professional Elite
       </div>
     </div>
   );
 };
 
-// --- SUB-COMPONENTS ---
-
-const StatCard = ({ title, value, icon, color }) => {
+const MetricCard = ({ label, value, icon, subValue, color, delay, sparkData }) => {
   const colors = {
-    blue: "hover:border-blue-500/40 hover:bg-blue-500/[0.02]",
-    emerald: "hover:border-emerald-500/40 hover:bg-emerald-500/[0.02]",
-    primary: "hover:border-primary/40 hover:bg-primary/[0.02]"
+    primary: "text-primary bg-primary/5 border-primary/10 shadow-primary/5",
+    emerald: "text-emerald-500 bg-emerald-500/5 border-emerald-500/10 shadow-emerald-500/5",
+    indigo: "text-indigo-500 bg-indigo-500/5 border-indigo-500/10 shadow-indigo-500/5",
   };
+
   return (
-    <div className={`bg-white/[0.02] border border-white/5 p-8 rounded-[2.5rem] transition-all group ${colors[color]} shadow-xl backdrop-blur-sm`}>
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:bg-white/10 transition-all border border-white/5">{icon}</div>
-        <p className="text-secondary/50 text-[10px] font-bold uppercase tracking-[2px]">{title}</p>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay }}
+      className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:translate-y-[-5px] transition-all group"
+    >
+      <div className="flex justify-between items-start mb-8">
+        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border ${colors[color]}`}>
+          {icon}
+        </div>
+        <div className="text-right">
+           <span className="text-[9px] font-black text-slate-900 uppercase tracking-widest block">{subValue}</span>
+           <span className="text-[8px] text-emerald-500 font-bold uppercase tracking-widest mt-1 block">Live Feed</span>
+        </div>
       </div>
-      <h3 className="text-4xl font-semibold text-white tabular-nums tracking-tight">{value}</h3>
+      <div className="flex items-end justify-between">
+        <div className="space-y-1">
+          <h3 className="text-5xl font-bold text-slate-900 tabular-nums tracking-tighter">{value}</h3>
+          <p className="text-slate-400 text-[10px] font-black uppercase tracking-[4px]">{label}</p>
+        </div>
+        <div className="flex items-end gap-1 h-12 mb-2">
+           {sparkData.map((h, i) => (
+             <motion.div key={i} initial={{ height: 0 }} animate={{ height: `${h}%` }} transition={{ delay: delay + (i * 0.05) }} className={`w-1 rounded-full ${color === 'primary' ? 'bg-primary/20' : color === 'emerald' ? 'bg-emerald-500/20' : 'bg-indigo-500/20'}`}></motion.div>
+           ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const TourCard = ({ icon, title, desc, link }) => {
+  const navigate = useNavigate();
+  return (
+    <div onClick={() => navigate(link)} className="bg-white border border-slate-100 p-8 rounded-[2rem] shadow-sm hover:shadow-xl hover:translate-y-[-5px] transition-all cursor-pointer group">
+       <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-xl mb-6 group-hover:scale-110 transition-transform">{icon}</div>
+       <h4 className="text-[15px] font-black text-slate-900 uppercase tracking-tight mb-3">{title}</h4>
+       <p className="text-[12px] text-slate-500 font-medium leading-relaxed">{desc}</p>
     </div>
   );
 };
 
-const UtilityQuickLink = ({ icon, title, path, color }) => {
+const QuickTool = ({ icon, label, path, desc }) => {
   const navigate = useNavigate();
-  const colors = {
-    blue: "text-blue-400 bg-blue-500/5 hover:bg-blue-500/10 border-blue-500/10 hover:border-blue-500/30",
-    primary: "text-primary bg-primary/5 hover:bg-primary/10 border-primary/10 hover:border-primary/30",
-    emerald: "text-emerald-400 bg-emerald-500/5 hover:bg-emerald-500/10 border-emerald-500/10 hover:border-emerald-500/30",
-    amber: "text-amber-400 bg-amber-500/5 hover:bg-amber-500/10 border-amber-500/10 hover:border-amber-500/30"
-  };
   return (
     <button 
       onClick={() => navigate(`/dashboard/dev-utilities/${path}`)}
-      className={`flex flex-col items-center gap-4 p-5 rounded-[2rem] border transition-all ${colors[color]} group`}
+      className="flex flex-col items-center justify-center gap-5 p-8 bg-slate-50 border border-slate-50 rounded-[2.5rem] hover:bg-white hover:border-primary/20 hover:shadow-xl transition-all group"
     >
-      <div className="text-2xl group-hover:scale-110 transition-transform">{icon}</div>
-      <span className="text-[10px] font-bold uppercase tracking-widest">{title}</span>
+      <div className="text-3xl text-slate-200 group-hover:text-primary transition-colors">{icon}</div>
+      <div className="text-center">
+        <span className="block text-[11px] font-black text-slate-900 uppercase tracking-[2px]">{label}</span>
+        <span className="block text-[8px] font-bold text-slate-400 uppercase mt-1.5 tracking-widest">{desc}</span>
+      </div>
     </button>
   );
 };
 
-const ModuleCard = ({ title, desc, tags, icon, color, onClick }) => {
-  const colors = {
-    blue: "hover:border-blue-500/30 group-hover:text-blue-400",
-    purple: "hover:border-purple-500/30 group-hover:text-purple-400",
-    emerald: "hover:border-emerald-500/30 group-hover:text-emerald-400"
-  };
-  return (
-    <div onClick={onClick} className={`bg-white/[0.02] border border-white/5 p-8 md:p-10 rounded-[3rem] ${colors[color]} transition-all cursor-pointer group relative overflow-hidden shadow-2xl hover:bg-white/[0.04]`}>
-      <div className="absolute top-0 right-0 p-1">
-         <div className={`w-32 h-32 -mr-16 -mt-16 blur-[60px] opacity-10 rounded-full ${color === 'blue' ? 'bg-blue-500' : color === 'purple' ? 'bg-purple-500' : 'bg-emerald-500'}`}></div>
-      </div>
-
-      <div className={`mb-8 w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform border border-white/5 ${color === 'blue' ? 'text-blue-400' : color === 'purple' ? 'text-purple-400' : 'text-emerald-400'}`}>
-        {icon}
-      </div>
-      <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight">{title}</h3>
-      <p className="text-secondary text-sm leading-relaxed mb-10 font-medium opacity-50 line-clamp-2">{desc}</p>
-      <div className="flex flex-wrap gap-2">
-        {tags.map(tag => (
-          <span key={tag} className="text-[9px] text-white/40 bg-white/5 px-4 py-2 rounded-full uppercase font-bold tracking-widest border border-white/5">{tag}</span>
-        ))}
-      </div>
-    </div>
-  );
-};
+const LanguageProgress = ({ label, percent, color }) => (
+  <div className="space-y-2">
+     <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+        <span className="text-slate-900">{label}</span>
+        <span className="text-slate-400">{percent}</span>
+     </div>
+     <div className="w-full h-1.5 bg-white border border-slate-100 rounded-full overflow-hidden shadow-inner">
+        <motion.div initial={{ width: 0 }} animate={{ width: percent }} transition={{ duration: 1.5 }} className={`h-full ${color}`}></motion.div>
+     </div>
+  </div>
+);
 
 export default DashboardHome;

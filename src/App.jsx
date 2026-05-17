@@ -7,7 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { supabase } from "./lib/supabase";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -46,7 +46,6 @@ const AnimatedRoutes = ({ user, loading }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Force redirect to dashboard if user is logged in but hits auth pages
     if (!loading && user) {
       if (location.pathname === '/login' || location.pathname === '/signup') {
         navigate('/dashboard', { replace: true });
@@ -55,18 +54,56 @@ const AnimatedRoutes = ({ user, loading }) => {
   }, [user, loading, location.pathname, navigate]);
 
   if (loading) {
-    return <div className="min-h-screen bg-background flex items-center justify-center text-white font-black uppercase tracking-[5px] text-xs opacity-50">Loading Platform...</div>;
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden">
+        {/* Ambient background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/10 blur-[100px] rounded-full animate-pulse"></div>
+        
+        <div className="relative z-10 flex flex-col items-center">
+           {/* Logo Area */}
+           <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-4 mb-10"
+           >
+              <div className="w-12 h-12 bg-slate-900 text-white rounded-2xl flex items-center justify-center shadow-2xl border border-slate-800">
+                <span className="font-bold text-2xl font-syne">C</span>
+              </div>
+              <span className="text-4xl font-bold font-syne tracking-tighter text-slate-900">Codefix</span>
+           </motion.div>
+
+           {/* Loading Bar */}
+           <div className="w-64 h-1.5 bg-slate-100 rounded-full overflow-hidden relative shadow-inner">
+              <motion.div 
+                 initial={{ x: "-100%" }}
+                 animate={{ x: "200%" }}
+                 transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                 className="absolute top-0 left-0 h-full w-1/2 bg-gradient-to-r from-transparent via-primary to-transparent"
+              />
+           </div>
+           
+           <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="mt-8 text-[10px] font-black uppercase tracking-[4px] text-slate-400"
+           >
+              Initializing Platform...
+           </motion.p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+      <Routes location={location}>
         {/* 🔓 Public Website Routes (Wrapped with Landing Layout) */}
         <Route path="/" element={<LandingLayout user={user} loading={loading} />}>
           <Route
             index
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <Home />
               </PageTransition>
             }
@@ -74,7 +111,7 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             path="about"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <About />
               </PageTransition>
             }
@@ -82,7 +119,7 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             path="features"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <Features />
               </PageTransition>
             }
@@ -90,7 +127,7 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             path="contact"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <Contact />
               </PageTransition>
             }
@@ -98,26 +135,23 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             path="tools"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <Tools />
               </PageTransition>
             }
           />
-          
-          {/* 🛠️ Dynamic File Upload Route */}
           <Route
             path="tools/:toolId"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <FileUpload />
               </PageTransition>
             }
           />
-          {/* 🛠️ Dev Utilities Route */}
           <Route
             path="dev-utilities"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <DevUtilities />
               </PageTransition>
             }
@@ -125,7 +159,7 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             path="dev-utilities/:toolId"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <DevToolProcessor />
               </PageTransition>
             }
@@ -133,7 +167,7 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             path="questions"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <QAHome />
               </PageTransition>
             }
@@ -141,7 +175,7 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             path="questions/:id"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <QuestionDetail />
               </PageTransition>
             }
@@ -149,7 +183,7 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             path="questions/ask"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <AskQuestion />
               </PageTransition>
             }
@@ -157,7 +191,7 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             path="privacy"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <Privacy />
               </PageTransition>
             }
@@ -165,7 +199,7 @@ const AnimatedRoutes = ({ user, loading }) => {
           <Route
             path="terms"
             element={
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <Terms />
               </PageTransition>
             }
@@ -179,7 +213,7 @@ const AnimatedRoutes = ({ user, loading }) => {
             user ? (
               <Navigate to="/dashboard" replace />
             ) : (
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <Login />
               </PageTransition>
             )
@@ -191,7 +225,7 @@ const AnimatedRoutes = ({ user, loading }) => {
             user ? (
               <Navigate to="/dashboard" replace />
             ) : (
-              <PageTransition>
+              <PageTransition key={location.pathname}>
                 <Signup />
               </PageTransition>
             )
@@ -204,7 +238,7 @@ const AnimatedRoutes = ({ user, loading }) => {
             <Route
               index
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <DashboardHome />
                 </PageTransition>
               }
@@ -212,7 +246,7 @@ const AnimatedRoutes = ({ user, loading }) => {
             <Route
               path="profile"
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <ProfileSettings />
                 </PageTransition>
               }
@@ -220,7 +254,7 @@ const AnimatedRoutes = ({ user, loading }) => {
             <Route
               path="activity"
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <MyActivity />
                 </PageTransition>
               }
@@ -228,26 +262,23 @@ const AnimatedRoutes = ({ user, loading }) => {
             <Route
               path="preferences"
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <AccountPreference />
                 </PageTransition>
               }
             />
-            
             <Route
               path="qa/ask"
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <AskQuestion />
                 </PageTransition>
               }
             />
-            
-            {/* 🛠️ Dashboard Tools (Inside Sidebar, No Landing Navbar/Footer) */}
             <Route
               path="tools"
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <Tools />
                 </PageTransition>
               }
@@ -255,17 +286,15 @@ const AnimatedRoutes = ({ user, loading }) => {
             <Route
               path="tools/:toolId"
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <FileUpload />
                 </PageTransition>
               }
             />
-
-            {/* 💬 Dashboard Community (Integrated Feed) */}
             <Route
               path="questions"
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <QAHome />
                 </PageTransition>
               }
@@ -273,17 +302,15 @@ const AnimatedRoutes = ({ user, loading }) => {
             <Route
               path="questions/:id"
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <QuestionDetail />
                 </PageTransition>
               }
             />
-
-            {/* 🛠️ Dashboard Dev Tools */}
             <Route
               path="dev-utilities"
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <DevUtilities />
                 </PageTransition>
               }
@@ -291,7 +318,7 @@ const AnimatedRoutes = ({ user, loading }) => {
             <Route
               path="dev-utilities/:toolId"
               element={
-                <PageTransition>
+                <PageTransition key={location.pathname}>
                   <DevToolProcessor />
                 </PageTransition>
               }
@@ -299,17 +326,15 @@ const AnimatedRoutes = ({ user, loading }) => {
           </Route>
         </Route>
 
-        {/* 🤖 Professional AI Assistant Route */}
         <Route
           path="/ai-assistant"
           element={
-            <PageTransition>
+            <PageTransition key={location.pathname}>
               <AIChatLayout user={user} />
             </PageTransition>
           }
         />
 
-        {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
@@ -322,17 +347,13 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Session check on mount
     const initAuth = async () => {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
           if (error.message.includes("refresh_token") || error.status === 400) {
-             console.warn("Auth session recovery failed, signing out to reset state...");
              await supabase.auth.signOut();
              setUser(null);
-          } else {
-             console.error("Auth session error:", error);
           }
         } else {
           setUser(session?.user ?? null);
@@ -346,13 +367,8 @@ function App() {
 
     initAuth();
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log("Auth event:", event);
       setUser(session?.user ?? null);
-      if (event === 'SIGNED_OUT') {
-        // Clear any local state if needed
-      }
     });
 
     return () => subscription.unsubscribe();
@@ -361,7 +377,6 @@ function App() {
   return (
     <Router>
       <div className="bg-background min-h-screen selection:bg-primary selection:text-white">
-        {/* Notifications */}
         <Toaster
           position="top-center"
           reverseOrder={false}
@@ -379,7 +394,6 @@ function App() {
         />
 
         <ScrollToTop />
-
         <AnimatedRoutes user={user} loading={loading} />
       </div>
     </Router>

@@ -13,6 +13,7 @@ const QAHome = () => {
   const [searchParams] = useSearchParams();
   const initialSearch = searchParams.get("search") || "";
 
+  // Dashboard route ko check krne ke liye
   const isDashboard = location.pathname.startsWith('/dashboard');
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,13 +21,25 @@ const QAHome = () => {
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [activeFilter, setActiveFilter] = useState("Newest");
   const [currentUser, setCurrentUser] = useState(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // User ki session check krte hain
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setCurrentUser(user);
     });
   }, []);
 
+  // Search query ko URL se fetch krte hain
+  // Deep Linking" aur "State Persistence" kehte hain isko
   useEffect(() => {
     const query = searchParams.get("search");
     if (query !== null) {
@@ -34,14 +47,17 @@ const QAHome = () => {
     }
   }, [searchParams]);
 
+  // Supabase se data fetch krne ke liye function
   const fetchQuestions = useCallback(async () => {
     try {
       setLoading(true);
+
+      // Supabase se questions fetch krne ke liye query
       let query = supabase.from("questions").select(`
           *,
           votes_count,
           profiles!questions_user_id_fkey (
-            full_name,
+            full_name, 
             avatar_url
           ),
           answers (count)
@@ -53,6 +69,7 @@ const QAHome = () => {
         );
       }
 
+      // Filter by active tab
       if (activeFilter === "Newest") {
         query = query.order("created_at", { ascending: false });
       } else if (activeFilter === "Top Voted") {
@@ -70,9 +87,11 @@ const QAHome = () => {
         query = query.order("created_at", { ascending: false });
       }
 
+      // Supabase se data fetch krte hain
       const { data, error } = await query;
       if (error) throw error;
 
+      // data ko format krte hain taake codeCard use kar sake
       let formattedData = data.map((q) => ({
         ...q,
         answer_count: q.answers?.[0]?.count || 0,
@@ -90,6 +109,10 @@ const QAHome = () => {
     }
   }, [searchQuery, activeFilter, currentUser]);
 
+  // 400ms delay debounce logic taake bar bar network request na ho
+  // Iska maqsad ye hai ke jab user search bar mein typing kar raha ho, to har aik lafz 
+  // likhne par database ko request na jaye. Jab user typing rok dega (400ms ke liye), 
+  // sirf tabhi data fetch hoga. Isse website ki performance fast ho jati hai.
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchQuestions();
@@ -97,6 +120,7 @@ const QAHome = () => {
     return () => clearTimeout(timer);
   }, [fetchQuestions]);
 
+  // Ask question button click handler
   const handleAskQuestionClick = () => {
     if (!currentUser) {
       navigate("/login");
@@ -104,6 +128,7 @@ const QAHome = () => {
       navigate(isDashboard ? "/dashboard/qa/ask" : "/questions/ask");
     }
   };
+
 
   const shouldReduceMotion = useReducedMotion();
   
@@ -118,7 +143,7 @@ const QAHome = () => {
   };
 
   return (
-    <div className={`relative min-h-screen bg-background text-white overflow-hidden font-sans ${isDashboard ? 'pt-10' : ''}`}>
+    <div className={`relative min-h-screen bg-background text-slate-900 overflow-hidden font-sans ${isDashboard ? 'pt-10' : ''}`}>
       <SEO 
         title="Community Q&A" 
         description="Solve your development bugs with the help of our global community and AI-powered insights." 
@@ -126,25 +151,33 @@ const QAHome = () => {
       
       {/* --- HERO HEADER (CENTERED) --- */}
       <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 overflow-hidden">
+          <div 
+            className="absolute w-[800px] h-[800px] bg-primary/10 blur-[150px] rounded-full transition-transform duration-700 ease-out pointer-events-none opacity-40"
+            style={{ 
+              transform: `translate(${mousePos.x - 400}px, ${mousePos.y - 400}px)`,
+              left: 0,
+              top: 0
+            }}
+          ></div>
           <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[150px] rounded-full"></div>
           <div className="absolute bottom-0 left-[-5%] w-[40%] h-[40%] bg-emerald-500/10 blur-[120px] rounded-full"></div>
         </div>
 
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 text-center space-y-10">
-           <motion.div {...fadeIn} className="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-2 rounded-full backdrop-blur-md">
+        <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 text-center space-y-10">
+           <motion.div {...fadeIn} className="inline-flex items-center gap-3 bg-slate-900 text-white px-6 py-2 rounded-full border border-white/10 shadow-2xl mb-10">
               <FaUsers className="text-primary text-[10px]" />
-              <span className="text-[10px] font-semibold text-slate-300 tracking-[4px] uppercase">Community Knowledge Base</span>
+              <span className="text-[10px] font-bold tracking-[4px] uppercase">Community Knowledge Base</span>
            </motion.div>
            
-           <motion.h1 {...fadeIn} className="text-4xl sm:text-6xl md:text-8xl font-semibold leading-[1.05] tracking-tight">
+           <motion.h1 {...fadeIn} className="text-5xl sm:text-7xl md:text-[100px] font-semibold font-heading leading-[0.9] tracking-tighter text-slate-900">
               Solve. Fix. <br />
-              <span className="bg-gradient-to-r from-primary via-blue-400 to-emerald-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Succeed.
               </span>
            </motion.h1>
 
-           <motion.p {...fadeIn} className="max-w-3xl mx-auto text-secondary text-base md:text-xl font-semibold opacity-80 leading-relaxed px-4">
+           <motion.p {...fadeIn} className="max-w-3xl mx-auto text-slate-500 text-lg md:text-xl font-medium leading-relaxed px-4">
               Access thousands of verified fixes and expert discussions. Integrated with AI to help you debug in real-time.
            </motion.p>
 
@@ -162,23 +195,23 @@ const QAHome = () => {
 
       {/* --- STATS BAR --- */}
       <section className="pb-16">
-         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 bg-white/[0.02] border border-white/5 p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] backdrop-blur-xl">
-               <div className="space-y-1 text-center md:border-r border-white/5">
-                  <p className="text-2xl md:text-3xl font-semibold">12k+</p>
-                  <p className="text-[9px] md:text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Questions</p>
+         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 bg-white border border-slate-200 p-8 md:p-10 rounded-[3rem] md:rounded-[4rem] text-slate-900 shadow-xl relative overflow-hidden">
+               <div className="space-y-1 text-center md:border-r border-slate-100 py-4">
+                  <p className="text-3xl md:text-5xl font-semibold font-heading">12k+</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-[4px] font-bold">Questions</p>
                </div>
-               <div className="space-y-1 text-center md:border-r border-white/5">
-                  <p className="text-2xl md:text-3xl font-semibold text-emerald-400">8k+</p>
-                  <p className="text-[9px] md:text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Verified</p>
+               <div className="space-y-1 text-center md:border-r border-slate-100 py-4">
+                  <p className="text-3xl md:text-5xl font-semibold font-heading text-emerald-600">8k+</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-[4px] font-bold">Verified</p>
                </div>
-               <div className="space-y-1 text-center md:border-r border-white/5">
-                  <p className="text-2xl md:text-3xl font-semibold text-primary">500+</p>
-                  <p className="text-[9px] md:text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Experts</p>
+               <div className="space-y-1 text-center md:border-r border-slate-100 py-4">
+                  <p className="text-3xl md:text-5xl font-semibold font-heading text-primary">500+</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-[4px] font-bold">Experts</p>
                </div>
-               <div className="space-y-1 text-center">
-                  <p className="text-2xl md:text-3xl font-semibold text-blue-400">2s</p>
-                  <p className="text-[9px] md:text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Response</p>
+               <div className="space-y-1 text-center py-4">
+                  <p className="text-3xl md:text-5xl font-semibold font-heading text-blue-500">2s</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-[4px] font-bold">Response</p>
                </div>
             </div>
          </div>
@@ -186,16 +219,16 @@ const QAHome = () => {
 
       {/* --- FILTER & SEARCH --- */}
       <section className="pb-12">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
            <div className="flex flex-col xl:flex-row gap-8 items-center justify-between">
               
               {/* Filter Tabs */}
-              <div className="flex items-center gap-1 sm:gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/10 overflow-x-auto no-scrollbar w-full xl:w-auto">
+              <div className="flex items-center gap-1 sm:gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200 overflow-x-auto no-scrollbar w-full xl:w-auto">
                 {["Newest", "Top Voted", "Unanswered", "My Questions"].map(filter => (
                     <button
                         key={filter}
                         onClick={() => { setActiveFilter(filter); setVisibleCount(5); }}
-                        className={`px-3 sm:px-8 py-2 sm:py-3 rounded-xl text-[9px] sm:text-[11px] font-semibold uppercase tracking-widest transition-all whitespace-nowrap ${activeFilter === filter ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-500 hover:text-white'}`}
+                        className={`px-3 sm:px-8 py-2.5 sm:py-3.5 rounded-xl text-[9px] sm:text-[11px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeFilter === filter ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
                     >
                         {filter}
                     </button>
@@ -205,14 +238,14 @@ const QAHome = () => {
               {/* Search Bar */}
               <div className="relative w-full xl:w-[500px] group">
                 <div className="absolute inset-0 bg-primary/10 blur-2xl opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
-                <div className="relative flex items-center bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus-within:border-primary/50 transition-all shadow-xl">
-                    <FaSearch className="text-slate-600 mr-4" />
+                <div className="relative flex items-center bg-slate-100 border border-slate-200 rounded-2xl px-6 py-4 focus-within:border-primary/50 transition-all shadow-xl">
+                    <FaSearch className="text-slate-400 mr-4" />
                     <input 
                         type="text" 
                         placeholder="Search discussions, bugs, or solutions..." 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-transparent outline-none text-white font-semibold text-xs placeholder:text-slate-600"
+                        className="w-full bg-transparent outline-none text-slate-900 font-semibold text-xs placeholder:text-slate-400"
                     />
                 </div>
               </div>
@@ -222,7 +255,7 @@ const QAHome = () => {
 
       {/* --- FEED SECTION --- */}
       <section className="pb-32">
-         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
+         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
             <div className="grid lg:grid-cols-12 gap-10">
                
                {/* Main Feed */}
@@ -312,22 +345,26 @@ const QAHome = () => {
 // --- SUBCOMPONENTS ---
 
 const SidebarCard = ({ title, icon, children }) => (
-  <div className="p-8 rounded-[3rem] bg-white/[0.02] border border-white/5 backdrop-blur-xl">
-     <h3 className="text-xl font-semibold mb-8 flex items-center gap-3 tracking-tight">
-        <span className="text-primary text-sm">{icon}</span>
+  <div className="p-10 rounded-[3rem] bg-white border border-slate-200 shadow-sm relative overflow-hidden group">
+     <h3 className="text-xl font-semibold font-heading mb-10 flex items-center gap-4 tracking-tight text-slate-900">
+        <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-primary text-sm group-hover:bg-primary group-hover:text-white transition-all duration-500">
+           {icon}
+        </div>
         {title}
      </h3>
-     {children}
+     <div className="relative z-10">
+        {children}
+     </div>
   </div>
 );
 
 const SolverItem = ({ name, rep }) => (
-  <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
+  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">{name[0]}</div>
-        <p className="text-xs font-semibold text-white">{name}</p>
+        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">{name[0]}</div>
+        <p className="text-xs font-semibold text-slate-700">{name}</p>
      </div>
-     <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full">{rep} REP</span>
+     <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-500/10 px-3 py-1 rounded-full">{rep} REP</span>
   </div>
 );
 

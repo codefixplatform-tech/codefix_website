@@ -67,9 +67,9 @@ const UnitConverter = () => {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       {/* Tab Switcher */}
-      <div className="flex flex-wrap gap-2 bg-white/5 p-2 rounded-2xl border border-white/10">
+      <div className="flex flex-wrap gap-3 bg-slate-100 p-2 rounded-[2rem] border border-slate-200 w-fit shadow-inner">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -78,10 +78,10 @@ const UnitConverter = () => {
               setInput('');
               setOutput('');
             }}
-            className={`px-6 py-2.5 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${
+            className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[3px] transition-all ${
               activeTab === tab.id 
-              ? 'bg-primary text-white shadow-lg shadow-primary/20' 
-              : 'text-slate-400 hover:text-white hover:bg-white/5'
+              ? 'bg-slate-900 text-white shadow-xl' 
+              : 'text-slate-400 hover:text-slate-900 hover:bg-white'
             }`}
           >
             {tab.label}
@@ -89,34 +89,38 @@ const UnitConverter = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-10 items-center">
         {/* Input Section */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="flex items-center justify-between px-2">
-            <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Input Value</label>
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+              <label className="text-[10px] font-black uppercase tracking-[4px] text-slate-400">Source Unit</label>
+            </div>
             {(activeTab === 'px-rem' || activeTab === 'rem-px') && (
-              <div className="flex items-center gap-2">
-                <span className="text-[9px] text-slate-500 font-semibold uppercase">Base:</span>
+              <div className="flex items-center gap-3 bg-slate-100 px-4 py-1.5 rounded-xl border border-slate-200">
+                <span className="text-[9px] text-slate-400 font-black uppercase tracking-[2px]">Base:</span>
                 <input 
                   type="number" 
                   value={baseSize} 
                   onChange={(e) => setBaseSize(e.target.value)}
-                  className="w-12 bg-white/5 border border-white/10 rounded-md text-[10px] font-semibold text-center py-0.5 focus:border-primary outline-none"
+                  className="w-10 bg-transparent text-[10px] font-black text-slate-900 text-center focus:outline-none"
                 />
               </div>
             )}
           </div>
-          <div className="relative group">
+          <div className="relative group/input">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/10 to-transparent blur-xl opacity-0 group-focus-within/input:opacity-100 transition-opacity"></div>
             <input 
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={activeTab.startsWith('hex') ? '#ffffff' : activeTab.startsWith('rgb') ? 'rgb(255, 255, 255)' : 'Enter value...'}
-              className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-5 text-xl font-mono text-white focus:border-primary/50 transition-all outline-none"
+              className="relative w-full bg-slate-900 border border-slate-800 rounded-3xl px-8 py-6 text-xl font-mono text-slate-300 focus:border-primary/50 transition-all outline-none shadow-2xl placeholder:text-slate-700"
             />
             <button 
               onClick={() => setInput('')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-600 hover:text-red-400 transition-colors"
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-600 hover:text-rose-500 transition-colors"
             >
               <FaEraser />
             </button>
@@ -125,58 +129,62 @@ const UnitConverter = () => {
 
         {/* Converter Arrow (Desktop) */}
         <div className="hidden lg:flex justify-center">
-           <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary animate-pulse">
+           <div className="w-14 h-14 rounded-full bg-slate-900 border border-white/5 flex items-center justify-center text-primary shadow-2xl animate-pulse">
               <FaExchangeAlt />
            </div>
         </div>
 
         {/* Output Section */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="flex items-center justify-between px-2">
-            <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Result</label>
+            <label className="text-[10px] font-black uppercase tracking-[4px] text-slate-400">Result Vector</label>
             <button 
               onClick={() => handleCopy(output)}
-              className="text-primary hover:text-blue-400 transition-colors flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest"
+              className="bg-primary/10 text-primary hover:bg-primary hover:text-white px-6 py-2 rounded-xl transition-all flex items-center gap-3 text-[10px] font-black uppercase tracking-[3px] border border-primary/20"
             >
-              <FaCopy /> Copy
+              <FaCopy /> Sync to Clip
             </button>
           </div>
-          <div className="relative group">
-            <div className="w-full bg-primary/5 border border-primary/20 rounded-2xl px-6 py-5 text-xl font-mono text-primary min-h-[68px] flex items-center">
+          <div className="relative group/output">
+            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/10 to-transparent blur-xl opacity-0 group-hover/output:opacity-100 transition-opacity"></div>
+            <div className="relative w-full bg-slate-900 border border-slate-800 rounded-3xl px-8 py-6 text-xl font-mono text-emerald-400 min-h-[76px] flex items-center shadow-2xl overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={output}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="w-full"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="w-full selection:bg-emerald-500/20"
                 >
-                  {output || <span className="opacity-20 italic text-sm">Waiting for input...</span>}
+                  {output || <span className="opacity-10 italic text-sm tracking-widest font-black uppercase">Awaiting Matrix...</span>}
                 </motion.span>
               </AnimatePresence>
+              {activeTab.includes('hex') || activeTab.includes('rgb') ? (
+                <div 
+                  className="absolute right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl border border-white/10 shadow-inner"
+                  style={{ backgroundColor: output && output !== 'Invalid Input' ? output : 'transparent' }}
+                />
+              ) : null}
             </div>
-            {activeTab.includes('hex') || activeTab.includes('rgb') ? (
-              <div 
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg border border-white/20 shadow-inner"
-                style={{ backgroundColor: output && output !== 'Invalid Input' ? output : 'transparent' }}
-              />
-            ) : null}
           </div>
         </div>
       </div>
 
       {/* Info Card */}
-      <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 flex items-start gap-4">
-        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-          <FaBolt />
-        </div>
-        <div>
-          <h4 className="text-sm font-bold text-white mb-1">Pro Tip</h4>
-          <p className="text-xs text-secondary opacity-60 leading-relaxed">
-            {activeTab === 'px-rem' ? "Most modern designs use 16px as the base font size for accessibility. You can adjust the base size above if your project uses a different standard." : 
-             activeTab.includes('hex') ? "You don't need to type the '#' symbol, our engine handles it automatically." :
-             "Type your values and see the conversion happen instantly. No buttons required."}
-          </p>
-        </div>
+      <div className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-10 flex items-start gap-8 shadow-2xl relative overflow-hidden group">
+         <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+            <FaBolt className="text-[100px] text-primary" />
+         </div>
+         <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-2xl shrink-0">
+            <FaBolt />
+         </div>
+         <div className="relative z-10 space-y-2">
+            <h4 className="text-sm font-black text-white uppercase tracking-[4px]">Architect Protocol</h4>
+            <p className="text-[11px] text-slate-400 font-medium leading-relaxed tracking-tight max-w-2xl">
+              {activeTab === 'px-rem' ? "Most modern designs use 16px as the base font size for accessibility. You can adjust the base size above if your project uses a different standard." : 
+               activeTab.includes('hex') ? "You don't need to type the '#' symbol, our engine handles it automatically." :
+               "Type your values and see the conversion happen instantly via the local neural engine. No server latency."}
+            </p>
+         </div>
       </div>
     </div>
   );

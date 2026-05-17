@@ -153,64 +153,72 @@ const ProfileSettings = () => {
   );
 
   return (
-    <div className="space-y-10 pb-10 max-w-5xl mx-auto">
+    <div className="space-y-12 pb-16 max-w-6xl mx-auto text-slate-900">
+      
       {/* --- HEADER SECTION --- */}
-      <div className="space-y-3 px-4 md:px-0">
-         <motion.div 
-           initial={{ opacity: 0, x: -20 }}
-           animate={{ opacity: 1, x: 0 }}
-           className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full"
-         >
-            <FaCog className="text-primary text-[10px]" />
-            <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Account Hub</span>
-         </motion.div>
-         <h1 className="text-4xl md:text-6xl font-semibold text-white tracking-tight leading-none">
-           User <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">Settings</span>
-         </h1>
-         <p className="text-secondary text-base md:text-lg font-medium opacity-60 max-w-xl">
-           Configure your digital identity, update contact parameters, and manage security protocols.
-         </p>
+      <div className="relative pt-6">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 blur-[120px] rounded-full pointer-events-none opacity-40"></div>
+        <div className="relative space-y-6">
+           <motion.div 
+             initial={{ opacity: 0, y: 10 }}
+             animate={{ opacity: 1, y: 0 }}
+             className="inline-flex items-center gap-2.5 bg-slate-100 border border-slate-200 px-5 py-2 rounded-full shadow-sm"
+           >
+              <FaCog className="text-primary text-[10px]" />
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-[3px]">Identity Hub</span>
+           </motion.div>
+           
+           <div className="space-y-2">
+             <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold text-slate-900 tracking-tighter leading-[1] font-syne">
+               Profile <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-600 to-purple-600">Settings</span>
+             </h1>
+             <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
+               Manage your global developer identity, secure access keys, and platform preferences.
+             </p>
+           </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start px-4 md:px-0">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
         {/* --- LEFT: AVATAR CARD --- */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="lg:col-span-4"
         >
-          <div className="bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-8 md:p-10 text-center relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-1">
-               <div className="w-20 h-20 -mr-10 -mt-10 bg-primary blur-3xl opacity-10 rounded-full"></div>
+          <div className="bg-white border border-slate-200 rounded-[3rem] p-10 text-center relative overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-500">
+            <div className="absolute top-0 right-0 p-2">
+               <div className="w-40 h-40 -mr-20 -mt-20 bg-primary blur-[100px] opacity-5 rounded-full"></div>
             </div>
 
             <div className="relative inline-block cursor-pointer group/avatar" onClick={handleAvatarClick}>
-              <div className="w-32 md:w-40 h-32 md:h-40 rounded-full bg-white/5 border-4 border-white/5 overflow-hidden flex items-center justify-center shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:border-primary/30">
+              <div className="w-32 md:w-44 h-32 md:h-44 rounded-full bg-slate-50 border-4 border-white shadow-2xl overflow-hidden flex items-center justify-center transition-all duration-500 group-hover:scale-105 group-hover:border-primary/20">
                 {formData.avatar_url ? (
                   <img src={formData.avatar_url} alt="Avatar" className="w-full h-full object-cover transition-transform duration-700 group-hover/avatar:scale-110" />
                 ) : (
-                  <FaUser className="text-white/10 w-16 h-16" />
+                  <FaUser className="text-slate-200 w-20 h-20" />
                 )}
               </div>
-              <div className="absolute inset-0 bg-primary/40 rounded-full flex flex-col items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-all duration-300 backdrop-blur-sm">
+              <div className="absolute inset-0 bg-slate-900/60 rounded-full flex flex-col items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-all duration-300 backdrop-blur-sm">
                 <FaCamera className="text-white text-2xl mb-2" />
-                <span className="text-[10px] font-bold text-white uppercase tracking-widest">Update</span>
+                <span className="text-[10px] font-black text-white uppercase tracking-widest">Update Photo</span>
               </div>
               <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
             </div>
 
-            <div className="mt-8 space-y-2">
-              <h3 className={`text-xl md:text-2xl font-semibold tracking-tight ${formData.full_name ? 'text-white' : 'text-white/20 italic'}`}>
+            <div className="mt-10 space-y-2">
+              <h3 className={`text-2xl md:text-3xl font-bold tracking-tight font-syne ${formData.full_name ? 'text-slate-900' : 'text-slate-300 italic'}`}>
                 {formData.full_name || "Nexus Developer"}
               </h3>
-              <p className="text-secondary text-xs font-medium opacity-50 uppercase tracking-[2px]">{formData.email}</p>
+              <p className="text-primary text-[10px] font-black uppercase tracking-[3px]">{formData.email}</p>
             </div>
 
-            <div className="mt-6 flex flex-wrap justify-center gap-2">
-               <span className="bg-primary/10 text-primary text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-tighter border border-primary/20">
+            <div className="mt-8 flex flex-wrap justify-center gap-2">
+               <span className="bg-slate-50 text-slate-500 text-[9px] font-black px-4 py-2 rounded-full uppercase tracking-widest border border-slate-100 shadow-sm">
                  Elite Member
                </span>
-               <span className="bg-emerald-500/10 text-emerald-400 text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-tighter border border-emerald-500/20">
+               <span className="bg-emerald-50 text-emerald-600 text-[9px] font-black px-4 py-2 rounded-full uppercase tracking-widest border border-emerald-100 shadow-sm">
                  Verified Fixer
                </span>
             </div>
@@ -222,10 +230,10 @@ const ProfileSettings = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="lg:col-span-8 space-y-6"
+          className="lg:col-span-8"
         >
-          <div className="bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-xl relative overflow-hidden">
-            <div className="flex items-center justify-start border-b border-white/5 gap-8 mb-10 overflow-x-auto no-scrollbar">
+          <div className="bg-white border border-slate-200 rounded-[3rem] p-8 md:p-12 shadow-sm relative overflow-hidden">
+            <div className="flex items-center justify-start border-b border-slate-100 gap-10 mb-12 overflow-x-auto no-scrollbar">
               {[
                 { id: 'profile', label: 'Identity', icon: <FaUser size={12} /> },
                 { id: 'security', label: 'Security', icon: <FaShieldAlt size={12} /> }
@@ -233,8 +241,8 @@ const ProfileSettings = () => {
                 <button 
                   key={tab.id} 
                   onClick={() => setActiveTab(tab.id)} 
-                  className={`pb-4 text-[10px] md:text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all relative shrink-0 ${
-                    activeTab === tab.id ? "text-primary" : "text-slate-500 hover:text-white"
+                  className={`pb-5 text-[11px] font-black uppercase tracking-[3px] flex items-center gap-3 transition-all relative shrink-0 ${
+                    activeTab === tab.id ? "text-primary" : "text-slate-400 hover:text-slate-900"
                   }`}
                 >
                   {tab.icon} {tab.label}
@@ -251,7 +259,7 @@ const ProfileSettings = () => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -10 }}
                   onSubmit={handleUpdateProfile} 
-                  className="space-y-8"
+                  className="space-y-10"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <InputGroup 
@@ -285,8 +293,8 @@ const ProfileSettings = () => {
                     onChange={v => setFormData({...formData, phone: v})} 
                   />
                   
-                  <button type="submit" disabled={updating} className="w-full bg-primary hover:bg-blue-600 py-5 rounded-[1.5rem] font-bold text-white shadow-xl shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 text-xs uppercase tracking-widest">
-                    {updating ? <FaCircleNotch className="animate-spin" /> : "Save Profile Details"}
+                  <button type="submit" disabled={updating} className="w-full bg-slate-900 hover:bg-black py-5 rounded-2xl font-black text-white shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-4 text-[11px] uppercase tracking-[3px]">
+                    {updating ? <FaCircleNotch className="animate-spin" /> : "Synchronize Profile"}
                   </button>
                 </motion.form>
               ) : (
@@ -296,13 +304,18 @@ const ProfileSettings = () => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -10 }}
                   onSubmit={handleChangePassword} 
-                  className="space-y-8"
+                  className="space-y-10"
                 >
-                  <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-2xl flex items-start gap-4">
-                     <FaShieldAlt className="text-red-500 mt-1 shrink-0" />
-                     <p className="text-[11px] text-red-500/80 font-medium leading-relaxed">
-                        Updating your security protocols will require a complete re-authentication. Ensure your new access key is stored securely.
-                     </p>
+                  <div className="p-8 bg-amber-50 border border-amber-100 rounded-[2rem] flex items-start gap-5">
+                     <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-amber-500 shadow-sm border border-amber-50 shrink-0">
+                        <FaShieldAlt size={20} />
+                     </div>
+                     <div className="space-y-1">
+                        <p className="text-xs font-black text-amber-700 uppercase tracking-widest">Security Protocol Alert</p>
+                        <p className="text-sm text-amber-600/80 font-medium leading-relaxed">
+                           Updating your security protocols will require a complete re-authentication. Ensure your new access key is stored securely.
+                        </p>
+                     </div>
                   </div>
 
                   <InputGroup 
@@ -335,7 +348,7 @@ const ProfileSettings = () => {
                     />
                   </div>
 
-                  <button type="submit" disabled={updating} className="w-full bg-emerald-500 hover:bg-emerald-600 py-5 rounded-[1.5rem] font-bold text-white shadow-xl shadow-emerald-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 text-xs uppercase tracking-widest">
+                  <button type="submit" disabled={updating} className="w-full bg-emerald-600 hover:bg-emerald-700 py-5 rounded-2xl font-black text-white shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-4 text-[11px] uppercase tracking-[3px] shadow-emerald-500/20">
                     {updating ? <FaCircleNotch className="animate-spin" /> : "Update Security Protocols"}
                   </button>
                 </motion.form>
@@ -349,10 +362,10 @@ const ProfileSettings = () => {
 };
 
 const InputGroup = ({ label, icon, value, placeholder, onChange, type = "text", isPassword, showPasswords, onToggle }) => (
-  <div className="space-y-2.5">
-    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+  <div className="space-y-3">
+    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[3px] ml-1">{label}</label>
     <div className="relative group/input">
-      <div className="absolute left-5 top-1/2 -translate-y-1/2 text-primary/40 group-focus-within/input:text-primary transition-colors">
+      <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within/input:text-primary transition-colors">
         {icon}
       </div>
       <input 
@@ -360,15 +373,15 @@ const InputGroup = ({ label, icon, value, placeholder, onChange, type = "text", 
         value={value} 
         placeholder={placeholder}
         onChange={e => onChange(e.target.value)}
-        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-14 pr-12 py-4 text-white text-sm font-semibold placeholder:text-white/10 focus:border-primary/40 focus:bg-white/[0.05] outline-none transition-all" 
+        className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-16 pr-12 py-5 text-slate-900 text-sm font-bold placeholder:text-slate-300 focus:border-primary/30 focus:bg-white focus:ring-4 focus:ring-primary/5 outline-none transition-all shadow-inner" 
       />
       {isPassword && (
         <button 
           type="button" 
           onClick={onToggle} 
-          className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+          className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-900 transition-colors"
         >
-          {showPasswords ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
+          {showPasswords ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
         </button>
       )}
     </div>
