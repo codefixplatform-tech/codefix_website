@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 // React Icons (Only Font Awesome)
 import { FaArrowLeft, FaRobot, FaMagic, FaBars } from 'react-icons/fa';
@@ -10,10 +10,19 @@ import toast from 'react-hot-toast';
 
 const AIChatLayout = ({ user }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [newChatTrigger, setNewChatTrigger] = useState(0);
+
+  // Automatic new chat when navigated with an initial prompt (e.g. from Solve with AI)
+  useEffect(() => {
+    if (location.state?.initialPrompt && activeChatId !== null) {
+      setActiveChatId(null);
+      setNewChatTrigger(prev => prev + 1);
+    }
+  }, [location.state?.initialPrompt, activeChatId]);
 
   // 1. Fetch History logic (stable reference)
   const fetchHistory = React.useCallback(async () => {
@@ -64,7 +73,7 @@ const AIChatLayout = ({ user }) => {
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#020617] text-slate-200 overflow-hidden font-sans">
+    <div className="flex h-screen w-full bg-white text-slate-800 overflow-hidden font-sans">
       
       {/* Mobile Backdrop Overlay */}
       <AnimatePresence>
@@ -106,16 +115,16 @@ const AIChatLayout = ({ user }) => {
       </AnimatePresence>
 
       {/* 2. Main Content Area */}
-      <main className="flex-1 flex flex-col relative min-w-0 bg-gradient-to-b from-slate-900/50 to-[#020617]">
+      <main className="flex-1 flex flex-col relative min-w-0 bg-gradient-to-b from-slate-50/50 to-white">
         
         {/* Top Navigation Bar */}
-        <header className="h-16 flex-shrink-0 border-b border-white/5 bg-[#020617]/60 flex items-center justify-between px-4 sm:px-6 backdrop-blur-xl z-20 relative top-0">
+        <header className="h-16 flex-shrink-0 border-b border-slate-200 bg-white/80 flex items-center justify-between px-4 sm:px-6 backdrop-blur-xl z-20 relative top-0">
           <div className="flex items-center gap-2 sm:gap-4">
             {/* Navigation & Toggles */}
             <div className="flex items-center gap-1">
               <button 
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="p-2 hover:bg-white/5 text-slate-400 hover:text-white rounded-xl transition-colors cursor-pointer"
+                className="p-2 hover:bg-slate-100 text-slate-500 hover:text-slate-900 rounded-xl transition-colors cursor-pointer"
                 title="Toggle Sidebar"
               >
                 <FaBars size={18} />
@@ -123,31 +132,31 @@ const AIChatLayout = ({ user }) => {
               
               <button 
                 onClick={() => navigate('/')}
-                className="hidden sm:flex p-2 hover:bg-white/5 text-slate-400 hover:text-white rounded-xl transition-colors group cursor-pointer"
+                className="hidden sm:flex p-2 hover:bg-slate-100 text-slate-500 hover:text-slate-900 rounded-xl transition-colors group cursor-pointer"
                 title="Return to Dashboard"
               >
                 <FaArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
               </button>
             </div>
             
-            <div className="h-6 w-[1px] bg-white/10 mx-1 hidden sm:block"></div>
+            <div className="h-6 w-[1px] bg-slate-200 mx-1 hidden sm:block"></div>
             
             {/* Model Identity Box */}
-            <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-blue-600/20 border border-primary/20 flex items-center justify-center">
-                <FaRobot className="text-primary text-sm shadow-xl" />
+            <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer border border-transparent hover:border-slate-200">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-blue-600/10 border border-primary/20 flex items-center justify-center">
+                <FaRobot className="text-primary text-sm shadow-sm" />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-[15px] font-bold text-slate-100 leading-tight">DevIntel Core</h1>
-                <span className="text-[11px] text-slate-400 font-medium">Gemini 2.0 Flash Model</span>
+                <h1 className="text-[15px] font-bold text-slate-800 leading-tight">DevIntel Core</h1>
+                <span className="text-[11px] text-slate-500 font-medium">Gemini 2.0 Flash Model</span>
               </div>
             </div>
           </div>
 
           <div className="flex items-center">
-             <div className="flex items-center gap-2 px-4 py-1.5 bg-[#1e293b] border border-white/10 rounded-full shadow-lg">
-                <FaMagic size={10} className="text-yellow-400 animate-pulse" />
-                <span className="text-[11px] font-bold text-slate-300 uppercase tracking-widest hidden sm:block">Pro Version</span>
+             <div className="flex items-center gap-2 px-4 py-1.5 bg-slate-100 border border-slate-200 rounded-full shadow-sm">
+                <FaMagic size={10} className="text-primary animate-pulse" />
+                <span className="text-[11px] font-bold text-slate-600 uppercase tracking-widest hidden sm:block">Pro Version</span>
              </div>
           </div>
         </header>

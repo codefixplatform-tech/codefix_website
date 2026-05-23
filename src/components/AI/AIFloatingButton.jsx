@@ -25,10 +25,10 @@ const AIFloatingButton = () => {
       <button 
         onClick={handleNavigation}
         disabled={isNavigating}
-        className="group relative flex items-center justify-center w-16 h-16 bg-primary rounded-full shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:scale-110 active:scale-95 transition-all duration-500 border border-white/10 overflow-hidden"
+        className="group relative flex items-center justify-center w-16 h-16 bg-gradient-to-r from-primary via-indigo-600 to-purple-600 rounded-full shadow-[0_10px_35px_rgba(37,99,235,0.4)] hover:scale-110 active:scale-95 transition-all duration-500 border border-white/10 overflow-hidden cursor-pointer"
       >
         {/* Animated Background Glow */}
-        <div className={`absolute inset-0 bg-primary opacity-20 ${isNavigating ? 'animate-pulse' : 'group-hover:opacity-40'}`}></div>
+        <div className={`absolute inset-0 bg-white opacity-10 ${isNavigating ? 'animate-pulse' : 'group-hover:opacity-20'}`}></div>
         
         {/* Main Content: Logic to switch between Bot and Loader */}
         <div className="relative z-10 transition-all duration-300">
@@ -37,7 +37,7 @@ const AIFloatingButton = () => {
           ) : (
             <div className="relative">
                <FaRobot className="text-white w-8 h-8 group-hover:rotate-[360deg] transition-transform duration-700" />
-               <div className="absolute -top-1 -right-1 bg-white text-primary rounded-full p-0.5 text-[8px] border border-primary">
+               <div className="absolute -top-1 -right-1 bg-white text-indigo-600 rounded-full p-0.5 text-[8px] border border-indigo-500/20">
                   <FaPlus className="rotate-45" />
                </div>
             </div>

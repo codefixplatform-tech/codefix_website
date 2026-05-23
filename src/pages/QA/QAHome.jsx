@@ -184,7 +184,7 @@ const QAHome = () => {
            <motion.div {...fadeIn} className="pt-6">
               <button
                  onClick={handleAskQuestionClick}
-                 className="group flex items-center justify-center gap-4 bg-primary hover:bg-blue-600 text-white px-8 md:px-12 py-4 md:py-6 rounded-2xl font-semibold text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-2xl shadow-primary/20 hover:scale-105 active:scale-95 mx-auto"
+                 className="group flex items-center justify-center gap-4 bg-gradient-to-r from-primary via-indigo-600 to-purple-600 text-white px-8 md:px-12 py-4 md:py-6 rounded-2xl font-semibold text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-[0_20px_40px_rgba(37,99,235,0.3)] border-0 cursor-pointer hover:scale-105 active:scale-95 mx-auto"
               >
                  <FaPlus className="group-hover:rotate-90 transition-transform" />
                  Ask Global Community

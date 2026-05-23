@@ -45,7 +45,7 @@ const ResponseWrapper = ({ text, isNew }) => {
                 />
               </div>
             ) : (
-              <code {...props} className={`${className} bg-black/30 px-1.5 py-0.5 rounded-md font-mono text-primary-foreground`}>
+              <code {...props} className={`${className} bg-slate-100 text-slate-850 px-1.5 py-0.5 rounded-md font-mono`}>
                 {children}
               </code>
             )
@@ -66,6 +66,7 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef(null);
   const lastSavedChatIdRef = useRef(null);
+  const initialPromptHandledRef = useRef(false);
 
   const loadChatDetails = React.useCallback(async () => {
     if (!activeChatId || activeChatId === lastSavedChatIdRef.current) return;
@@ -134,12 +135,15 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
 
   // Handle initial prompt from navigation state (e.g. from Question Detail)
   useEffect(() => {
-    if (location.state?.initialPrompt && !loading && messages.length === 0) {
-      handleSendMessage(null, location.state.initialPrompt);
-      // Optional: Clear state to prevent re-trigger on refresh
-      window.history.replaceState({}, document.title);
+    if (location.state?.initialPrompt && !initialPromptHandledRef.current) {
+      initialPromptHandledRef.current = true; // Synchronous guard to prevent duplicate triggers
+      const prompt = location.state.initialPrompt;
+      // Immediately clear the router state to break infinite triggers
+      navigate(location.pathname, { replace: true, state: {} });
+      // Send the prompt
+      handleSendMessage(null, prompt);
     }
-  }, [location.state, messages.length, handleSendMessage, loading]);
+  }, [location.state, handleSendMessage, navigate, location.pathname]);
 
   // Jab sidebar se koi purani chat select ho, toh messages load karein
   useEffect(() => {
@@ -153,9 +157,11 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
   // Auto-scroll logic
   useEffect(() => {
     if (messages.length > 0) {
-      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+      // Use instant scroll for initial message load, smooth scroll for continuous streaming text
+      const behavior = messages.length <= 2 ? 'auto' : 'smooth';
+      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior });
     } else {
-      scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollRef.current?.scrollTo({ top: 0, behavior: 'auto' });
     }
   }, [messages, loading]);
 
@@ -171,11 +177,11 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
         {messages.length === 0 && (
           <div className="min-h-full flex flex-col items-center justify-start sm:justify-center pt-10 sm:pt-0 space-y-10 animate-in fade-in zoom-in duration-700 w-full max-w-3xl mx-auto px-4 pb-10">
             <div className="text-center">
-              <div className="flex w-16 h-16 bg-primary/10 rounded-[2rem] items-center justify-center border border-primary/20 shadow-2xl shadow-primary/20 mx-auto mb-6">
+              <div className="flex w-16 h-16 bg-primary/10 rounded-[2rem] items-center justify-center border border-primary/25 shadow-2xl shadow-primary/10 mx-auto mb-6">
                 <FaRobot className="text-3xl text-primary" />
               </div>
-              <h2 className="text-3xl font-black text-white tracking-wide mb-2">How can I help you today?</h2>
-              <p className="text-slate-400 text-sm">Hi, I'm DevIntel Core. I can help you write code, debug errors, and plan architecture.</p>
+              <h2 className="text-3xl font-black text-slate-800 tracking-wide mb-2">How can I help you today?</h2>
+              <p className="text-slate-500 text-sm font-semibold">Hi, I'm DevIntel Core. I can help you write code, debug errors, and plan architecture.</p>
             </div>
             
             {/* Interactive Welcome Area */}
@@ -183,11 +189,11 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
               {/* Suggestion 1 */}
               <button 
                 onClick={() => handleSendMessage(null, "Explain how React hooks like useEffect work under the hood.")}
-                className="flex flex-col text-left p-5 bg-[#1e293b]/50 hover:bg-[#1e293b] border border-white/5 hover:border-blue-500/30 rounded-2xl transition-all group"
+                className="flex flex-col text-left p-5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-blue-500/30 rounded-2xl transition-all group shadow-sm cursor-pointer"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg group-hover:scale-110 transition-transform"><FaLightbulb size={18} /></div>
-                  <h3 className="text-slate-200 font-bold text-[13px]">Explain Code</h3>
+                  <div className="p-2 bg-blue-500/10 text-blue-600 rounded-lg group-hover:scale-110 transition-transform"><FaLightbulb size={18} /></div>
+                  <h3 className="text-slate-800 font-bold text-[13px]">Explain Code</h3>
                 </div>
                 <p className="text-slate-500 text-[12px] leading-relaxed">Break down complex concepts or explain how a specific piece of code functions.</p>
               </button>
@@ -195,11 +201,11 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
               {/* Suggestion 2 */}
               <button 
                  onClick={() => handleSendMessage(null, "Can you help me debug a TypeError: Cannot read properties of undefined in my JavaScript project?")}
-                className="flex flex-col text-left p-5 bg-[#1e293b]/50 hover:bg-[#1e293b] border border-white/5 hover:border-red-500/30 rounded-2xl transition-all group"
+                className="flex flex-col text-left p-5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-red-500/30 rounded-2xl transition-all group shadow-sm cursor-pointer"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 bg-red-500/10 text-red-400 rounded-lg group-hover:scale-110 transition-transform"><FaBug size={18} /></div>
-                  <h3 className="text-slate-200 font-bold text-[13px]">Fix Errors</h3>
+                  <div className="p-2 bg-red-500/10 text-red-600 rounded-lg group-hover:scale-110 transition-transform"><FaBug size={18} /></div>
+                  <h3 className="text-slate-800 font-bold text-[13px]">Fix Errors</h3>
                 </div>
                 <p className="text-slate-500 text-[12px] leading-relaxed">Paste your error logs and code, and I will help you find and fix the bugs.</p>
               </button>
@@ -207,11 +213,11 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
               {/* Suggestion 3 */}
               <button 
                  onClick={() => handleSendMessage(null, "Write a clean, reusable React component for a responsive navigation bar.")}
-                className="flex flex-col text-left p-5 bg-[#1e293b]/50 hover:bg-[#1e293b] border border-white/5 hover:border-emerald-500/30 rounded-2xl transition-all group"
+                className="flex flex-col text-left p-5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-500/30 rounded-2xl transition-all group shadow-sm cursor-pointer"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg group-hover:scale-110 transition-transform"><FaCode size={18} /></div>
-                  <h3 className="text-slate-200 font-bold text-[13px]">Generate Code</h3>
+                  <div className="p-2 bg-emerald-500/10 text-emerald-600 rounded-lg group-hover:scale-110 transition-transform"><FaCode size={18} /></div>
+                  <h3 className="text-slate-800 font-bold text-[13px]">Generate Code</h3>
                 </div>
                 <p className="text-slate-500 text-[12px] leading-relaxed">Describe what you need, and I will write optimized, modern code for it.</p>
               </button>
@@ -219,11 +225,11 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
               {/* Suggestion 4 */}
               <button 
                  onClick={() => handleSendMessage(null, "Design a SQL schema for an e-commerce platform with users, orders, and products.")}
-                className="flex flex-col text-left p-5 bg-[#1e293b]/50 hover:bg-[#1e293b] border border-white/5 hover:border-purple-500/30 rounded-2xl transition-all group"
+                className="flex flex-col text-left p-5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-purple-500/30 rounded-2xl transition-all group shadow-sm cursor-pointer"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 bg-purple-500/10 text-purple-400 rounded-lg group-hover:scale-110 transition-transform"><FaDatabase size={18} /></div>
-                  <h3 className="text-slate-200 font-bold text-[13px]">SQL & Architecture</h3>
+                  <div className="p-2 bg-purple-500/10 text-purple-600 rounded-lg group-hover:scale-110 transition-transform"><FaDatabase size={18} /></div>
+                  <h3 className="text-slate-800 font-bold text-[13px]">SQL & Architecture</h3>
                 </div>
                 <p className="text-slate-500 text-[12px] leading-relaxed">Get suggestions on database schemas, API design, and cloud architecture.</p>
               </button>
@@ -235,22 +241,22 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
           <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`flex gap-2 sm:gap-4 w-full sm:w-auto max-w-[100%] sm:max-w-[90%] ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
               <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border mt-1 sm:mt-0 ${
-                m.role === 'user' ? 'bg-primary border-primary shadow-lg shadow-primary/20' : 'bg-slate-800 border-white/10'
+                m.role === 'user' ? 'bg-gradient-to-r from-primary to-indigo-600 border-primary shadow-md shadow-primary/10' : 'bg-slate-100 border-slate-200 text-slate-700'
               }`}>
                 {m.role === 'user' ? <FaUser className="text-white text-sm sm:text-lg" /> : <FaTerminal className="text-primary text-sm sm:text-lg" />}
               </div>
-              <div className={`p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] text-[15px] sm:text-[16px] leading-[1.75] shadow-xl overflow-x-auto ${
+              <div className={`p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] text-[15px] sm:text-[16px] leading-[1.75] shadow-md overflow-x-auto ${
                 m.role === 'user' 
-                ? 'bg-primary text-white rounded-tr-none' 
-                : 'bg-[#1e293b]/80 backdrop-blur-md text-slate-200 rounded-tl-none border border-white/5 w-full max-w-full sm:max-w-[85vw] md:max-w-[70vw]'
+                ? 'bg-gradient-to-r from-primary via-indigo-600 to-purple-600 text-white rounded-tr-none' 
+                : 'bg-slate-50/80 backdrop-blur-md text-slate-800 rounded-tl-none border border-slate-200/60 w-full max-w-full sm:max-w-[85vw] md:max-w-[70vw]'
               }`}>
-                <div className={`${m.role === 'user' ? 'whitespace-pre-wrap text-[16px] font-[Inter,sans-serif]' : 'prose prose-invert prose-p:leading-[1.85] prose-p:mb-6 prose-headings:mt-8 prose-headings:mb-5 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-headings:font-bold prose-ul:mb-6 prose-ol:mb-6 prose-li:my-2 prose-pre:p-0 prose-pre:my-6 prose-pre:bg-transparent max-w-none text-[16px] font-[Inter,sans-serif]'}`}>
+                <div className={`${m.role === 'user' ? 'whitespace-pre-wrap text-[16px] font-[Inter,sans-serif]' : 'prose prose-slate prose-p:leading-[1.85] prose-p:mb-6 prose-headings:mt-8 prose-headings:mb-5 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-headings:font-bold prose-ul:mb-6 prose-ol:mb-6 prose-li:my-2 prose-pre:p-0 prose-pre:my-6 prose-pre:bg-transparent max-w-none text-[16px] font-[Inter,sans-serif]'}`}>
                   {m.role === 'user' ? (
                     m.text
                   ) : (
                     <>
                       <ResponseWrapper text={m.text} isNew={m.isNew} />
-                      <div className="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                             <button 
                               onClick={() => {
@@ -268,7 +274,7 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
                             </div>
                          </div>
                          <div className="flex items-center gap-2 self-end sm:self-auto">
-                            <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">DevIntel Core v2.0</span>
+                            <span className="text-[10px] font-black text-slate-550 uppercase tracking-widest">DevIntel Core v2.0</span>
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
                          </div>
                       </div>
@@ -283,7 +289,7 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
 
         {loading && (
           <div className="flex justify-start animate-pulse">
-            <div className="bg-white/5 border border-white/10 p-5 rounded-3xl rounded-tl-none flex gap-2">
+            <div className="bg-slate-100 border border-slate-200 p-5 rounded-3xl rounded-tl-none flex gap-2">
               <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
               <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
               <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
@@ -293,21 +299,21 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
       </div>
 
       {/* Input Area */}
-      <div className="p-4 sm:p-8 relative z-10 bg-gradient-to-t from-[#020617] via-[#020617]/90 to-transparent">
+      <div className="p-4 sm:p-8 relative z-10 bg-gradient-to-t from-white via-white/95 to-transparent">
         <form onSubmit={handleSendMessage} className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-primary to-blue-600 rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-          <div className="relative flex items-center bg-[#0f172a] border border-white/10 rounded-[1.8rem] overflow-hidden p-2">
+          <div className="absolute -inset-1 bg-gradient-to-r from-primary via-indigo-600 to-purple-600 rounded-[2rem] blur opacity-15 group-hover:opacity-30 transition duration-1000"></div>
+          <div className="relative flex items-center bg-white border border-slate-200 shadow-lg rounded-[1.8rem] overflow-hidden p-2 focus-within:border-primary/45 transition-colors">
             <input 
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask anything about development..."
-              className="flex-1 bg-transparent px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-sm text-white focus:outline-none placeholder:text-slate-600"
+              className="flex-1 bg-transparent px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-sm text-slate-800 focus:outline-none placeholder:text-slate-400 font-medium"
             />
             <button 
               type="submit"
               disabled={loading || !input.trim()}
-              className="bg-primary hover:bg-blue-600 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all disabled:opacity-30 disabled:grayscale flex items-center justify-center"
+              className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 hover:scale-105 active:scale-95 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all disabled:opacity-30 disabled:grayscale flex items-center justify-center cursor-pointer border-0"
             >
               <FaPaperPlane className="text-white text-lg" />
             </button>
@@ -315,14 +321,14 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
         </form>
         <div className="mt-3 flex justify-center gap-6">
            {!user && (
-             <div className="flex items-center gap-2 text-[9px] font-black text-amber-500 uppercase tracking-widest animate-pulse">
+             <div className="flex items-center gap-2 text-[9px] font-black text-amber-600 uppercase tracking-widest animate-pulse">
                <FaShieldAlt size={12} /> Guest Mode: History Not Saved
              </div>
            )}
-           <div className="flex items-center gap-2 text-[9px] font-black text-slate-600 uppercase tracking-widest">
+           <div className="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest">
               <FaShieldAlt size={12} /> Privacy Focused
            </div>
-           <div className="flex items-center gap-2 text-[9px] font-black text-slate-600 uppercase tracking-widest">
+           <div className="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest">
               <FaMagic size={12} /> Gemini 2.0 Flash
            </div>
         </div>

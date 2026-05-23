@@ -329,7 +329,7 @@ const AnimatedRoutes = ({ user, loading }) => {
         <Route
           path="/ai-assistant"
           element={
-            <PageTransition key={location.pathname}>
+            <PageTransition key={location.pathname} noSlide={true}>
               <AIChatLayout user={user} />
             </PageTransition>
           }
