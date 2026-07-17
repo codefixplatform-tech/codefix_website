@@ -65,6 +65,7 @@ const GlobalSearch = ({ variant = 'landing', placeholder = "Search tools, docs &
   const location = useLocation();
 
   const isDashboard = location.pathname.startsWith('/dashboard');
+  const isDarkDropdown = variant === 'dashboard';
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -197,9 +198,9 @@ const GlobalSearch = ({ variant = 'landing', placeholder = "Search tools, docs &
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 5, scale: 0.98 }}
             className={`absolute top-full mt-3 w-[120%] -left-[10%] lg:w-full lg:left-0 rounded-[1.5rem] backdrop-blur-3xl z-[9999] overflow-hidden ${
-              variant === 'dashboard-light'
-                ? 'bg-white/98 border border-slate-200 shadow-[0_30px_60px_rgba(0,0,0,0.1)]'
-                : 'bg-[#0F172A]/98 border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.6)]'
+              isDarkDropdown
+                ? 'bg-[#0F172A]/98 border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.6)]'
+                : 'bg-white/98 border border-slate-200 shadow-[0_30px_60px_rgba(0,0,0,0.1)]'
             }`}
           >
             <div className="p-2 space-y-2 max-h-[500px] overflow-y-auto custom-scrollbar">
@@ -209,31 +210,31 @@ const GlobalSearch = ({ variant = 'landing', placeholder = "Search tools, docs &
                 <div className="space-y-1">
                   <div className="px-4 py-2 flex items-center justify-between">
                     <span className="text-[9px] font-black uppercase tracking-[3px] text-primary/80">Tools & Navigation</span>
-                    <span className={`text-[9px] font-bold uppercase ${variant === 'dashboard-light' ? 'text-slate-400' : 'text-slate-600'}`}>{localResults.length} Found</span>
+                    <span className={`text-[9px] font-bold uppercase ${isDarkDropdown ? 'text-slate-600' : 'text-slate-400'}`}>{localResults.length} Found</span>
                   </div>
                   {localResults.map((item, idx) => (
                     <button 
                       key={`local-${idx}`}
                       onClick={() => handleNavigate(item.path)}
                       className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all text-left group/item border border-transparent ${
-                        variant === 'dashboard-light' ? 'hover:bg-slate-50 hover:border-slate-100' : 'hover:bg-white/5 hover:border-white/5'
+                        isDarkDropdown ? 'hover:bg-white/5 hover:border-white/5' : 'hover:bg-slate-50 hover:border-slate-100'
                       }`}
                     >
                       <div className={`p-2.5 rounded-xl group-hover/item:text-primary transition-colors border ${
-                        variant === 'dashboard-light' ? 'bg-slate-50 border-slate-100 text-slate-500' : 'bg-white/5 border-white/5 text-slate-400'
+                        isDarkDropdown ? 'bg-white/5 border-white/5 text-slate-400' : 'bg-slate-50 border-slate-100 text-slate-500'
                       }`}>
                         {React.cloneElement(item.icon, { size: 14 })}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className={`text-sm font-bold transition-colors ${
-                          variant === 'dashboard-light' ? 'text-slate-700 group-hover/item:text-slate-900' : 'text-slate-200 group-hover/item:text-white'
+                          isDarkDropdown ? 'text-slate-200 group-hover/item:text-white' : 'text-slate-700 group-hover/item:text-slate-900'
                         }`}>{item.title}</p>
                         <p className={`text-[10px] mt-0.5 uppercase tracking-wider font-black opacity-60 ${
-                          variant === 'dashboard-light' ? 'text-slate-400' : 'text-slate-500'
+                          isDarkDropdown ? 'text-slate-500' : 'text-slate-400'
                         }`}>{item.category}</p>
                       </div>
                       <FaChevronRight className={`opacity-0 group-hover/item:opacity-100 transition-all -translate-x-2 group-hover/item:translate-x-0 ${
-                        variant === 'dashboard-light' ? 'text-slate-400' : 'text-slate-700'
+                        isDarkDropdown ? 'text-slate-700' : 'text-slate-400'
                       }`} size={10} />
                     </button>
                   ))}
@@ -242,7 +243,7 @@ const GlobalSearch = ({ variant = 'landing', placeholder = "Search tools, docs &
 
               {/* knowledge base / Questions Results */}
               {results.length > 0 && (
-                <div className={`space-y-1 pt-2 border-t ${variant === 'dashboard-light' ? 'border-slate-100' : 'border-white/5'}`}>
+                <div className={`space-y-1 pt-2 border-t ${isDarkDropdown ? 'border-white/5' : 'border-slate-100'}`}>
                   <div className="px-4 py-2">
                     <span className="text-[9px] font-black uppercase tracking-[3px] text-emerald-500">Community Knowledge</span>
                   </div>
@@ -251,7 +252,7 @@ const GlobalSearch = ({ variant = 'landing', placeholder = "Search tools, docs &
                       key={`qa-${item.id}`}
                       onClick={() => handleNavigate(`/questions/${item.id}`)}
                       className={`w-full flex items-start gap-4 p-3 rounded-xl transition-all text-left group/item ${
-                        variant === 'dashboard-light' ? 'hover:bg-slate-50' : 'hover:bg-white/5'
+                        isDarkDropdown ? 'hover:bg-white/5' : 'hover:bg-slate-50'
                       }`}
                     >
                       <div className="bg-emerald-500/10 p-2.5 rounded-xl text-emerald-500">
@@ -259,12 +260,12 @@ const GlobalSearch = ({ variant = 'landing', placeholder = "Search tools, docs &
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className={`text-sm font-bold transition-colors line-clamp-1 ${
-                          variant === 'dashboard-light' ? 'text-slate-700 group-hover/item:text-slate-900' : 'text-slate-200 group-hover/item:text-white'
+                          isDarkDropdown ? 'text-slate-200 group-hover/item:text-white' : 'text-slate-700 group-hover/item:text-slate-900'
                         }`}>{item.title}</p>
-                        <p className={`text-[10px] mt-0.5 ${variant === 'dashboard-light' ? 'text-slate-400' : 'text-slate-500'}`}>Community Q&A Discussion</p>
+                        <p className={`text-[10px] mt-0.5 ${isDarkDropdown ? 'text-slate-500' : 'text-slate-400'}`}>Community Q&A Discussion</p>
                       </div>
                       <FaChevronRight className={`mt-2 opacity-0 group-hover/item:opacity-100 transition-all -translate-x-2 group-hover/item:translate-x-0 ${
-                        variant === 'dashboard-light' ? 'text-slate-400' : 'text-slate-700'
+                        isDarkDropdown ? 'text-slate-700' : 'text-slate-400'
                       }`} size={10} />
                     </button>
                   ))}
@@ -280,30 +281,30 @@ const GlobalSearch = ({ variant = 'landing', placeholder = "Search tools, docs &
                     className="py-16 text-center"
                   >
                     <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border ${
-                      variant === 'dashboard-light' ? 'bg-slate-50 border-slate-100 text-slate-400' : 'bg-white/5 border-white/5 text-slate-600'
+                      isDarkDropdown ? 'bg-white/5 border-white/5 text-slate-600' : 'bg-slate-50 border-slate-100 text-slate-400'
                     }`}>
                         <HiSearch size={24} />
                     </div>
-                    <p className={`text-sm font-bold ${variant === 'dashboard-light' ? 'text-slate-600' : 'text-slate-400'}`}>No results found for "{query}"</p>
-                    <p className={`text-xs mt-1 ${variant === 'dashboard-light' ? 'text-slate-400' : 'text-slate-600'}`}>Try keywords like 'JSON', 'PDF', or 'AI'</p>
+                    <p className={`text-sm font-bold ${isDarkDropdown ? 'text-slate-400' : 'text-slate-600'}`}>No results found for "{query}"</p>
+                    <p className={`text-xs mt-1 ${isDarkDropdown ? 'text-slate-600' : 'text-slate-400'}`}>Try keywords like 'JSON', 'PDF', or 'AI'</p>
                   </motion.div>
                 ) : (
                   <div className="py-16 flex flex-col items-center justify-center space-y-4 opacity-40">
-                    <FaCircleNotch className={`animate-spin ${variant === 'dashboard-light' ? 'text-primary' : 'text-primary'}`} size={28} />
-                    <p className={`text-[10px] font-black uppercase tracking-[4px] ${variant === 'dashboard-light' ? 'text-slate-500' : 'text-white'}`}>Scanning Platform Index...</p>
+                    <FaCircleNotch className={`animate-spin ${isDarkDropdown ? 'text-primary' : 'text-primary'}`} size={28} />
+                    <p className={`text-[10px] font-black uppercase tracking-[4px] ${isDarkDropdown ? 'text-white' : 'text-slate-500'}`}>Scanning Platform Index...</p>
                   </div>
                 )
               )}
 
               {/* Footer Search Link */}
               {(localResults.length > 0 || results.length > 0) && (
-                <div className={`p-2 border-t ${variant === 'dashboard-light' ? 'border-slate-100' : 'border-white/5'}`}>
+                <div className={`p-2 border-t ${isDarkDropdown ? 'border-white/5' : 'border-slate-100'}`}>
                   <button 
                     onClick={handleFullSearch}
                     className={`w-full py-3 rounded-xl hover:bg-primary text-[10px] font-black uppercase tracking-[3px] transition-all border ${
-                      variant === 'dashboard-light' 
-                        ? 'bg-slate-50 border-slate-100 text-slate-500 hover:text-white' 
-                        : 'bg-white/5 border-white/5 text-slate-400 hover:text-white'
+                      isDarkDropdown 
+                        ? 'bg-white/5 border-white/5 text-slate-400 hover:text-white' 
+                        : 'bg-slate-50 border-slate-100 text-slate-500 hover:text-white'
                     }`}
                   >
                     Deep search knowledge base

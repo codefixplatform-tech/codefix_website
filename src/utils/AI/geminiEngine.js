@@ -23,6 +23,7 @@ export const getAIResponse = async (userPrompt, chatHistory = []) => {
 
     const payload = {
       model: "google/gemini-2.0-flash-lite-001",
+      max_tokens: 2000,
       messages: [systemPrompt, ...formattedHistory, { role: "user", content: String(userPrompt) }]
     };
 
@@ -64,8 +65,9 @@ export const getAIResponseStream = async (userPrompt, chatHistory = [], onChunk)
   }));
 
   const payload = {
-    model: "google/gemini-2.0-flash-lite-001", 
+    model: "google/gemini-3.5-flash", 
     stream: true,
+    max_tokens: 2000, // Limiting max output tokens so it doesn't check for 65536 credits
     messages: [
       systemPrompt,
       ...formattedHistory,

@@ -53,13 +53,13 @@ const Features = () => {
       />
       
       {/* --- HERO HEADER --- */}
-      <section className={`relative overflow-hidden ${isDashboard ? 'py-10' : 'pt-32 pb-24 lg:pt-56 lg:pb-40'}`}>
+      <section className={`relative overflow-hidden ${isDashboard ? 'py-10' : 'pt-24 pb-16 md:pt-36 md:pb-24 lg:pt-44 lg:pb-32'}`}>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
           <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-primary/5 blur-[120px] rounded-full"></div>
           <div className="absolute bottom-0 right-[-10%] w-[40%] h-[40%] bg-indigo-500/5 blur-[100px] rounded-full"></div>
         </div>
 
-        <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 text-center space-y-10">
+        <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 text-center space-y-8 sm:space-y-10">
            <motion.div {...fadeIn} className="inline-flex items-center gap-3 bg-slate-900 text-white px-6 py-2 rounded-full border border-white/10 shadow-2xl">
               <FaMagic className="text-primary text-[10px]" />
               <span className="text-[10px] font-black tracking-[4px] uppercase">Feature Deep Dive</span>
@@ -68,7 +68,7 @@ const Features = () => {
            <motion.h1 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-5xl sm:text-7xl md:text-8xl font-bold font-heading text-slate-900 leading-[1.1] tracking-[-0.04em] mb-10"
+              className="text-5xl sm:text-7xl md:text-8xl font-bold font-heading text-slate-900 leading-[1.1] tracking-[-0.04em] mb-6 sm:mb-10"
             > Built for the <br />
               <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Elite Developer.
@@ -81,14 +81,14 @@ const Features = () => {
       </section>
 
       {/* --- 1. 🤖 DEVINTEL AI ENGINE --- */}
-      <section className="py-32 relative bg-white border-y border-slate-100">
+      <section className="py-16 md:py-24 relative bg-white border-y border-slate-100">
          <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
-            <div className="flex flex-col lg:flex-row items-center gap-20">
-               <motion.div {...fadeIn} className="lg:w-1/2 space-y-10">
+            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+               <motion.div {...fadeIn} className="lg:w-1/2 space-y-6 sm:space-y-10">
                   <div className="inline-block p-4 bg-primary/5 rounded-2xl border border-primary/10">
                      <FaRobot className="text-primary text-3xl" />
                   </div>
-                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 tracking-tighter leading-[1.1]">DevIntel AI <br /><span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Neural Core.</span></h2>
+                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 leading-tight tracking-tight">DevIntel AI <br /><span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Neural Core.</span></h2>
                   <p className="text-slate-600 text-lg md:text-xl font-medium leading-relaxed tracking-tight max-w-xl">
                      Your personal technical architect, powered by Gemini 2.0. Context-aware assistance for debugging, refactoring, and documentation.
                   </p>
@@ -99,7 +99,7 @@ const Features = () => {
                      <StatusCheck text="Multi-Language Support" />
                   </div>
                </motion.div>
-               <div className="lg:w-1/2 bg-slate-900 rounded-[3rem] p-10 border border-white/10 shadow-3xl">
+               <div className="lg:w-1/2 w-full bg-slate-900 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 md:p-14 border border-white/10 shadow-3xl">
                   <div className="font-mono text-xs md:text-sm space-y-6">
                      <div className="flex items-center gap-2 text-white/20 uppercase tracking-[3px] text-[10px] mb-8">AI-Terminal-v2.0</div>
                      <p className="text-primary/60">$ codefix --analyze snippets/</p>
@@ -115,17 +115,17 @@ const Features = () => {
       </section>
 
       {/* --- 2. 📄 HYBRID FILE CONVERSION ENGINE --- */}
-      <section className="py-32 bg-slate-50/50 relative">
+      <section className="py-16 md:py-24 bg-slate-50/50 relative">
          <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
-            <div className="text-center mb-24 space-y-4">
-               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 tracking-tighter leading-[1.1]">Hybrid Conversion <br /><span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Architecture.</span></h2>
+            <div className="text-center mb-12 md:mb-20 space-y-4">
+               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 leading-tight tracking-tight">Hybrid Conversion <br /><span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Architecture.</span></h2>
                <p className="text-slate-500 text-lg font-medium tracking-tight">Enterprise-grade cloud power mixed with 100% private local processing.</p>
             </div>
             
-            <div className="grid lg:grid-cols-2 gap-10">
+            <div className="grid lg:grid-cols-2 gap-6 md:gap-10">
                {/* Cloud Engine */}
-               <div className="bg-white border border-slate-200 p-12 rounded-[3.5rem] shadow-sm group hover:border-primary/40 transition-all duration-500">
-                  <FaCloudDownloadAlt className="text-4xl text-primary mb-8" />
+               <div className="bg-white border border-slate-200 p-6 sm:p-10 md:p-12 rounded-[2rem] sm:rounded-[3rem] md:rounded-[3.5rem] shadow-sm group hover:border-primary/40 transition-all duration-500">
+                  <FaCloudDownloadAlt className="text-4xl text-primary mb-6 sm:mb-8" />
                   <h3 className="text-2xl font-bold text-slate-900 mb-6">Cloud Engine (Google v4)</h3>
                   <p className="text-slate-500 mb-8 font-medium">High-fidelity conversion for complex office formats with zero layout shift.</p>
                   <div className="grid grid-cols-1 gap-4">
@@ -136,9 +136,9 @@ const Features = () => {
                </div>
                
                {/* Local Engine */}
-               <div className="bg-slate-900 text-white p-12 rounded-[3.5rem] shadow-2xl relative overflow-hidden group">
+               <div className="bg-slate-900 text-white p-6 sm:p-10 md:p-12 rounded-[2rem] sm:rounded-[3rem] md:rounded-[3.5rem] shadow-2xl relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-10 opacity-5"><FaHdd className="text-9xl" /></div>
-                  <FaShieldAlt className="text-4xl text-primary mb-8 relative z-10" />
+                  <FaShieldAlt className="text-4xl text-primary mb-6 sm:mb-8 relative z-10" />
                   <h3 className="text-2xl font-bold mb-6 relative z-10">Local Processor (Zero-Server)</h3>
                   <p className="text-white/50 mb-8 font-medium relative z-10">Processes files entirely in your browser memory for absolute privacy.</p>
                   <div className="grid grid-cols-1 gap-4 relative z-10">
@@ -152,11 +152,11 @@ const Features = () => {
       </section>
 
       {/* --- 3. 💻 DEVELOPER NEURAL SUITE --- */}
-      <section className="py-32 bg-white relative border-y border-slate-100">
+      <section className="py-16 md:py-24 bg-white relative border-y border-slate-100">
          <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
-            <div className="flex flex-col lg:flex-row justify-between items-end mb-24 gap-8">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 md:mb-20 gap-8">
                <div className="max-w-xl">
-                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 tracking-tighter leading-[1.1]">Developer Neural <br /><span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Utility Suite.</span></h2>
+                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 leading-tight tracking-tight">Developer Neural <br /><span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Utility Suite.</span></h2>
                   <p className="text-slate-500 text-lg font-medium mt-6">A state-of-the-art toolkit designed to streamline your daily engineering tasks.</p>
                </div>
                <div className="bg-slate-50 px-8 py-4 rounded-full border border-slate-200 text-[10px] font-black uppercase tracking-[4px]">15+ Professional Tools</div>
@@ -174,14 +174,14 @@ const Features = () => {
       </section>
 
       {/* --- 4. 🤝 COMMUNITY QA HUB (THE MISSING PIECE) --- */}
-      <section id="community" className="py-32 bg-slate-900 text-white relative overflow-hidden border-b border-white/5">
+      <section id="community" className="py-16 md:py-24 bg-slate-900 text-white relative overflow-hidden border-b border-white/5">
          <div className="absolute inset-0 bg-grid opacity-5"></div>
-         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 grid lg:grid-cols-12 gap-20 items-center relative z-10">
-            <div className="lg:col-span-6 space-y-12">
+         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 grid lg:grid-cols-12 gap-12 lg:gap-20 items-center relative z-10">
+            <div className="lg:col-span-6 space-y-8 sm:space-y-12">
                <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center text-primary text-3xl border border-primary/20">
                   <FaComments />
                </div>
-               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-white tracking-tighter leading-[1.1]">Community QA <br /><span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Collaborative Hub.</span></h2>
+               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-white leading-tight tracking-tight">Community QA <br /><span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Collaborative Hub.</span></h2>
                <p className="text-white/50 text-lg md:text-xl font-medium leading-relaxed tracking-tight max-w-xl">
                   A dedicated ecosystem for developers to solve complex challenges. Engage in deeply threaded discussions with real-time solutions.
                </p>
@@ -193,8 +193,8 @@ const Features = () => {
                </div>
             </div>
             
-            <div className="lg:col-span-6">
-               <div className="bg-white/5 border border-white/10 rounded-[4rem] p-12 space-y-10 relative overflow-hidden">
+            <div className="lg:col-span-6 w-full">
+               <div className="bg-white/5 border border-white/10 rounded-[2rem] sm:rounded-[3rem] md:rounded-[4rem] p-6 sm:p-10 md:p-12 space-y-6 sm:space-y-10 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-8 opacity-10"><FaComments className="text-[150px]" /></div>
                   <div className="flex items-center gap-6">
                      <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center font-black text-white text-xl">JD</div>
@@ -203,7 +203,7 @@ const Features = () => {
                         <p className="text-[10px] text-primary font-black uppercase tracking-[3px]">Solution Contributor</p>
                      </div>
                   </div>
-                  <div className="bg-black/20 p-8 rounded-[2.5rem] border border-white/5 text-lg text-slate-300 font-medium italic tracking-tight leading-relaxed">
+                  <div className="bg-black/20 p-5 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/5 text-lg text-slate-300 font-medium italic tracking-tight leading-relaxed">
                      "The threading issue was solved by implementing a custom mutex lock in the worker thread. View verified fix below."
                   </div>
                   <div className="flex items-center justify-between pt-4 border-t border-white/5">
@@ -216,10 +216,10 @@ const Features = () => {
       </section>
 
       {/* --- 5. 📊 DASHBOARD & AUTH --- */}
-      <section className="py-32 bg-white relative">
-         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 flex flex-col lg:flex-row items-center gap-24">
-            <div className="lg:w-1/2">
-               <div className="grid grid-cols-2 gap-8">
+      <section className="py-16 md:py-24 bg-white relative">
+         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-24">
+            <div className="lg:w-1/2 w-full">
+               <div className="grid grid-cols-2 gap-4 sm:gap-8">
                   <AuthBox icon={<FaUserShield />} title="Supabase Auth" desc="Enterprise Security" />
                   <AuthBox icon={<FaChartLine />} title="Activity Tracking" desc="Unified Monitoring" />
                   <AuthBox icon={<FaMagic />} title="Theme Engine" desc="Custom Workspace" />
@@ -227,7 +227,7 @@ const Features = () => {
                </div>
             </div>
             <div className="lg:w-1/2 space-y-10">
-               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 tracking-tighter leading-[1.1]">Elite Command <br /><span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Dashboard.</span></h2>
+               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 leading-tight tracking-tight">Elite Command <br /><span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Dashboard.</span></h2>
                <p className="text-slate-500 text-lg md:text-xl font-medium tracking-tight leading-relaxed">Your personal hub for authenticated operations. Monitor contributions, conversion history, and platform reputation.</p>
                <ul className="space-y-4">
                   <li className="flex items-center gap-4 text-sm font-bold text-slate-400 uppercase tracking-[2px]"><FaCheckCircle className="text-primary" /> Profile & Avatar Sync</li>
@@ -239,22 +239,41 @@ const Features = () => {
       </section>
 
       {/* --- FINAL CTA --- */}
-      <section className="py-48 relative">
-         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
-             <div className="bg-gradient-to-br from-primary via-indigo-700 to-black p-16 md:p-32 rounded-[5rem] text-center text-white shadow-3xl relative overflow-hidden group">
-                <div className="absolute inset-0 bg-grid opacity-10 group-hover:opacity-20 transition-opacity"></div>
-                <div className="relative z-10 space-y-12">
-                   <h2 className="text-5xl md:text-8xl font-bold mb-10 tracking-tight leading-none">Initialize <br /> Your Stack.</h2>
-                   <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-8">
-                     <Link to="/signup">
-                        <button className="bg-white text-black px-16 py-7 rounded-[2.5rem] font-black text-xs uppercase tracking-[6px] shadow-2xl hover:scale-105 transition-all">Join Codefix Elite</button>
+      <section className="py-16 md:py-24 relative overflow-hidden bg-white">
+         <div className="max-w-[1400px] mx-auto px-6 sm:px-16 lg:px-24">
+            <motion.div 
+               whileHover={{ scale: 1.005 }}
+               className="bg-gradient-to-br from-slate-900 via-indigo-950 to-black p-8 sm:p-16 md:p-24 rounded-[2.5rem] md:rounded-[4rem] text-center text-white shadow-3xl border border-white/5 relative overflow-hidden group"
+            >
+               <div className="absolute inset-0 bg-grid opacity-[0.03] group-hover:opacity-[0.05] transition-opacity"></div>
+               {/* Ambient Glow */}
+               <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary/20 rounded-full blur-[100px] pointer-events-none group-hover:bg-primary/30 transition-all duration-1000"></div>
+               <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-900/30 rounded-full blur-[100px] pointer-events-none group-hover:bg-purple-900/40 transition-all duration-1000"></div>
+               
+               <div className="relative z-10 space-y-8 max-w-3xl mx-auto">
+                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading leading-tight tracking-tight text-white">
+                     Initialize <br />
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-400 to-purple-400">
+                        Your Stack.
+                     </span>
+                  </h2>
+                  <p className="text-white/60 text-base md:text-lg max-w-xl mx-auto font-medium leading-relaxed tracking-tight">
+                     Join the next generation of engineers building secure, neural-native applications.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto pt-4">
+                     <Link to="/signup" className="w-full sm:w-auto">
+                        <button className="w-full sm:w-auto bg-white text-slate-950 px-8 py-4 sm:px-12 sm:py-5 rounded-[2rem] font-bold text-xs uppercase tracking-[3px] shadow-2xl hover:bg-slate-100 transition-all hover:scale-[1.02] active:scale-95">
+                           Join Codefix Elite
+                        </button>
                      </Link>
-                     <Link to="/questions">
-                        <button className="bg-black/20 text-white border border-white/20 backdrop-blur-xl px-16 py-7 rounded-[2.5rem] font-black text-xs uppercase tracking-[6px] hover:bg-white/10 transition-all">Explore Q&A</button>
+                     <Link to="/questions" className="w-full sm:w-auto">
+                        <button className="w-full sm:w-auto bg-white/5 text-white border border-white/10 backdrop-blur-xl px-8 py-4 sm:px-12 sm:py-5 rounded-[2rem] font-bold text-xs uppercase tracking-[3px] hover:bg-white/10 transition-all hover:scale-[1.02] active:scale-95">
+                           Explore Q&A
+                        </button>
                      </Link>
-                   </div>
-                </div>
-             </div>
+                  </div>
+               </div>
+            </motion.div>
          </div>
       </section>
     </div>
@@ -280,15 +299,15 @@ const FeatureItem = ({ title, desc, white }) => (
 );
 
 const ToolCard = ({ icon, title, desc }) => (
-   <div className="bg-slate-50 p-10 rounded-[3rem] border border-slate-100 hover:border-primary/30 hover:bg-white hover:shadow-2xl transition-all duration-500 group flex flex-col h-full cursor-pointer">
-      <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-primary text-2xl mb-8 group-hover:bg-primary group-hover:text-white transition-all shadow-sm">{icon}</div>
+   <div className="bg-slate-50 p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[2.5rem] md:rounded-[3rem] border border-slate-100 hover:border-primary/30 hover:bg-white hover:shadow-2xl transition-all duration-500 group flex flex-col h-full cursor-pointer">
+      <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-primary text-2xl mb-6 sm:mb-8 group-hover:bg-primary group-hover:text-white transition-all shadow-sm">{icon}</div>
       <h4 className="font-bold text-slate-900 text-xl mb-3 tracking-tight">{title}</h4>
       <p className="text-slate-500 text-sm font-medium leading-relaxed opacity-80 group-hover:opacity-100">{desc}</p>
    </div>
 );
 
 const AuthBox = ({ icon, title, desc }) => (
-   <div className="bg-slate-50 p-8 rounded-[2.5rem] border border-slate-200 text-center space-y-3 group hover:bg-slate-900 transition-all duration-500">
+   <div className="bg-slate-50 p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-slate-200 text-center space-y-3 group hover:bg-slate-900 transition-all duration-500">
       <div className="text-primary text-3xl mx-auto flex justify-center">{icon}</div>
       <h4 className="text-slate-900 font-bold text-lg group-hover:text-white transition-colors">{title}</h4>
       <p className="text-slate-400 text-[10px] font-black uppercase tracking-[3px]">{desc}</p>

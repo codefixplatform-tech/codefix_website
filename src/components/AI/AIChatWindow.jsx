@@ -80,13 +80,13 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
   }, [activeChatId]);
 
 
-  const handleSendMessage = React.useCallback(async (e, customText = null) => {
+  const handleSendMessage = React.useCallback(async (e, customText = null, forceNewChat = false) => {
     if (e && e.preventDefault) e.preventDefault();
     const textToSend = customText || input;
     if (!textToSend.trim() || loading) return;
 
     const userMsg = { role: 'user', text: textToSend };
-    const newMessages = [...messages, userMsg];
+    const newMessages = forceNewChat ? [userMsg] : [...messages, userMsg];
     
     setMessages(newMessages);
     setInput('');
@@ -98,7 +98,7 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
       // Add empty model message for streaming
       setMessages(prev => [...prev, { role: 'model', text: '', isNew: true }]);
 
-      await getAIResponseStream(textToSend, messages, (chunk) => {
+      await getAIResponseStream(textToSend, forceNewChat ? [] : messages, (chunk) => {
         if (loading) setLoading(false);
         fullAIResponse = chunk;
         setMessages(prev => {
@@ -114,8 +114,8 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
       if (user) {
         const finalMessages = [...newMessages, { role: 'model', text: fullAIResponse }];
         const dbMessages = finalMessages.map(m => ({ role: m.role, text: m.text }));
-        const savedChat = await chatService.saveChat(user.id, activeChatId, dbMessages);
-        if (!activeChatId) {
+        const savedChat = await chatService.saveChat(user.id, forceNewChat ? null : activeChatId, dbMessages);
+        if (!activeChatId || forceNewChat) {
           lastSavedChatIdRef.current = savedChat.id;
           setActiveChatId(savedChat.id);
           onChatSaved();
@@ -138,21 +138,34 @@ const AIChatWindow = ({ user, activeChatId, setActiveChatId, onChatSaved }) => {
     if (location.state?.initialPrompt && !initialPromptHandledRef.current) {
       initialPromptHandledRef.current = true; // Synchronous guard to prevent duplicate triggers
       const prompt = location.state.initialPrompt;
+      
+      // Clear active chat state first if one is open to prevent UI blending
+      if (activeChatId) {
+        setActiveChatId(null);
+      }
+      
       // Immediately clear the router state to break infinite triggers
       navigate(location.pathname, { replace: true, state: {} });
-      // Send the prompt
-      handleSendMessage(null, prompt);
+      // Send the prompt and force a clean new chat
+      handleSendMessage(null, prompt, true);
     }
-  }, [location.state, handleSendMessage, navigate, location.pathname]);
+  }, [location.state, handleSendMessage, navigate, location.pathname, activeChatId, setActiveChatId]);
 
-  // Jab sidebar se koi purani chat select ho, toh messages load karein
   useEffect(() => {
     if (activeChatId && user) {
+      // Reset saved ref if we are switching to a different chat or returning to it
+      if (activeChatId !== lastSavedChatIdRef.current) {
+        lastSavedChatIdRef.current = null;
+      }
       loadChatDetails();
     } else {
-      setMessages([]); // New chat ke liye khali kar dein
+      // Only clear messages if we are NOT currently handling an initial prompt and not loading!
+      if (!location.state?.initialPrompt && !loading) {
+        setMessages([]);
+      }
+      lastSavedChatIdRef.current = null;
     }
-  }, [activeChatId, user, loadChatDetails]);
+  }, [activeChatId, user?.id, loadChatDetails, location.state?.initialPrompt, loading]);
 
   // Auto-scroll logic
   useEffect(() => {

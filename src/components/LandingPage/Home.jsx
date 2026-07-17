@@ -25,8 +25,17 @@ import {
   FaGithub,
   FaNetworkWired,
   FaLock,
-  FaHdd
+  FaHdd,
+  FaTimesCircle
 } from "react-icons/fa";
+
+const comparisons = [
+  { label: "Data Processing", elite: "Local WASM Sandbox", legacy: "Cloud Server Sync" },
+  { label: "Inference Engine", elite: "Multi-Model Neural Core", legacy: "Single API Wrapper" },
+  { label: "Privacy Model", elite: "Zero-Knowledge E2E", legacy: "Server-Side Logging" },
+  { label: "Cold Start Speed", elite: "< 42ms (Edge)", legacy: "2.5s - 12s (Cloud)" },
+  { label: "Workspace State", elite: "Persistent Local Storage", legacy: "Fragmented Session" },
+];
 
 const Home = () => {
   const [typedCode, setTypedCode] = useState("");
@@ -80,7 +89,7 @@ const Home = () => {
       />
 
       {/* 1. HERO SECTION: ULTRA MODERN */}
-      <section id="home" className="relative pt-32 pb-24 lg:pt-56 lg:pb-40 overflow-hidden">
+      <section id="home" className="relative pt-24 pb-16 md:pt-36 md:pb-24 lg:pt-44 lg:pb-32 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 overflow-hidden">
           <div 
             className="absolute w-[800px] h-[800px] bg-primary/10 blur-[150px] rounded-full transition-transform duration-700 ease-out pointer-events-none opacity-40"
@@ -127,14 +136,14 @@ const Home = () => {
               Architected for speed. Built for privacy. The unified ecosystem where decentralized intelligence meets high-velocity engineering.
             </motion.p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              <Link to="/login">
-                <button className="bg-slate-900 text-white px-12 py-6 rounded-[2rem] font-bold shadow-2xl hover:bg-black transition-all hover:scale-[1.02] active:scale-95 text-xs uppercase tracking-[4px]">
+            <div className="flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto">
+              <Link to="/login" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto bg-slate-900 text-white px-8 py-4 sm:px-12 sm:py-6 rounded-[2rem] font-bold shadow-2xl hover:bg-black transition-all hover:scale-[1.02] active:scale-95 text-xs uppercase tracking-[4px]">
                   Initialize Workspace
                 </button>
               </Link>
-              <Link to="/tools">
-                <button className="bg-white text-slate-900 border border-slate-200 px-12 py-6 rounded-[2rem] font-bold transition-all hover:bg-slate-50 shadow-sm text-xs uppercase tracking-[4px]">
+              <Link to="/tools" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto bg-white text-slate-900 border border-slate-200 px-8 py-4 sm:px-12 sm:py-6 rounded-[2rem] font-bold transition-all hover:bg-slate-50 shadow-sm text-xs uppercase tracking-[4px]">
                   Explore Architecture
                 </button>
               </Link>
@@ -144,14 +153,14 @@ const Home = () => {
       </section>
 
       {/* 2. TECHNICAL SPEC SHEET: ENGINEERING METRICS */}
-      <section className="py-32 relative bg-white border-y border-slate-100">
+      <section className="py-16 md:py-24 relative bg-white border-y border-slate-100">
          <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
             <div className="flex flex-col lg:flex-row items-center gap-20">
                <motion.div {...fadeIn} className="lg:w-1/2 space-y-10">
                   <div className="inline-block p-4 bg-primary/5 rounded-2xl border border-primary/10">
                     <FaMicrochip className="text-primary text-3xl" />
                   </div>
-                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 leading-[1] tracking-tighter">Architected for <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-600 to-purple-600">Zero Latency.</span></h2>
+                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 leading-tight tracking-tight">Architected for <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-600 to-purple-600">Zero Latency.</span></h2>
                   <p className="text-slate-600 text-lg md:text-xl font-medium leading-relaxed max-w-lg">Our engine is built on the pillars of distributed intelligence and edge-computing. We process where you code.</p>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4">
@@ -189,7 +198,7 @@ const Home = () => {
       </section>
 
       {/* 3. LIVE PREVIEW SECTION */}
-      <section className="relative py-32 bg-slate-50/50">
+      <section className="relative py-16 md:py-24 bg-slate-50/50">
         <div className="max-w-6xl mx-auto px-4">
           <motion.div {...fadeIn} className="relative group">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/30 via-blue-500/20 to-indigo-600/30 rounded-[4rem] blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
@@ -228,7 +237,7 @@ const Home = () => {
       </section>
 
       {/* 4. METRICS TICKER: INFINITE DATA */}
-      <section className="py-12 border-y border-slate-200 bg-white relative overflow-hidden">
+      <section className="py-8 md:py-12 border-y border-slate-200 bg-white relative overflow-hidden">
          <div className="flex whitespace-nowrap overflow-hidden group">
             <motion.div animate={{ x: "-50%" }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }} className="flex items-center gap-32 pr-32">
                <TickerItem label="P99 LATENCY" value="42ms" />
@@ -247,41 +256,75 @@ const Home = () => {
       </section>
 
       {/* 5. COMPARISON MATRIX: CODEFIX VS LEGACY */}
-      <section className="py-32 relative overflow-hidden bg-slate-900 text-white">
+      <section className="py-16 md:py-24 relative overflow-hidden bg-slate-900 text-white">
          <div className="absolute inset-0 bg-grid opacity-5"></div>
          <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
             <div className="text-center mb-24 space-y-4">
                <p className="text-primary font-bold uppercase tracking-[8px] text-[10px]">Comparative Logic</p>
-               <h2 className="text-5xl md:text-8xl font-bold tracking-tighter">Elite vs <span className="text-white/20">Legacy.</span></h2>
+               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-white leading-tight tracking-tight">Elite vs <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-400 to-purple-400">Legacy.</span></h2>
             </div>
             
-            <div className="overflow-x-auto">
-               <table className="w-full text-left border-collapse min-w-[800px]">
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+               <table className="w-full text-left border-collapse">
                   <thead>
                      <tr className="border-b border-white/10">
-                        <th className="py-10 text-[11px] font-black uppercase tracking-[5px] text-white/40">Infrastructure</th>
-                        <th className="py-10 text-[11px] font-black uppercase tracking-[5px] text-primary px-10 bg-primary/5 rounded-t-[2.5rem]">Codefix Elite</th>
-                        <th className="py-10 text-[11px] font-black uppercase tracking-[5px] text-white/40 px-10">Standard SaaS</th>
+                        <th className="py-8 text-[11px] font-black uppercase tracking-[5px] text-white/40">Infrastructure</th>
+                        <th className="py-8 text-[11px] font-black uppercase tracking-[5px] text-primary px-10 bg-primary/5 rounded-t-[2.5rem]">Codefix Elite</th>
+                        <th className="py-8 text-[11px] font-black uppercase tracking-[5px] text-white/40 px-10">Standard SaaS</th>
                      </tr>
                   </thead>
                   <tbody>
-                     <ComparisonRow label="Data Processing" elite="Local WASM Sandbox" legacy="Cloud Server Sync" />
-                     <ComparisonRow label="Inference Engine" elite="Multi-Model Neural Core" legacy="Single API Wrapper" />
-                     <ComparisonRow label="Privacy Model" elite="Zero-Knowledge E2E" legacy="Server-Side Logging" />
-                     <ComparisonRow label="Cold Start Speed" elite="< 42ms (Edge)" legacy="2.5s - 12s (Cloud)" />
-                     <ComparisonRow label="Workspace State" elite="Persistent Local Storage" legacy="Fragmented Session" />
+                     {comparisons.map((row, index) => (
+                        <ComparisonRow 
+                           key={index} 
+                           label={row.label} 
+                           elite={row.elite} 
+                           legacy={row.legacy} 
+                        />
+                     ))}
                   </tbody>
                </table>
+            </div>
+
+            {/* Mobile Cards View */}
+            <div className="md:hidden flex flex-col gap-6">
+               {comparisons.map((row, index) => (
+                  <div key={index} className="bg-white/5 border border-white/10 rounded-[2rem] p-6 space-y-4 hover:border-primary/40 transition-all duration-300">
+                     <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                        <h3 className="text-white font-bold text-base tracking-tight">{row.label}</h3>
+                        <span className="text-[9px] font-black uppercase tracking-[2px] text-primary bg-primary/10 px-3 py-1 rounded-full">Spec</span>
+                     </div>
+                     <div className="flex flex-col gap-3">
+                        {/* Elite Option */}
+                        <div className="bg-primary/10 border border-primary/20 rounded-2xl p-4 flex items-start gap-3">
+                           <FaCheckCircle className="text-primary text-lg mt-0.5 shrink-0 animate-pulse" />
+                           <div>
+                              <div className="text-[10px] font-black uppercase tracking-[3px] text-primary mb-1">Codefix Elite</div>
+                              <div className="text-white font-bold text-sm tracking-tight">{row.elite}</div>
+                           </div>
+                        </div>
+                        {/* Legacy Option */}
+                        <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 flex items-start gap-3">
+                           <FaTimesCircle className="text-white/20 text-lg mt-0.5 shrink-0" />
+                           <div>
+                              <div className="text-[10px] font-black uppercase tracking-[3px] text-white/30 mb-1">Standard SaaS</div>
+                              <div className="text-white/50 font-medium text-sm tracking-tight">{row.legacy}</div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               ))}
             </div>
          </div>
       </section>
 
       {/* 6. BENTO GRID: UNIFIED INTELLIGENCE */}
-      <section className="py-32 relative">
+      <section className="py-16 md:py-24 relative">
         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
           <motion.div {...fadeIn} className="mb-24 text-center">
              <p className="text-primary font-bold uppercase tracking-[6px] text-[10px] mb-4">Core Architecture</p>
-             <h2 className="text-4xl sm:text-6xl font-bold font-heading text-slate-900 leading-[1] tracking-tighter">Unified <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Ecosystem.</span></h2>
+             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 leading-tight tracking-tight">Unified <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Ecosystem.</span></h2>
           </motion.div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
              <div className="lg:col-span-8 group relative bg-slate-900 rounded-[4rem] overflow-hidden p-14 md:p-20 text-white border border-white/5 shadow-2xl">
@@ -304,7 +347,7 @@ const Home = () => {
       </section>
 
       {/* 7. SECURITY DEEP DIVE: ARCHITECTURE */}
-      <section className="py-32 bg-white border-y border-slate-100">
+      <section className="py-16 md:py-24 bg-white border-y border-slate-100">
          <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 flex flex-col lg:flex-row items-center gap-24">
             <div className="lg:w-1/2 relative">
                <div className="absolute -inset-10 bg-primary/5 blur-[100px] rounded-full"></div>
@@ -317,7 +360,7 @@ const Home = () => {
             </div>
             <div className="lg:w-1/2 space-y-10">
                <p className="text-primary font-bold uppercase tracking-[6px] text-[10px]">Security Framework</p>
-               <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-slate-900">Ironclad <br /> Architecture.</h2>
+               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 leading-tight tracking-tight">Ironclad <br /> Architecture.</h2>
                <p className="text-slate-500 text-xl font-medium leading-relaxed max-w-lg tracking-tight">We've pioneered the "Zero-Knowledge" engineering model. Your source code, documents, and neural queries are never persisted on any central server.</p>
                <div className="pt-4 flex items-center gap-4 text-emerald-600 font-bold tracking-tighter text-sm uppercase">
                   <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
@@ -328,37 +371,40 @@ const Home = () => {
       </section>
 
       {/* 8. TOOLBOX SHOWCASE: PRECISION DATA */}
-      <section className="py-32 relative">
-        <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 grid lg:grid-cols-2 gap-24 items-center">
-            <div className="space-y-12">
-              <h2 className="text-5xl sm:text-8xl font-bold font-heading text-slate-900 leading-[0.9] tracking-tighter">Precision <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Toolbox.</span></h2>
-              <div className="grid grid-cols-2 gap-6">
+      <section className="py-16 md:py-24 relative bg-slate-50/30">
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-16 lg:px-24 grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+            <div className="space-y-8 sm:space-y-12">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 leading-tight tracking-tight">Precision <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Toolbox.</span></h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <ToolMiniBadge label="JSON ENGINE" metric="0.02ms" />
                 <ToolMiniBadge label="PDF CORE" metric="HIGH-DPI" />
                 <ToolMiniBadge label="BASE64 SYNC" metric="BUFFERED" />
                 <ToolMiniBadge label="REGEX V8" metric="NATIVE" />
               </div>
             </div>
-            <div className="bg-slate-900 p-14 rounded-[4rem] text-white shadow-2xl relative overflow-hidden group">
-               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-               <div className="flex items-center gap-5 mb-10 border-b border-white/5 pb-10">
-                  <div className="w-16 h-16 bg-primary rounded-[1.5rem] flex items-center justify-center font-bold text-2xl">CF</div>
+            <div className="bg-slate-900 p-8 sm:p-14 rounded-[2.5rem] sm:rounded-[4rem] text-white shadow-2xl border border-white/5 relative overflow-hidden group">
+               <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+               {/* Decorative glow */}
+               <div className="absolute -top-20 -right-20 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+               
+               <div className="flex items-center gap-4 sm:gap-5 mb-8 sm:mb-10 border-b border-white/5 pb-6 sm:pb-10">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 border border-primary/30 text-primary rounded-[1rem] sm:rounded-[1.5rem] flex items-center justify-center font-bold text-lg sm:text-2xl shadow-inner shrink-0">CF</div>
                   <div>
-                     <p className="font-bold text-xl tracking-tight">Neural Sync Ready</p>
-                     <p className="text-emerald-500 text-[10px] font-black uppercase tracking-[4px]">Node: Local-01</p>
+                     <p className="font-bold text-lg sm:text-xl tracking-tight">Neural Sync Ready</p>
+                     <p className="text-emerald-500 text-[9px] sm:text-[10px] font-black uppercase tracking-[3px] sm:tracking-[4px] mt-0.5">Node: Local-01</p>
                   </div>
                </div>
-               <p className="text-slate-400 text-lg leading-relaxed font-medium">Platform verified. Neural path identified for optimized document conversion. No data leakage detected. Ready for initialization.</p>
+               <p className="text-slate-400 text-base sm:text-lg leading-relaxed font-medium">Platform verified. Neural path identified for optimized document conversion. No data leakage detected. Ready for initialization.</p>
             </div>
         </div>
       </section>
 
       {/* 9. WALL OF FAME: ELITE TESTIMONIALS */}
-      <section className="py-32 bg-slate-50 border-y border-slate-200">
+      <section className="py-16 md:py-24 bg-slate-50 border-y border-slate-200">
          <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
             <div className="text-center mb-32 space-y-6">
                <p className="text-primary font-bold uppercase tracking-[8px] text-[10px]">The Hive Mind</p>
-               <h2 className="text-6xl md:text-8xl font-bold tracking-tighter text-slate-900 leading-[0.8]">Wall of <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Fame.</span></h2>
+               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 leading-tight tracking-tight">Wall of <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">Fame.</span></h2>
             </div>
             <div className="grid md:grid-cols-3 gap-10">
                <TestimonialCard quote="The cold-start speed is phenomenal. Codefix is architected for real engineering work." author="Sarah Chen" role="Principal @ Meta" img="https://i.pravatar.cc/150?img=32" />
@@ -369,11 +415,11 @@ const Home = () => {
       </section>
 
       {/* 10. ADVANCED FAQ */}
-      <section className="py-40 bg-slate-900 text-white relative">
+      <section className="py-20 md:py-28 bg-slate-900 text-white relative">
          <div className="max-w-4xl mx-auto px-8 relative z-10">
             <div className="text-center mb-24 space-y-6">
                <FaQuestionCircle className="text-primary text-6xl mx-auto" />
-               <h2 className="text-5xl md:text-8xl font-bold tracking-tighter">Inquiries.</h2>
+               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-white leading-tight tracking-tight">Inquiries.</h2>
             </div>
             <div className="space-y-10">
                <FAQItem question="How is the Zero-Knowledge Sandbox implemented?" answer="We utilize a double-layer WASM isolation layer. All logic is executed within a memory-safe buffer that clears automatically upon session termination." />
@@ -384,22 +430,37 @@ const Home = () => {
       </section>
 
       {/* 11. FINAL CTA: CONVERSION CORE */}
-      <section className="py-48 relative overflow-hidden">
-         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
+      <section className="py-16 md:py-24 relative overflow-hidden bg-white">
+         <div className="max-w-[1400px] mx-auto px-6 sm:px-16 lg:px-24">
             <motion.div 
-               whileHover={{ scale: 1.01 }}
-               className="bg-gradient-to-br from-primary via-indigo-700 to-black p-16 md:p-32 rounded-[5rem] text-center text-white shadow-3xl relative overflow-hidden group"
+               whileHover={{ scale: 1.005 }}
+               className="bg-gradient-to-br from-slate-900 via-indigo-950 to-black p-8 sm:p-16 md:p-24 rounded-[2.5rem] md:rounded-[4rem] text-center text-white shadow-3xl border border-white/5 relative overflow-hidden group"
             >
-               <div className="absolute inset-0 bg-grid opacity-10 group-hover:opacity-20 transition-opacity"></div>
-               <div className="relative z-10 space-y-12">
-                  <h2 className="text-5xl md:text-7xl font-bold mb-10 tracking-[-0.06em] leading-none">Initialize <br /> Your Stack.</h2>
-                  <p className="text-white/70 text-lg md:text-xl font-medium max-w-2xl mx-auto tracking-tight">Join the next generation of engineers building secure, neural-native applications.</p>
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-8">
-                     <Link to="/signup">
-                        <button className="bg-white text-black px-16 py-7 rounded-[2.5rem] font-black text-xs uppercase tracking-[6px] shadow-2xl hover:scale-105 transition-all">Initialize Free</button>
+               <div className="absolute inset-0 bg-grid opacity-[0.03] group-hover:opacity-[0.05] transition-opacity"></div>
+               {/* Ambient Glow */}
+               <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary/20 rounded-full blur-[100px] pointer-events-none group-hover:bg-primary/30 transition-all duration-1000"></div>
+               <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-900/30 rounded-full blur-[100px] pointer-events-none group-hover:bg-purple-900/40 transition-all duration-1000"></div>
+               
+               <div className="relative z-10 space-y-8 max-w-3xl mx-auto">
+                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading leading-tight tracking-tight text-white">
+                     Initialize <br />
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-400 to-purple-400">
+                        Your Stack.
+                     </span>
+                  </h2>
+                  <p className="text-white/60 text-base md:text-lg max-w-xl mx-auto font-medium leading-relaxed tracking-tight">
+                     Join the next generation of engineers building secure, neural-native applications.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto pt-4">
+                     <Link to="/signup" className="w-full sm:w-auto">
+                        <button className="w-full sm:w-auto bg-white text-slate-950 px-8 py-4 sm:px-12 sm:py-5 rounded-[2rem] font-bold text-xs uppercase tracking-[3px] shadow-2xl hover:bg-slate-100 transition-all hover:scale-[1.02] active:scale-95">
+                           Initialize Free
+                        </button>
                      </Link>
-                     <Link to="/tools">
-                        <button className="bg-black/20 text-white border border-white/20 backdrop-blur-xl px-16 py-7 rounded-[2.5rem] font-black text-xs uppercase tracking-[6px] hover:bg-white/10 transition-all">Doc/Architecture</button>
+                     <Link to="/tools" className="w-full sm:w-auto">
+                        <button className="w-full sm:w-auto bg-white/5 text-white border border-white/10 backdrop-blur-xl px-8 py-4 sm:px-12 sm:py-5 rounded-[2rem] font-bold text-xs uppercase tracking-[3px] hover:bg-white/10 transition-all hover:scale-[1.02] active:scale-95">
+                           Doc/Architecture
+                        </button>
                      </Link>
                   </div>
                </div>
@@ -442,12 +503,12 @@ const TickerItem = ({ label, value }) => (
 );
 
 const ToolMiniBadge = ({ label, metric }) => (
-  <div className="flex items-center justify-between bg-white border border-slate-200 px-8 py-6 rounded-3xl shadow-sm hover:shadow-xl transition-all group cursor-pointer">
-     <div className="flex items-center gap-4">
-        <div className="w-2 h-2 bg-primary rounded-full group-hover:scale-150 transition-transform"></div>
-        <span className="text-[11px] font-black text-slate-800 uppercase tracking-[3px]">{label}</span>
+  <div className="flex items-center justify-between bg-white border border-slate-200 px-5 py-4 sm:px-8 sm:py-6 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-xl transition-all group cursor-pointer hover:border-primary/20">
+     <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+        <div className="w-2 h-2 bg-primary rounded-full group-hover:scale-150 transition-transform shrink-0"></div>
+        <span className="text-[10px] sm:text-[11px] font-black text-slate-800 uppercase tracking-[2px] sm:tracking-[3px] truncate">{label}</span>
      </div>
-     <span className="text-[10px] font-bold text-primary/30 uppercase group-hover:text-primary transition-colors">{metric}</span>
+     <span className="text-[9px] sm:text-[10px] font-bold text-primary/30 uppercase group-hover:text-primary transition-colors shrink-0 pl-2">{metric}</span>
   </div>
 );
 
@@ -460,16 +521,19 @@ const SecurityPoint = ({ icon, title, desc }) => (
 );
 
 const ComparisonRow = ({ label, elite, legacy }) => (
-   <tr className="border-b border-white/5 group">
-      <td className="py-10 font-bold text-white/50 tracking-tight text-lg">{label}</td>
-      <td className="py-10 px-10 bg-primary/[0.03] border-x border-white/5">
+   <tr className="border-b border-white/5 group hover:bg-white/[0.02] transition-all duration-300">
+      <td className="py-8 font-bold text-white/55 tracking-tight text-lg group-hover:text-white transition-colors">{label}</td>
+      <td className="py-8 px-10 bg-primary/[0.03] border-x border-white/5 group-hover:bg-primary/[0.06] transition-all duration-300">
          <div className="flex items-center gap-4">
-            <FaCheckCircle className="text-primary text-sm" />
+            <FaCheckCircle className="text-primary text-lg shrink-0 animate-pulse" />
             <span className="text-white font-bold text-lg tracking-tight">{elite}</span>
          </div>
       </td>
-      <td className="py-10 px-10">
-         <span className="text-white/20 font-medium text-lg tracking-tight">{legacy}</span>
+      <td className="py-8 px-10">
+         <div className="flex items-center gap-4">
+            <FaTimesCircle className="text-white/20 text-lg shrink-0" />
+            <span className="text-white/35 font-medium text-lg tracking-tight group-hover:text-white/45 transition-colors">{legacy}</span>
+         </div>
       </td>
    </tr>
 );

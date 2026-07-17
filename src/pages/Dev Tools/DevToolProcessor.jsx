@@ -69,7 +69,7 @@ const DevToolProcessor = () => {
   };
 
   return (
-    <div className={`relative min-h-screen bg-background text-slate-900 overflow-hidden font-sans ${isDashboard ? 'pt-6 pb-20' : 'py-32'}`}>
+    <div className={`relative min-h-screen bg-background text-slate-900 overflow-hidden font-sans ${isDashboard ? 'pt-6 pb-20' : 'py-16 md:py-24'}`}>
       <Toaster 
         position="top-center" 
         containerStyle={{ top: 110 }}
@@ -86,30 +86,30 @@ const DevToolProcessor = () => {
       <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 relative z-10">
         
         {/* TOP COMMAND BAR */}
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-16 gap-10">
-          <button onClick={handleBack} className="flex items-center gap-4 text-slate-400 hover:text-slate-900 transition-all group w-fit">
-            <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5 transition-all bg-white shadow-sm">
-              <FaArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-            </div>
-            <span className="font-black uppercase tracking-[5px] text-[10px]">Back to Station</span>
-          </button>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-10 md:mb-16 gap-6 md:gap-10">
+           <button onClick={handleBack} className="flex items-center gap-4 text-slate-400 hover:text-slate-900 transition-all group w-fit">
+             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5 transition-all bg-white shadow-sm shrink-0">
+               <FaArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+             </div>
+             <span className="font-black uppercase tracking-[5px] text-[10px]">Back to Station</span>
+           </button>
 
-          <div className="flex items-center gap-8 bg-white border border-slate-200 px-10 py-6 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-700">
-             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 ${tool.color} shadow-inner text-3xl`}>
-               {tool.icon}
-             </div>
-             <div>
-               <div className="flex items-center gap-3 mb-1">
-                  <h1 className="text-3xl font-bold font-heading text-slate-900 tracking-tighter leading-none">{tool.title}</h1>
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-               </div>
-               <p className="text-[10px] text-slate-400 font-black uppercase tracking-[5px] mt-2">Active Neural Node v2.4</p>
-             </div>
-          </div>
+           <div className="flex items-center gap-4 sm:gap-8 bg-white border border-slate-200 px-6 py-4 sm:px-10 sm:py-6 rounded-[2rem] sm:rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-700 w-full lg:w-auto">
+              <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 ${tool.color} shadow-inner text-2xl sm:text-3xl shrink-0`}>
+                {tool.icon}
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-3 mb-1">
+                   <h1 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900 tracking-tight leading-none truncate">{tool.title}</h1>
+                   <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shrink-0" />
+                </div>
+                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[4px] sm:tracking-[5px] mt-1 sm:mt-2 truncate">Active Neural Node v2.4</p>
+              </div>
+           </div>
         </div>
 
         {/* WORKSPACE CONTAINER */}
-        <div className="bg-white border border-slate-200 rounded-[4rem] p-10 md:p-20 shadow-sm hover:shadow-3xl transition-all duration-1000 relative overflow-hidden group">
+        <div className="bg-white border border-slate-200 rounded-[2rem] sm:rounded-[3rem] md:rounded-[4rem] p-6 sm:p-12 md:p-20 shadow-sm hover:shadow-3xl transition-all duration-1000 relative overflow-hidden group">
           {/* Ambient Glow */}
           <div className="absolute top-0 right-0 p-12">
             <div className="w-80 h-80 bg-primary/5 blur-[120px] rounded-full group-hover:bg-primary/10 transition-all duration-1000"></div>
@@ -120,7 +120,7 @@ const DevToolProcessor = () => {
           </div>
 
           {/* Footer Branding */}
-          <div className="mt-16 pt-10 border-t border-slate-100 flex items-center justify-between opacity-30">
+          <div className="mt-10 sm:mt-16 pt-6 sm:pt-10 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 opacity-30 text-center sm:text-left">
              <div className="flex items-center gap-3">
                 <FaMicrochip className="text-primary text-xs" />
                 <span className="text-[9px] font-black uppercase tracking-[4px]">Neural Processing Active</span>

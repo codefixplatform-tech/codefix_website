@@ -83,6 +83,9 @@ const ProfileSettings = () => {
       
       setFormData(prev => ({ ...prev, avatar_url: publicUrl }));
       toast.success("Identity updated!");
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1500);
     } catch (error) {
       toast.error("Upload failed! Check storage limits.");
     } finally {

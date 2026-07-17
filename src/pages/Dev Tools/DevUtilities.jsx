@@ -114,17 +114,17 @@ const DevUtilities = () => {
       </div>
 
       {/* HERO HEADER */}
-      <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>
-        <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 text-center space-y-10">
-           <motion.div {...fadeIn} className="inline-flex items-center gap-3 bg-slate-900 text-white px-6 py-2 rounded-full border border-white/10 shadow-2xl mb-10">
-              <FaMicrochip className="text-primary text-[10px]" />
-              <span className="text-[10px] font-black tracking-[4px] uppercase">Neural Workspace v2.4</span>
+      <section className={`relative ${isDashboard ? 'py-10' : 'pt-24 pb-16 md:pt-36 md:pb-24 lg:pt-44 lg:pb-32'}`}>
+        <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 text-center space-y-8 sm:space-y-10">
+           <motion.div {...fadeIn} className="inline-flex items-center gap-3 bg-slate-900 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-full border border-white/10 shadow-2xl mb-10 max-w-full">
+              <FaMicrochip className="text-primary text-[10px] shrink-0" />
+              <span className="text-[8px] sm:text-[10px] font-black tracking-[2px] sm:tracking-[4px] uppercase truncate max-w-[180px] xs:max-w-none">Neural Workspace v2.4</span>
            </motion.div>
            
            <motion.h1 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-5xl sm:text-7xl md:text-8xl font-bold font-heading text-slate-900 leading-[1.1] tracking-[-0.04em] mb-10"
+              className="text-5xl sm:text-7xl md:text-8xl font-bold font-heading text-slate-900 leading-[1.1] tracking-[-0.04em] mb-6 sm:mb-10"
             > Developer <br />
               <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Power Station.
@@ -138,12 +138,12 @@ const DevUtilities = () => {
       </section>
 
       {/* SEARCH INTERFACE */}
-      <section className="pb-32 relative z-10">
+      <section className="pb-16 md:pb-24 relative z-10">
          <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
             
-            <div className="max-w-2xl mx-auto mb-20 relative group">
+            <div className="max-w-2xl mx-auto mb-12 md:mb-16 relative group">
                <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-indigo-600/20 blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
-               <div className="relative flex items-center bg-white border border-slate-200 rounded-[2rem] px-10 py-6 focus-within:border-primary/50 transition-all shadow-2xl">
+               <div className="relative flex items-center bg-white border border-slate-200 rounded-[2rem] px-6 py-4 sm:px-10 sm:py-6 focus-within:border-primary/50 transition-all shadow-2xl">
                   <FaSearch className="text-primary mr-6 text-xl opacity-40" />
                   <input 
                      type="text" 
@@ -156,7 +156,7 @@ const DevUtilities = () => {
             </div>
 
             {/* UTILITIES GRID */}
-            <div className="flex flex-wrap justify-center gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                <AnimatePresence mode="popLayout">
                 {filteredUtils.length > 0 ? (
                   filteredUtils.map((util, index) => (
@@ -167,7 +167,7 @@ const DevUtilities = () => {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.4, delay: index * 0.05 }}
-                        className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]"
+                        className="w-full h-full"
                     >
                         <UtilityCard 
                             util={util} 
@@ -204,12 +204,12 @@ const DevUtilities = () => {
 const UtilityCard = ({ util, onClick }) => (
   <div 
     onClick={onClick}
-    className="group relative bg-white border border-slate-200 p-10 rounded-[3rem] shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full overflow-hidden flex flex-col"
+    className="group relative bg-white border border-slate-200 p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[2.5rem] md:rounded-[3rem] shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full overflow-hidden flex flex-col"
   >
      {/* Ambient Glow */}
      <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/5 blur-3xl rounded-full group-hover:bg-primary/10 transition-all duration-700"></div>
 
-     <div className="flex justify-between items-start mb-10 relative z-10">
+     <div className="flex justify-between items-start mb-6 sm:mb-8 md:mb-10 relative z-10">
         <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3
            ${util.highlight ? 'bg-primary text-white shadow-xl shadow-primary/30' : 'bg-slate-50 text-primary border border-slate-100 group-hover:bg-primary group-hover:text-white'}`}>
            {util.icon}
@@ -219,8 +219,8 @@ const UtilityCard = ({ util, onClick }) => (
         </div>
      </div>
 
-     <div className="space-y-6 relative z-10 flex-1">
-        <h3 className="text-2xl font-semibold font-heading text-slate-900 tracking-tighter leading-tight group-hover:text-primary transition-colors">
+     <div className="space-y-4 sm:space-y-6 relative z-10 flex-1">
+        <h3 className="text-2xl font-semibold font-heading text-slate-900 tracking-tight leading-tight group-hover:text-primary transition-colors">
            {util.title}
         </h3>
         <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium group-hover:text-slate-600 transition-colors line-clamp-3">
@@ -229,7 +229,7 @@ const UtilityCard = ({ util, onClick }) => (
      </div>
 
      {/* Indicator */}
-     <div className="pt-8 mt-8 border-t border-slate-100 flex items-center justify-between relative z-10">
+     <div className="pt-6 mt-6 sm:pt-8 sm:mt-8 border-t border-slate-100 flex items-center justify-between relative z-10">
         <div className="flex items-center gap-3">
            <div className="w-2 h-2 rounded-full bg-primary/20 group-hover:bg-primary transition-colors"></div>
            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-[2px]">Engine v2.0</span>
@@ -239,13 +239,13 @@ const UtilityCard = ({ util, onClick }) => (
         </div>
      </div>
 
-     <div className="mt-10 flex items-center justify-between relative z-10">
+     <div className="mt-6 sm:mt-8 md:mt-10 flex items-center justify-between relative z-10">
         <div className="flex flex-wrap gap-2 sm:gap-4">
            {util.tags.slice(0, 2).map((tag, idx) => (
               <span key={idx} className="text-[10px] font-bold uppercase tracking-[2px] text-slate-400 group-hover:text-slate-900 transition-colors">#{tag}</span>
            ))}
         </div>
-        <div className="w-12 h-12 flex-shrink-0 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 group-hover:border-primary group-hover:text-primary group-hover:bg-primary/5 transition-all group-hover:translate-x-2 shadow-sm">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 group-hover:border-primary group-hover:text-primary group-hover:bg-primary/5 transition-all group-hover:translate-x-2 shadow-sm">
            <FaArrowRight size={14} />
         </div>
      </div>

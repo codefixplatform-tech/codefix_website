@@ -60,8 +60,15 @@ create table public.votes (
 ) TABLESPACE pg_default;
 
 -- Function to sync votes count
+-- SECURITY DEFINER zaroori hai taake ye function DB owner ke privileges se chale
+-- aur questions table ki RLS policy ("Users can update their own questions") bypass ho.
+-- Bina SECURITY DEFINER ke, jab User A kisi aur ki question pe vote karta hai,
+-- trigger ka UPDATE silently fail hota hai kyunke RLS block kar deta hai.
 CREATE OR REPLACE FUNCTION sync_votes_count()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER
+SECURITY DEFINER
+SET search_path = public
+AS $$
 BEGIN
     UPDATE questions
     SET votes_count = (SELECT COALESCE(SUM(vote_type), 0) FROM votes WHERE question_id = COALESCE(NEW.question_id, OLD.question_id))
@@ -70,12 +77,32 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 create trigger trg_sync_votes
 after INSERT
 or DELETE
 or
 update on votes for EACH row
 execute FUNCTION sync_votes_count ();
+
+-- RPC function: Frontend se call kr ke kisi bhi question ka votes_count 
+-- recalculate kr sakte hain. SECURITY DEFINER se RLS bypass hoga.
+CREATE OR REPLACE FUNCTION recalculate_votes_count(p_question_id uuid)
+RETURNS void
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+    UPDATE questions
+    SET votes_count = (
+        SELECT COALESCE(SUM(vote_type), 0) 
+        FROM votes 
+        WHERE question_id = p_question_id
+    )
+    WHERE id = p_question_id;
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- 5. Chats Table
 create table public.chats (
@@ -143,4 +170,17 @@ CREATE POLICY "Users can only see their own chats" ON public.chats FOR SELECT US
 CREATE POLICY "Users can create their own chats" ON public.chats FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Users can update their own chats" ON public.chats FOR UPDATE USING (auth.uid() = user_id);
 
+-- 8. Votes Table RLS (CRITICAL - ye missing tha, isi wajah se votes persist nahi ho rahe the)
+ALTER TABLE public.votes ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Votes are viewable by everyone" ON public.votes FOR SELECT USING (true);
+CREATE POLICY "Authenticated users can insert votes" ON public.votes FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update their own votes" ON public.votes FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete their own votes" ON public.votes FOR DELETE USING (auth.uid() = user_id);
+
+-- 9. Comments Table RLS (ye bhi missing tha)
+ALTER TABLE public.comments ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Comments are viewable by everyone" ON public.comments FOR SELECT USING (true);
+CREATE POLICY "Authenticated users can create comments" ON public.comments FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update their own comments" ON public.comments FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete their own comments" ON public.comments FOR DELETE USING (auth.uid() = user_id);
 

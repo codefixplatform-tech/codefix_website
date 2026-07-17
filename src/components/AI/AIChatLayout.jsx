@@ -14,15 +14,13 @@ const AIChatLayout = ({ user }) => {
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
-  const [newChatTrigger, setNewChatTrigger] = useState(0);
 
-  // Automatic new chat when navigated with an initial prompt (e.g. from Solve with AI)
+  // Listen to initialPrompt from question details and reset activeChatId
   useEffect(() => {
-    if (location.state?.initialPrompt && activeChatId !== null) {
+    if (location.state?.initialPrompt) {
       setActiveChatId(null);
-      setNewChatTrigger(prev => prev + 1);
     }
-  }, [location.state?.initialPrompt, activeChatId]);
+  }, [location.state?.initialPrompt]);
 
   // 1. Fetch History logic (stable reference)
   const fetchHistory = React.useCallback(async () => {
@@ -33,7 +31,7 @@ const AIChatLayout = ({ user }) => {
     } catch (err) {
       console.error(err);
     }
-  }, [user]);
+  }, [user?.id]);
 
   // 2. Initial Load: Supabase se chats mangwana
   useEffect(() => {
@@ -43,7 +41,6 @@ const AIChatLayout = ({ user }) => {
   // 2. Nayi Chat shuru karne ka logic
   const handleNewChat = () => {
     setActiveChatId(null);
-    setNewChatTrigger(prev => prev + 1);
     if (window.innerWidth < 768) setIsSidebarOpen(false); // Mobile par sidebar hide kar do
   };
 
@@ -164,7 +161,6 @@ const AIChatLayout = ({ user }) => {
         {/* 3. Chat Window Component */}
         <div className="flex-1 relative overflow-hidden">
           <AIChatWindow 
-            key={newChatTrigger}
             user={user}
             activeChatId={activeChatId}
             setActiveChatId={setActiveChatId}

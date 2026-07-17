@@ -126,16 +126,12 @@ const JsonToCsv = () => {
     <div className="flex flex-col gap-10 w-full">
       
       {error && (
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-6 rounded-[2rem] text-[10px] font-black uppercase tracking-[4px] text-center shadow-xl flex items-center justify-center gap-4"
-        >
+        <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-6 rounded-[2rem] text-[10px] font-black uppercase tracking-[4px] text-center shadow-xl flex items-center justify-center gap-4">
           <div className="w-8 h-8 bg-rose-500/10 rounded-full flex items-center justify-center border border-rose-500/20">
              <FaTrash className="text-xs" />
           </div>
           Parsing Violation: {error}
-        </motion.div>
+        </div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">

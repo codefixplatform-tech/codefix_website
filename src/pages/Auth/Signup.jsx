@@ -130,7 +130,7 @@ const Signup = () => {
               whileTap={{ scale: 0.99 }}
               onClick={handleGoogleSignup}
               disabled={loading}
-              className="w-full h-14 flex items-center justify-center gap-4 bg-white border border-slate-200 rounded-2xl text-slate-900 font-bold hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20 transition-all group overflow-hidden relative"
+              className="w-full h-14 flex items-center justify-center gap-4 bg-white border border-slate-200 rounded-2xl text-slate-900 font-bold hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20 transition-[background-color,border-color,box-shadow] duration-200 group overflow-hidden relative"
             >
               <div className="w-6 h-6 flex items-center justify-center relative z-10">
                  <GoogleIcon />
@@ -208,7 +208,7 @@ const Signup = () => {
               whileTap={{ scale: 0.99 }}
               type="submit"
               disabled={loading}
-              className="w-full h-14 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 text-white rounded-2xl font-black uppercase tracking-[3px] text-[11px] transition-all flex items-center justify-center gap-3 disabled:opacity-50 mt-4"
+              className="w-full h-14 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 text-white rounded-2xl font-black uppercase tracking-[3px] text-[11px] transition-[background-color,box-shadow] duration-200 flex items-center justify-center gap-3 disabled:opacity-50 mt-4"
             >
               <span>{loading ? "Initializing..." : "Create Identity"}</span>
               <FaArrowRight size={10} />

@@ -79,7 +79,7 @@ const DashboardHome = () => {
     };
 
     fetchStats();
-  }, [profile]);
+  }, []);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -124,14 +124,10 @@ const DashboardHome = () => {
           <div className="space-y-6">
             <h2 className="text-[11px] font-black text-primary uppercase tracking-[8px] ml-1">{getGreeting()}</h2>
             <h1 className="text-6xl sm:text-7xl md:text-[95px] font-bold text-slate-900 tracking-tighter leading-[0.85] font-syne">
-              {loading ? "Establishing..." : (
-                <>
-                  Welcome Back,  <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-600 to-purple-600">
-                    {displayName}.
-                  </span>
-                </>
-              )}
+              Welcome Back,  <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-600 to-purple-600">
+                {displayName}.
+              </span>
             </h1>
             <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
               Experience the powerhouse of AI, Q&A, and **Local-First PDF utilities** all in one synchronized workspace.
@@ -143,7 +139,7 @@ const DashboardHome = () => {
               whileHover={{ scale: 1.02, translateY: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate('/dashboard/qa/ask')}
-              className="h-16 px-10 bg-slate-900 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[4px] shadow-2xl hover:bg-black transition-all flex items-center justify-center gap-4 group"
+              className="h-16 px-10 bg-slate-900 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[4px] shadow-2xl hover:bg-black transition-colors duration-200 flex items-center justify-center gap-4 group"
             >
               <FaPlus size={12} className="group-hover:rotate-90 transition-transform" />
               <span>Broadcast Inquiry</span>
@@ -331,12 +327,33 @@ const MetricCard = ({ label, value, icon, subValue, color, delay, sparkData }) =
     indigo: "text-indigo-500 bg-indigo-500/5 border-indigo-500/10 shadow-indigo-500/5",
   };
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        delay,
+        duration: 0.4,
+        ease: "easeOut"
+      }
+    },
+    hover: {
+      y: -5,
+      transition: {
+        duration: 0.2,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
-      className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:translate-y-[-5px] transition-all group"
+      variants={cardVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover="hover"
+      className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-shadow duration-300 group"
     >
       <div className="flex justify-between items-start mb-8">
         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border ${colors[color]}`}>

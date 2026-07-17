@@ -89,56 +89,56 @@ const AskQuestion = () => {
       <div className="w-full max-w-[1300px] relative z-10">
         
         {/* Navigation & Header */}
-        <div className="flex flex-col items-center text-center mb-16">
+        <div className="flex flex-col items-center text-center mb-10 sm:mb-16">
           <motion.button 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             onClick={() => navigate(-1)}
-            className="group flex items-center gap-2 mb-8 text-[11px] font-black uppercase tracking-[4px] text-slate-400 hover:text-primary transition-colors bg-slate-50 px-6 py-2 rounded-full border border-slate-100"
+            className="group flex items-center gap-2 mb-6 sm:mb-8 text-[9px] sm:text-[11px] font-black uppercase tracking-[2px] sm:tracking-[4px] text-slate-400 hover:text-primary transition-colors bg-slate-50 px-4 py-1.5 sm:px-6 sm:py-2 rounded-full border border-slate-100 max-w-full"
           >
-            <FaChevronLeft size={10} />
-            <span>Return to Network</span>
+            <FaChevronLeft size={10} className="shrink-0" />
+            <span className="truncate max-w-[150px] xs:max-w-none">Return to Network</span>
           </motion.button>
           
           <motion.h1 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-5xl md:text-7xl font-bold font-syne tracking-tighter text-slate-900 leading-[1.1]"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading tracking-tight text-slate-900 leading-tight"
           >
             Create a <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-600 to-purple-600">
               Knowledge Request
             </span>
           </motion.h1>
-          <p className="mt-6 text-slate-500 font-medium text-lg max-w-2xl leading-relaxed">
+          <p className="mt-4 sm:mt-6 text-slate-500 font-medium text-base sm:text-lg max-w-2xl leading-relaxed px-4">
             Explain your struggle in detail. Our community and AI fix-engines are ready to assist.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
           {/* 🧩 Left: Guidance Panel */}
-          <div className="lg:col-span-4 space-y-6">
+          <div className="lg:col-span-4 space-y-6 w-full">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="p-8 bg-slate-50 border border-slate-100 rounded-[2.5rem] shadow-sm relative overflow-hidden"
+              className="p-6 sm:p-8 bg-slate-50 border border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] shadow-sm relative overflow-hidden"
             >
               <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-10">
-                  <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center border border-primary/20">
+                <div className="flex items-center gap-4 mb-6 sm:mb-10">
+                  <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center border border-primary/20 shrink-0">
                     <FaRegLightbulb size={22}/>
                   </div>
                   <h4 className="text-slate-900 font-bold text-xl tracking-tight">Best Practices</h4>
                 </div>
 
-                <div className="space-y-8 mb-10">
+                <div className="space-y-6 sm:space-y-8 mb-8 sm:mb-10">
                   <TipItem icon={<FaHeading />} title="Precise Title" desc="Avoid vague help requests." />
                   <TipItem icon={<FaAlignLeft />} title="Technical Context" desc="What were you expecting?" />
                   <TipItem icon={<FaCode />} title="Source Snippets" desc="Only include relevant code." />
                 </div>
 
-                <div className="p-5 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-center gap-4">
+                <div className="p-4 sm:p-5 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-center gap-4">
                   <FaRobot className="text-emerald-500 text-2xl shrink-0" />
                   <p className="text-[11px] text-emerald-700 font-bold uppercase tracking-wider leading-relaxed">
                     AI-Powered analysis active. Instant suggestions incoming.
@@ -151,13 +151,13 @@ const AskQuestion = () => {
           </div>
 
           {/* 📝 Right: The Editor Surface */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-8 w-full">
             <motion.div 
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white border border-slate-100 p-8 sm:p-12 rounded-[3rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.06)]"
+              className="bg-white border border-slate-100 p-6 sm:p-10 md:p-12 rounded-[2rem] sm:rounded-[3rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.06)]"
             >
-              <form onSubmit={handleSubmit} className="space-y-10">
+              <form onSubmit={handleSubmit} className="space-y-8 sm:space-y-10">
                 
                 {/* Title Input */}
                 <div className="space-y-2">
@@ -169,7 +169,7 @@ const AskQuestion = () => {
                       value={formData.title}
                       onChange={handleChange}
                       placeholder="e.g. 'Uncaught TypeError' in React Effect Hook"
-                      className="w-full h-16 bg-slate-50/50 border border-slate-100 rounded-2xl px-6 text-slate-900 text-base font-bold focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all outline-none placeholder:text-slate-300"
+                      className="w-full h-14 sm:h-16 bg-slate-50/50 border border-slate-100 rounded-xl sm:rounded-2xl px-4 sm:px-6 text-slate-900 text-base font-bold focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all outline-none placeholder:text-slate-300"
                     />
                   </div>
                 </div>
@@ -184,7 +184,7 @@ const AskQuestion = () => {
                     value={formData.desc}
                     onChange={handleChange}
                     placeholder="Describe the struggle..."
-                    className="w-full bg-slate-50/50 border border-slate-100 rounded-[2rem] py-6 px-6 text-slate-900 text-base font-bold focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all outline-none placeholder:text-slate-300 resize-none leading-relaxed"
+                    className="w-full bg-slate-50/50 border border-slate-100 rounded-[1.5rem] sm:rounded-[2rem] py-4 sm:py-6 px-4 sm:px-6 text-slate-900 text-base font-bold focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all outline-none placeholder:text-slate-300 resize-none leading-relaxed"
                   />
                 </div>
 
@@ -193,14 +193,14 @@ const AskQuestion = () => {
                   <label className="text-[11px] font-black text-emerald-500 uppercase tracking-widest ml-1 flex items-center gap-2">
                     <FaCode /> The Source Lab
                   </label>
-                  <div className="relative rounded-[2rem] overflow-hidden border border-slate-200 group focus-within:border-emerald-500/40 focus-within:ring-4 focus-within:ring-emerald-500/5 transition-all">
-                    <div className="bg-slate-900 absolute top-0 left-0 right-0 h-10 flex items-center px-6 justify-between">
+                  <div className="relative rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden border border-slate-200 group focus-within:border-emerald-500/40 focus-within:ring-4 focus-within:ring-emerald-500/5 transition-all">
+                    <div className="bg-slate-900 absolute top-0 left-0 right-0 h-10 flex items-center px-4 sm:px-6 justify-between">
                       <div className="flex gap-1.5">
                         <div className="w-2.5 h-2.5 rounded-full bg-red-500/40" />
                         <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/40" />
                         <div className="w-2.5 h-2.5 rounded-full bg-green-500/40" />
                       </div>
-                      <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">code-block.js</span>
+                      <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest font-sans">code-block.js</span>
                     </div>
                     <textarea 
                       name="code"
@@ -208,7 +208,7 @@ const AskQuestion = () => {
                       value={formData.code}
                       onChange={handleChange}
                       placeholder="// Paste code here..."
-                      className="w-full bg-[#030303] pt-14 pb-6 px-6 text-emerald-400 font-mono text-sm outline-none resize-none leading-relaxed"
+                      className="w-full bg-[#030303] pt-14 pb-6 px-4 sm:px-6 text-emerald-400 font-mono text-sm outline-none resize-none leading-relaxed"
                     />
                   </div>
                 </div>
@@ -217,13 +217,13 @@ const AskQuestion = () => {
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Classification Tags</label>
                   <div className="relative group">
-                    <FaTags className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-primary transition-colors" />
+                    <FaTags className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-primary transition-colors" />
                     <input 
                       name="tags"
                       value={formData.tags}
                       onChange={handleChange}
                       placeholder="javascript, react, api"
-                      className="w-full h-14 bg-slate-50/50 border border-slate-100 rounded-2xl pl-14 pr-6 text-slate-900 text-sm font-bold focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all outline-none placeholder:text-slate-300"
+                      className="w-full h-14 bg-slate-50/50 border border-slate-100 rounded-xl sm:rounded-2xl pl-12 sm:pl-14 pr-4 sm:pr-6 text-slate-900 text-sm font-bold focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all outline-none placeholder:text-slate-300"
                     />
                   </div>
                 </div>
@@ -234,14 +234,14 @@ const AskQuestion = () => {
                   whileTap={{ scale: 0.99 }}
                   type="submit"
                   disabled={loading}
-                  className="w-full h-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white rounded-2xl font-black uppercase tracking-[3px] text-[11px] shadow-xl shadow-blue-500/20 transition-all flex items-center justify-center gap-3 disabled:opacity-50 mt-4"
+                  className="w-full h-14 sm:h-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white rounded-xl sm:rounded-2xl font-black uppercase tracking-[2px] sm:tracking-[3px] text-[10px] sm:text-[11px] shadow-xl shadow-blue-500/20 transition-all flex items-center justify-center gap-3 disabled:opacity-50 mt-4"
                 >
                   {loading ? (
                     <FaCircleNotch className="animate-spin text-lg" />
                   ) : (
                     <>
                       <span>Establish Connection & Publish</span>
-                      <FaPaperPlane size={10} className="mt-[1px]" />
+                      <FaPaperPlane size={10} className="mt-[1px] shrink-0" />
                     </>
                   )}
                 </motion.button>
@@ -252,7 +252,7 @@ const AskQuestion = () => {
         </div>
       </div>
 
-      <div className="mt-16 text-[11px] font-black uppercase tracking-[5px] text-slate-200 pointer-events-none mb-10">
+      <div className="mt-16 text-[10px] sm:text-[11px] font-black uppercase tracking-[3px] sm:tracking-[5px] text-slate-200 pointer-events-none mb-10 text-center px-4">
         Codefix Professional Elite
       </div>
     </div>

@@ -150,7 +150,7 @@ const QAHome = () => {
       />
       
       {/* --- HERO HEADER (CENTERED) --- */}
-      <section className={`relative ${isDashboard ? 'py-10' : 'pt-32 pb-20 lg:pt-48 lg:pb-32'}`}>
+      <section className={`relative ${isDashboard ? 'py-10' : 'pt-24 pb-16 md:pt-36 md:pb-24 lg:pt-44 lg:pb-32'}`}>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 overflow-hidden">
           <div 
             className="absolute w-[800px] h-[800px] bg-primary/10 blur-[150px] rounded-full transition-transform duration-700 ease-out pointer-events-none opacity-40"
@@ -164,13 +164,13 @@ const QAHome = () => {
           <div className="absolute bottom-0 left-[-5%] w-[40%] h-[40%] bg-emerald-500/10 blur-[120px] rounded-full"></div>
         </div>
 
-        <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 text-center space-y-10">
-           <motion.div {...fadeIn} className="inline-flex items-center gap-3 bg-slate-900 text-white px-6 py-2 rounded-full border border-white/10 shadow-2xl mb-10">
-              <FaUsers className="text-primary text-[10px]" />
-              <span className="text-[10px] font-bold tracking-[4px] uppercase">Community Knowledge Base</span>
+        <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24 text-center space-y-8 sm:space-y-10">
+           <motion.div {...fadeIn} className="inline-flex items-center gap-3 bg-slate-900 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-full border border-white/10 shadow-2xl mb-6 sm:mb-10 max-w-full">
+              <FaUsers className="text-primary text-[10px] shrink-0" />
+              <span className="text-[8px] sm:text-[10px] font-bold tracking-[2px] sm:tracking-[4px] uppercase truncate max-w-[180px] xs:max-w-none">Community Knowledge Base</span>
            </motion.div>
            
-           <motion.h1 {...fadeIn} className="text-5xl sm:text-7xl md:text-[100px] font-semibold font-heading leading-[0.9] tracking-tighter text-slate-900">
+           <motion.h1 {...fadeIn} className="text-5xl sm:text-7xl md:text-8xl font-bold font-heading leading-tight tracking-tight text-slate-900">
               Solve. Fix. <br />
               <span className="bg-gradient-to-r from-primary via-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Succeed.
@@ -184,9 +184,9 @@ const QAHome = () => {
            <motion.div {...fadeIn} className="pt-6">
               <button
                  onClick={handleAskQuestionClick}
-                 className="group flex items-center justify-center gap-4 bg-gradient-to-r from-primary via-indigo-600 to-purple-600 text-white px-8 md:px-12 py-4 md:py-6 rounded-2xl font-semibold text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-[0_20px_40px_rgba(37,99,235,0.3)] border-0 cursor-pointer hover:scale-105 active:scale-95 mx-auto"
+                 className="group flex items-center justify-center gap-3 sm:gap-4 bg-gradient-to-r from-primary via-indigo-600 to-purple-600 text-white px-6 py-4 sm:px-10 sm:py-5 rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-widest transition-all shadow-[0_20px_40px_rgba(37,99,235,0.2)] border-0 cursor-pointer hover:scale-[1.02] active:scale-95 mx-auto"
               >
-                 <FaPlus className="group-hover:rotate-90 transition-transform" />
+                 <FaPlus className="group-hover:rotate-90 transition-transform shrink-0" />
                  Ask Global Community
               </button>
            </motion.div>
@@ -194,9 +194,9 @@ const QAHome = () => {
       </section>
 
       {/* --- STATS BAR --- */}
-      <section className="pb-16">
+      <section className="pb-12 md:pb-16">
          <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 bg-white border border-slate-200 p-8 md:p-10 rounded-[3rem] md:rounded-[4rem] text-slate-900 shadow-xl relative overflow-hidden">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 bg-white border border-slate-200 p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[3rem] md:rounded-[4rem] text-slate-900 shadow-xl relative overflow-hidden">
                <div className="space-y-1 text-center md:border-r border-slate-100 py-4">
                   <p className="text-3xl md:text-5xl font-semibold font-heading">12k+</p>
                   <p className="text-[10px] text-slate-400 uppercase tracking-[4px] font-bold">Questions</p>
@@ -218,17 +218,17 @@ const QAHome = () => {
       </section>
 
       {/* --- FILTER & SEARCH --- */}
-      <section className="pb-12">
+      <section className="pb-8 md:pb-12">
         <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
-           <div className="flex flex-col xl:flex-row gap-8 items-center justify-between">
+           <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center justify-between">
               
               {/* Filter Tabs */}
-              <div className="flex items-center gap-1 sm:gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200 overflow-x-auto no-scrollbar w-full xl:w-auto">
+              <div className="flex items-center gap-1 sm:gap-1.5 bg-slate-100 p-1 sm:p-1.5 rounded-[1.5rem] border border-slate-200 overflow-x-auto no-scrollbar w-full md:w-auto">
                 {["Newest", "Top Voted", "Unanswered", "My Questions"].map(filter => (
                     <button
                         key={filter}
                         onClick={() => { setActiveFilter(filter); setVisibleCount(5); }}
-                        className={`px-3 sm:px-8 py-2.5 sm:py-3.5 rounded-xl text-[9px] sm:text-[11px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeFilter === filter ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
+                        className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-[1rem] text-[9px] sm:text-[10px] lg:text-xs font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeFilter === filter ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
                     >
                         {filter}
                     </button>
@@ -236,9 +236,9 @@ const QAHome = () => {
               </div>
 
               {/* Search Bar */}
-              <div className="relative w-full xl:w-[500px] group">
+              <div className="relative w-full md:w-80 lg:w-[450px] group">
                 <div className="absolute inset-0 bg-primary/10 blur-2xl opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
-                <div className="relative flex items-center bg-slate-100 border border-slate-200 rounded-2xl px-6 py-4 focus-within:border-primary/50 transition-all shadow-xl">
+                <div className="relative flex items-center bg-slate-100 border border-slate-200 rounded-2xl px-4 py-3 sm:px-6 sm:py-4 focus-within:border-primary/50 transition-all shadow-xl">
                     <FaSearch className="text-slate-400 mr-4" />
                     <input 
                         type="text" 
@@ -254,9 +254,9 @@ const QAHome = () => {
       </section>
 
       {/* --- FEED SECTION --- */}
-      <section className="pb-32">
+      <section className="pb-16 md:pb-24">
          <div className="max-w-[1400px] mx-auto px-8 sm:px-16 lg:px-24">
-            <div className="grid lg:grid-cols-12 gap-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
                
                {/* Main Feed */}
                <div className="lg:col-span-8 space-y-6">
@@ -271,40 +271,40 @@ const QAHome = () => {
                         ))}
                     </div>
                   ) : (
-                    <div className="text-center py-40 bg-white/[0.01] rounded-[4rem] border border-dashed border-white/10">
+                    <div className="text-center py-20 sm:py-32 md:py-40 bg-white border border-dashed border-slate-200 rounded-[2rem] sm:rounded-[3rem] shadow-sm">
                         {activeFilter === "My Questions" && !currentUser ? (
                            <div className="space-y-6">
-                              <p className="text-secondary font-semibold text-lg opacity-70 px-6">Please login to view your questions you ask.</p>
-                              <button onClick={() => navigate("/login")} className="bg-primary text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20 hover:scale-105 transition-all mx-auto block">Sign In Now</button>
+                              <p className="text-slate-600 font-semibold text-lg opacity-70 px-6">Please login to view your questions you ask.</p>
+                              <button onClick={() => navigate("/login")} className="bg-primary text-white px-8 py-3.5 rounded-xl font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20 hover:scale-105 transition-all mx-auto block">Sign In Now</button>
                            </div>
                         ) : activeFilter === "My Questions" && currentUser ? (
                            <div className="space-y-6">
-                              <p className="text-secondary font-semibold text-lg opacity-70 px-6">You haven't asked any questions yet.</p>
-                              <button onClick={handleAskQuestionClick} className="text-primary font-semibold hover:underline flex items-center gap-3 mx-auto uppercase tracking-widest text-[10px]">Ask Your First Question <FaArrowRight /></button>
+                              <p className="text-slate-600 font-semibold text-lg opacity-70 px-6">You haven't asked any questions yet.</p>
+                              <button onClick={handleAskQuestionClick} className="text-primary font-bold hover:underline flex items-center justify-center gap-3 mx-auto uppercase tracking-widest text-[10px]">Ask Your First Question <FaArrowRight /></button>
                            </div>
                         ) : (
                            <>
-                              <p className="text-secondary font-semibold text-lg opacity-70 mb-6">No discussions found matching your criteria.</p>
-                              <button onClick={handleAskQuestionClick} className="text-primary font-semibold hover:underline flex items-center gap-3 mx-auto uppercase tracking-widest text-[10px]">Start a Discussion <FaArrowRight /></button>
+                              <p className="text-slate-600 font-semibold text-lg opacity-70 mb-6">No discussions found matching your criteria.</p>
+                              <button onClick={handleAskQuestionClick} className="text-primary font-bold hover:underline flex items-center justify-center gap-3 mx-auto uppercase tracking-widest text-[10px]">Start a Discussion <FaArrowRight /></button>
                            </>
                         )}
                     </div>
                   )}
 
                   {!loading && (
-                    <div className="flex justify-center pt-10 pb-10">
+                    <div className="flex justify-center pt-8 pb-8">
                       {questions.length > visibleCount ? (
                         <button 
                             onClick={() => setVisibleCount(prev => prev + 5)}
-                            className="px-12 py-5 rounded-2xl border border-white/10 text-[10px] font-semibold uppercase tracking-[3px] text-slate-500 hover:text-white hover:border-primary/50 transition-all bg-white/[0.02] flex items-center gap-3 group"
+                            className="px-8 py-4 sm:px-12 sm:py-5 rounded-2xl border border-slate-200 text-[10px] font-semibold uppercase tracking-[3px] text-slate-500 hover:text-primary hover:border-primary/50 transition-all bg-white flex items-center gap-3 group shadow-sm active:scale-95"
                         >
-                            More Questions <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                            More Questions <FaArrowRight className="group-hover:translate-x-1 transition-transform shrink-0" />
                         </button>
                       ) : (
                         <div className="flex flex-col items-center gap-3 opacity-30">
-                          <div className="h-[1px] w-20 bg-white/20"></div>
-                          <p className="text-[10px] font-semibold uppercase tracking-[5px]">No more questions</p>
-                          <div className="h-[1px] w-20 bg-white/20"></div>
+                           <div className="h-[1px] w-20 bg-slate-200"></div>
+                           <p className="text-[10px] font-semibold uppercase tracking-[5px]">No more questions</p>
+                           <div className="h-[1px] w-20 bg-slate-200"></div>
                         </div>
                       )}
                     </div>
@@ -316,13 +316,13 @@ const QAHome = () => {
                   <SidebarCard title="Trending Tags" icon={<FaHashtag />}>
                      <div className="flex flex-wrap gap-2">
                         {["React", "Supabase", "Node.js", "AI", "PDF", "Encoding", "Security", "REST API"].map(tag => (
-                           <span key={tag} className="px-4 py-2 bg-white/5 border border-white/5 rounded-xl text-[11px] font-semibold text-slate-400 hover:text-primary hover:border-primary/30 transition-all cursor-pointer">#{tag}</span>
+                           <span key={tag} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-50 border border-slate-100 rounded-xl text-[11px] font-semibold text-slate-500 hover:text-primary hover:border-primary/30 transition-all cursor-pointer">#{tag}</span>
                         ))}
                      </div>
                   </SidebarCard>
 
                   <SidebarCard title="AI Fix Assistant" icon={<FaRobot />}>
-                     <p className="text-secondary text-sm font-semibold opacity-70 leading-relaxed mb-6">Can't find an answer? Let our Neural Engine analyze your bug and suggest a fix instantly.</p>
+                     <p className="text-slate-600 text-sm font-semibold opacity-70 leading-relaxed mb-6">Can't find an answer? Let our Neural Engine analyze your bug and suggest a fix instantly.</p>
                      <button onClick={() => navigate('/ai-assistant')} className="w-full py-4 bg-primary/10 border border-primary/20 text-primary rounded-xl text-[10px] font-semibold uppercase tracking-widest hover:bg-primary hover:text-white transition-all">Try AI Solver</button>
                   </SidebarCard>
 
@@ -345,9 +345,9 @@ const QAHome = () => {
 // --- SUBCOMPONENTS ---
 
 const SidebarCard = ({ title, icon, children }) => (
-  <div className="p-10 rounded-[3rem] bg-white border border-slate-200 shadow-sm relative overflow-hidden group">
-     <h3 className="text-xl font-semibold font-heading mb-10 flex items-center gap-4 tracking-tight text-slate-900">
-        <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-primary text-sm group-hover:bg-primary group-hover:text-white transition-all duration-500">
+  <div className="p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[3rem] bg-white border border-slate-200 shadow-sm relative overflow-hidden group">
+     <h3 className="text-xl font-semibold font-heading mb-6 sm:mb-8 flex items-center gap-4 tracking-tight text-slate-900">
+        <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-primary text-sm group-hover:bg-primary group-hover:text-white transition-all duration-500 shrink-0">
            {icon}
         </div>
         {title}
